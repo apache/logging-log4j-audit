@@ -26,7 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
-    private static final String APPLICATION_NAME = "CatalogService";
+    private static final String APPLICATION_NAME = "AuditCatalog";
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
