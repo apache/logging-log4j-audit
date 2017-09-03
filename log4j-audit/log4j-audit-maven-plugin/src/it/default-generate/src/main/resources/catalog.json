@@ -1,0 +1,193 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache license, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the license for the specific language governing permissions and
+ * limitations under the license.
+ */
+{
+  "products" : [ {
+    "name" : "banking",
+    "displayName" : "Banking",
+    "description" : "Fictional banking product",
+    "events" : [ "login", "transfer", "deposit", "billPay" ]
+  } ],
+  "categories" : [ {
+    "name" : "account",
+    "displayName" : "Account",
+    "description" : "Events related to accounts",
+    "events" : [ "transfer", "deposit" ]
+  }, {
+    "name" : "billPay",
+    "displayName" : "Bill Pay",
+    "description" : "Events related to bill payment",
+    "events" : [ "billPay" ]
+  } ],
+  "events" : [ {
+    "name" : "login",
+    "displayName" : "Login",
+    "description" : "User Login",
+    "aliases" : null,
+    "attributes" : null
+  }, {
+    "name" : "transfer",
+    "displayName" : "Transfer",
+    "description" : "Transfer between accounts",
+    "aliases" : null,
+    "attributes" : [ {"name" : "toAccount", "required" : true}, {"name" : "fromAccount", "required" : true},
+      {"name" :"amount", "required" : true} ]
+  }, {
+    "name" : "deposit",
+    "displayName" : "Deposit",
+    "description" : "Deposit funds",
+    "aliases" : null,
+    "attributes" : [ {"name" : "account", "required" : true}, {"name" : "amount", "required" : true} ]
+  }, {
+    "name" : "billPay",
+    "displayName" : "Bill Pay",
+    "description" : "Payment of a bill",
+    "aliases" : null,
+    "attributes" : [ {"name" : "fromAccount", "required" : true}, {"name" : "payee", "required" : true},
+        {"name" : "amount", "required" : true} ]
+  } ],
+  "attributes" : [ {
+    "name" : "accountNumber",
+    "displayName" : "Account Number",
+    "description" : "Company account number",
+    "dataType" : "INT",
+    "indexed" : true,
+    "sortable" : true,
+    "required" : true,
+    "requestContext" : true,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "ipAddress",
+    "displayName" : "IP Address",
+    "description" : "IP Address of the caller",
+    "dataType" : "STRING",
+    "indexed" : true,
+    "sortable" : true,
+    "required" : false,
+    "requestContext" : true,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : [ {
+      "constraintType" : {
+        "name" : "pattern"
+      },
+      "value" : "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+    } ]
+  }, {
+    "name" : "userId",
+    "displayName" : "UserId",
+    "description" : "Id of the User",
+    "dataType" : "INT",
+    "indexed" : true,
+    "sortable" : true,
+    "required" : true,
+    "requestContext" : true,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "loginId",
+    "displayName" : "LoginId",
+    "description" : "Id user logs in with",
+    "dataType" : "INT",
+    "indexed" : true,
+    "sortable" : true,
+    "required" : true,
+    "requestContext" : true,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "hostName",
+    "displayName" : "Host Name",
+    "description" : "Name of the server",
+    "dataType" : "STRING",
+    "indexed" : true,
+    "sortable" : true,
+    "required" : false,
+    "requestContext" : true,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "toAccount",
+    "displayName" : "To Account Number",
+    "description" : "Destination account",
+    "dataType" : "INT",
+    "indexed" : false,
+    "sortable" : false,
+    "required" : true,
+    "requestContext" : false,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : [ {
+      "constraintType" : {
+        "name" : "minValue"
+      },
+      "value" : "1"
+    } ]
+  }, {
+    "name" : "fromAccount",
+    "displayName" : "From Account Number",
+    "description" : "Source of funds",
+    "dataType" : "INT",
+    "indexed" : false,
+    "sortable" : false,
+    "required" : true,
+    "requestContext" : false,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "amount",
+    "displayName" : "Amount",
+    "description" : "Amount to transfer",
+    "dataType" : "BIG_DECIMAL",
+    "indexed" : false,
+    "sortable" : false,
+    "required" : true,
+    "requestContext" : false,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "account",
+    "displayName" : "Account Number",
+    "description" : "Accopunt number",
+    "dataType" : "INT",
+    "indexed" : false,
+    "sortable" : false,
+    "required" : true,
+    "requestContext" : false,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  }, {
+    "name" : "payee",
+    "displayName" : "Payee",
+    "description" : "Recipient of payment",
+    "dataType" : "STRING",
+    "indexed" : false,
+    "sortable" : false,
+    "required" : true,
+    "requestContext" : false,
+    "examples" : null,
+    "aliases" : null,
+    "constraints" : null
+  } ]
+}

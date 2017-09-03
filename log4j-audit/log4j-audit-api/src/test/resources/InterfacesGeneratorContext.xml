@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements. See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache license, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License. You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the license for the specific language governing permissions and
+  ~ limitations under the license.
+  -->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+              http://www.springframework.org/schema/mvc
+              http://www.springframework.org/schema/mvc/spring-mvc.xsd
+              http://www.springframework.org/schema/tx
+              http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+              http://www.springframework.org/schema/context
+              http://www.springframework.org/schema/context/spring-context-2.5.xsd
+             http://www.springframework.org/schema/util
+  	         http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+  <context:property-placeholder location="classpath:interfacesGenerator.properties" />
+  <context:component-scan base-package="org.apache.logging.log4j.catalog.api.dao" />
+  <context:component-scan base-package="org.apache.logging.log4j.audit" />
+
+  <mvc:annotation-driven>  <!-- this is added for validations to work -->
+    <mvc:message-converters register-defaults="true">
+      <ref bean="jsonMessageConverter"/>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+
+  <bean id="objectMapper" class="org.apache.logging.log4j.audit.util.JsonObjectMapperFactory"
+        factory-method="createMapper" />
+
+  <!-- Configure bean to convert JSON to POJO and vice versa -->
+  <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    <constructor-arg ref="objectMapper" />
+  </bean>
+
+
+
+  <bean id="org.apache.logging.log4j.catalog.api.CatalogReader" class="org.apache.logging.log4j.catalog.api.dao.JsonCatalogReader" init-method="init">
+    <property name="catalogReader">
+      <bean class="org.apache.logging.log4j.audit.catalog.StringCatalogReader"/>
+    </property>
+  </bean>
+  <!-- <bean id="org.apache.logging.log4j.audit.generator.InterfacesGenerator" class="org.apache.logging.log4j.audit.generator.InterfacesGenerator">
+    <property name="catalogDao" ref="org.apache.logging.log4j.catalog.api.dao.CatalogDao"/>
+  </bean>-->
+
+</beans>
