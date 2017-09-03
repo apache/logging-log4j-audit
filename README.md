@@ -17,6 +17,13 @@ within the application. Non-Java applications would call the Audit Service by se
 Object in JSON form and the Audit Service would perform the same validation that logging via the Java Interface
 would.
 
+Log4j Audit is not entirely usable by itself. Users of Log4j Audit must have a Git project that contains the JSON 
+catalog which will contain the Java Interfaces for the events defined in the catalog after a build is performed. They
+will need to modify the Audit Service provided with Log4j Audit to include the JSON catalog (by including the 
+just discussed Git project as a dependency) and configuring the Audit Service as desired. The 
+[Log4j Audit Samples](https://git-wip-us.apache.org/repos/asf?p=logging-log4j-audit-sample.git;a=tree) is a
+sample project that illustrates how to perform these tasks.
+
 ## Packages
 
 ### Log4j Audit
@@ -32,3 +39,20 @@ is executing and need to audit when actions are taken against these objects.
 The Log4j Catalog module contains the API for working with the catalog, a module for persisting the catalog using 
 the Java Persistence Architecture (JPA), a module for reading and writing the JSON version of the catalog to a remote
 GIT repository, and a module that provides a web application that can edit the various components of the catalog.
+
+## Requirements
+
+Log4j Audit requires a minimum of Java 8 and Log4j API and Core 2.9.
+
+## Building From Source
+
+Log4j Audit requires Apache Maven 3.x. To build from source and install to your local Maven repository, execute 
+the following:
+
+```sh
+mvn clean install
+```
+
+## License
+
+Apache Log4j Audit is distributed under the [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
