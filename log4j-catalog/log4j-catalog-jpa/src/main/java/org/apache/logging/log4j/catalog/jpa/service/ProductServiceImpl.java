@@ -45,6 +45,11 @@ public class ProductServiceImpl extends AbstractPagingAndSortingService implemen
     }
 
     @Override
+    public List<ProductModel> getProducts(String catalogId) {
+        return productRepository.findByCatalogId(catalogId);
+    }
+
+    @Override
     public List<ProductModel> getProducts(int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<ProductModel> page = productRepository.findAll(pageable);
@@ -52,8 +57,22 @@ public class ProductServiceImpl extends AbstractPagingAndSortingService implemen
     }
 
     @Override
+    public List<ProductModel> getProducts(String catalogId, int startPage, int itemsPerPage, String sortColumn,
+                                          String direction) {
+        Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
+        Page<ProductModel> page = productRepository.findByCatalogId(catalogId, pageable);
+        return page.getContent();
+    }
+
+    @Override
     public Optional<ProductModel> getProduct(Long productId) {
         return productRepository.findOne(productId);
+    }
+
+
+    @Override
+    public Optional<ProductModel> getProduct(String catalogId, String name) {
+        return productRepository.findByCatalogIdAndName(catalogId, name);
     }
 
     @Override

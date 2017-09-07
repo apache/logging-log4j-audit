@@ -21,6 +21,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 /**
  * A Catalog Category.
  */
@@ -39,7 +41,7 @@ public class Category implements Serializable {
      * Set default values;
      */
     public Category() {
-        catalogId = "DEFAULT";
+        catalogId = DEFAULT_CATALOG;
     }
 
     /**

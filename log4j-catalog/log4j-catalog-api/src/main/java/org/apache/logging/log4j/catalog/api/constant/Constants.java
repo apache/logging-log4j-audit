@@ -14,32 +14,15 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.audit.constant;
+package org.apache.logging.log4j.catalog.api.constant;
 
 /**
- * Various environments applications run in.
+ * Contains constants used in Log4j-Catalog.
  */
-public enum Environment {
+public final class Constants {
 
-    PROD("Production"), PRE_PROD("Pre-Production"), UAT("UserAcceptance"), BETA("Beta"),
-    RC("ReleaseCandidate"), STAGING("Staging"),
-    DEV("Development"), DEVQA("DevelopmentQA"), QA("QA"), PERF("Performance");
-    private final String name;
-
-    private Environment(String name) {
-        this.name = name;
+    private Constants() {
     }
 
-    public String toString() {
-        return this.name;
-    }
-
-    public static Environment getByName(String name) {
-        for (Environment region : values()) {
-            if (region.name.equals(name)) {
-                return region;
-            }
-        }
-        return null;
-    }
+    public static final String DEFAULT_CATALOG = "DEFAULT";
 }

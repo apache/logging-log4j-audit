@@ -44,10 +44,28 @@ public class AttributeServiceImpl extends AbstractPagingAndSortingService implem
         return attributeRepository.findAll();
     }
 
+    @Override
+    public List<AttributeModel> getAttributes(String catalogId) {
+        return attributeRepository.findByCatalogId(catalogId);
+    }
+
+    @Override
     public List<AttributeModel> getAttributes(int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<AttributeModel> page = attributeRepository.findAll(pageable);
         return page.getContent();
+    }
+
+    @Override
+    public List<AttributeModel> getAttributes(String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
+        Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
+        Page<AttributeModel> page = attributeRepository.findByCatalogId(catalogId, pageable);
+        return page.getContent();
+    }
+
+    @Override
+    public Optional<AttributeModel> getAttribute(String catalogId, String attributeName) {
+        return attributeRepository.findByCatalogIdAndName(catalogId, attributeName);
     }
 
     @Override

@@ -21,6 +21,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 /**
  * A Catalog AttributeDto.
  */
@@ -46,7 +48,7 @@ public class Attribute implements Serializable {
      * Set default values.
      */
     public Attribute() {
-        catalogId = "DEFAULT"; 
+        catalogId = DEFAULT_CATALOG;
     }
 
     /**

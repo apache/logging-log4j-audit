@@ -26,8 +26,12 @@ import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
  */
 public interface AttributeService {
     List<AttributeModel> getAttributes(int startPage, int itemsPerPage, String sortColumn, String direction);
+    List<AttributeModel> getAttributes(String catalogId, int startPage, int itemsPerPage, String sortColumn,
+                                       String direction);
     List<AttributeModel> getAttributes();
+    List<AttributeModel> getAttributes(String catalogId);
     Optional<AttributeModel> getAttribute(Long attributeId);
+    Optional<AttributeModel> getAttribute(String catalogId, String attributeName);
     AttributeModel saveAttribute(AttributeModel attribute);
     void deleteAttribute(Long attributeId);
 }

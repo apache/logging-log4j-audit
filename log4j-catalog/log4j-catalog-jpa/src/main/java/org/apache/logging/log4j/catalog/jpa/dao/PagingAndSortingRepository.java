@@ -16,7 +16,10 @@
 package org.apache.logging.log4j.catalog.jpa.dao;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
 
+import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,4 +31,10 @@ public interface PagingAndSortingRepository<T, ID extends Serializable> extends 
     Iterable<T> findAll(Sort sort);
 
     Page<T> findAll(Pageable pageable);
+
+    List<T> findByCatalogId(String catalogId);
+
+    Page<T> findByCatalogId(String catalogId, Pageable pageable);
+
+    Optional<T> findByCatalogIdAndName(String catalogId, String name);
 }

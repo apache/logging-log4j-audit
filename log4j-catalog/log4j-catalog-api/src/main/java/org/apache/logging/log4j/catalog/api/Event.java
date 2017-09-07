@@ -22,6 +22,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 /**
  * Basic attributes common to all events.
  */
@@ -41,7 +43,7 @@ public class Event implements Serializable {
      * Set default values.
      */
     public Event() {
-        catalogId = "DEFAULT";
+        catalogId = DEFAULT_CATALOG;
     }
     
     /**

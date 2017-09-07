@@ -26,8 +26,12 @@ import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
  */
 public interface CategoryService {
     List<CategoryModel> getCategories(int startPage, int itemsPerPage, String sortColumn, String direction);
+    List<CategoryModel> getCategories(String catalogId, int startPage, int itemsPerPage, String sortColumn,
+                                      String direction);
     List<CategoryModel> getCategories();
+    List<CategoryModel> getCategories(String catalogId);
     Optional<CategoryModel> getCategory(Long categoryId);
+    Optional<CategoryModel> getCategory(String catalogId, String name);
     CategoryModel saveCategory(CategoryModel category);
     void deleteCategory(Long categoryId);
 }

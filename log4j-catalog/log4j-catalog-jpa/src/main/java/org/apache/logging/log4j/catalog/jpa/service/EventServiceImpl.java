@@ -47,9 +47,22 @@ public class EventServiceImpl extends AbstractPagingAndSortingService implements
     }
 
     @Override
+    public List<EventModel> getEvents(String catalogId) {
+        return eventRepository.findByCatalogId(catalogId);
+    }
+
+    @Override
     public List<EventModel> getEvents(int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<EventModel> page = eventRepository.findAll(pageable);
+        return page.getContent();
+    }
+
+    @Override
+    public List<EventModel> getEvents(String catalogId, int startPage, int itemsPerPage, String sortColumn,
+                                      String direction) {
+        Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
+        Page<EventModel> page = eventRepository.findByCatalogId(catalogId, pageable);
         return page.getContent();
     }
 
@@ -66,6 +79,11 @@ public class EventServiceImpl extends AbstractPagingAndSortingService implements
     @Override
     public Optional<EventModel> getEvent(Long eventId) {
         return eventRepository.findOne(eventId);
+    }
+
+    @Override
+    public Optional<EventModel> getEvent(String catalogId, String eventName) {
+        return eventRepository.findByCatalogIdAndName(catalogId, eventName);
     }
 
     @Override

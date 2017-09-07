@@ -45,6 +45,11 @@ public class CategoryServiceImpl extends AbstractPagingAndSortingService impleme
     }
 
     @Override
+    public List<CategoryModel> getCategories(String catalogId) {
+        return categoryRepository.findByCatalogId(catalogId);
+    }
+
+    @Override
     public List<CategoryModel> getCategories(int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<CategoryModel> page = categoryRepository.findAll(pageable);
@@ -52,8 +57,21 @@ public class CategoryServiceImpl extends AbstractPagingAndSortingService impleme
     }
 
     @Override
+    public List<CategoryModel> getCategories(String catalogId, int startPage, int itemsPerPage, String sortColumn,
+                                             String direction) {
+        Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
+        Page<CategoryModel> page = categoryRepository.findByCatalogId(catalogId, pageable);
+        return page.getContent();
+    }
+
+    @Override
     public Optional<CategoryModel> getCategory(Long categoryId) {
         return categoryRepository.findOne(categoryId);
+    }
+
+    @Override
+    public Optional<CategoryModel> getCategory(String catalogId, String name) {
+        return categoryRepository.findByCatalogIdAndName(catalogId, name);
     }
 
     @Override

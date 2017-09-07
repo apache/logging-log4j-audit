@@ -27,9 +27,12 @@ import org.apache.logging.log4j.catalog.jpa.model.EventModel;
  */
 public interface EventService {
     List<EventModel> getEvents(int startPage, int itemsPerPage, String sortColumn, String direction);
+    List<EventModel> getEvents(String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction);
     List<EventModel> getEvents();
+    List<EventModel> getEvents(String catalogId);
     Map<String, EventModel> getEventMap();
     Optional<EventModel> getEvent(Long eventId);
+    Optional<EventModel> getEvent(String catalogId, String eventName);
     EventModel saveEvent(EventModel event);
     void deleteEvent(Long eventId);
 }

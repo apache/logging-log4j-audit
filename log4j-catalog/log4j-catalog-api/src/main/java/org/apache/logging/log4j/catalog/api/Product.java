@@ -16,11 +16,13 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.logging.log4j.catalog.api.Event;
+
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 
 /**
@@ -41,7 +43,7 @@ public class Product implements Serializable {
      * Set default values.
      */
     public Product() {
-        catalogId = "DEFAULT";
+        catalogId = DEFAULT_CATALOG;
     }
     
     /**
