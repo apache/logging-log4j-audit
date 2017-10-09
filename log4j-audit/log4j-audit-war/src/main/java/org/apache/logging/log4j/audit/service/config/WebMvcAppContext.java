@@ -26,7 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.AuditLogger;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
-import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
+import org.apache.logging.log4j.audit.service.catalog.AuditCatalogManager;
 import org.apache.logging.log4j.audit.service.security.LocalAuthorizationInterceptor;
 import org.apache.logging.log4j.audit.util.JsonObjectMapperFactory;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
@@ -60,7 +60,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @EnableScheduling
-@ComponentScan(basePackages = {"org.apache.logging.log4j.audit.service"})
+@ComponentScan(basePackages = {"org.apache.logging.log4j.catalog.jpa", "org.apache.logging.log4j.audit.service"})
 //@ImportResource("classpath*:propertySources.xml")
 public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
@@ -163,7 +163,7 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     @Bean
     public CatalogManager catalogManager() {
-        return new CatalogManagerImpl(catalogReader());
+        return new AuditCatalogManager(catalogReader());
     }
 
     @Bean

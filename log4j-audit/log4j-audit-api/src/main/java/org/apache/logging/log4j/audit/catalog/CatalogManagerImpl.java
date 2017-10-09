@@ -50,6 +50,8 @@ public class CatalogManagerImpl implements CatalogManager {
 
     private static final String REQCTX = "ReqCtx_";
 
+    protected CatalogData catalogData;
+
     public CatalogManagerImpl(CatalogReader catalogReader) {
         try {
             infoMap = initializeData(catalogReader);
@@ -94,15 +96,15 @@ public class CatalogManagerImpl implements CatalogManager {
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
         ObjectMapper mapper = new ObjectMapper(factory);
-        CatalogData data = mapper.readValue(catalog, CatalogData.class);
-        for (Attribute attr : data.getAttributes()) {
+        catalogData = mapper.readValue(catalog, CatalogData.class);
+        for (Attribute attr : catalogData.getAttributes()) {
             if (attr.isRequestContext()) {
                 requestContextAttributes.put(attr.getName(), attr);
             }
             attributeMap.put(attr.getName(), attr);
         }
-        Map<String, CatalogInfo> map = new HashMap<>(data.getEvents().size());
-        for (Event event : data.getEvents()) {
+        Map<String, CatalogInfo> map = new HashMap<>(catalogData.getEvents().size());
+        for (Event event : catalogData.getEvents()) {
             CatalogInfo info = new CatalogInfo();
             info.event = event;
             List<String> required = new ArrayList<>();

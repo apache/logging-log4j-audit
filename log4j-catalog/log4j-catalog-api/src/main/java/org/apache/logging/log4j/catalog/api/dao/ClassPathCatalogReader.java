@@ -20,6 +20,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Map;
 
@@ -43,6 +47,7 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
     private static final String DEFAULT_CATALOG_FILE = "catalog.json";
 
     private final String catalog;
+    private final LocalDateTime lastUpdated;
 
     public ClassPathCatalogReader(Map<String, String> attributes) throws IOException {
         String catalogFile = attributes != null ?
@@ -60,6 +65,15 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
         }
 
         catalog = readCatalog(catalogURL);
+        LocalDateTime localDateTime = null;
+        try {
+            URLConnection connection = catalogURL.openConnection();
+            localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(connection.getLastModified()),
+                    ZoneId.systemDefault());
+        } catch (IOException ioe) {
+            LOGGER.warn("Unable to open connection to {}", catalogURL.toString());
+        }
+        lastUpdated = localDateTime;
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
         ObjectMapper objectMapper = new ObjectMapper(factory);
@@ -85,5 +99,10 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
     @Override
     public String readCatalog() {
         return catalog;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 }

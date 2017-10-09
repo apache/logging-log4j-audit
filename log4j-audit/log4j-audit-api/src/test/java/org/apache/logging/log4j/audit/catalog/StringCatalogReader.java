@@ -19,6 +19,7 @@ package org.apache.logging.log4j.audit.catalog;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,6 +53,8 @@ public class StringCatalogReader implements CatalogReader {
 
     private final Map<String, Attribute> attributeMap = new HashMap<>();
 
+    private final LocalDateTime lastUpdated;
+
     public StringCatalogReader() throws Exception {
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
@@ -63,6 +66,7 @@ public class StringCatalogReader implements CatalogReader {
         PrintStream ps = new PrintStream(new FileOutputStream(file));
         ps.print(json);
         ps.close();
+        lastUpdated = LocalDateTime.now();
     }
 
     @Override
@@ -110,6 +114,11 @@ public class StringCatalogReader implements CatalogReader {
             return catalogData.getProducts().stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
         }
         return null;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 
     private CatalogData createCatalogData() {

@@ -14,7 +14,7 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.catalog.jpa.service;
+package org.apache.logging.log4j.catalog.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

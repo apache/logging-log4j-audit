@@ -16,6 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.jpa.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,16 +27,17 @@ import org.apache.logging.log4j.catalog.api.Category;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.Product;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
-import org.apache.logging.log4j.catalog.api.service.CatalogService;
 import org.apache.logging.log4j.catalog.jpa.converter.AttributeModelConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryModelConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.EventModelConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.ProductModelConverter;
 import org.apache.logging.log4j.catalog.jpa.dao.AttributeRepository;
+import org.apache.logging.log4j.catalog.jpa.dao.CatalogRepository;
 import org.apache.logging.log4j.catalog.jpa.dao.CategoryRepository;
 import org.apache.logging.log4j.catalog.jpa.dao.EventRepository;
 import org.apache.logging.log4j.catalog.jpa.dao.ProductRepository;
 import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
+import org.apache.logging.log4j.catalog.jpa.model.CatalogModel;
 import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 import org.apache.logging.log4j.catalog.jpa.model.ProductModel;
@@ -67,6 +69,8 @@ public class CatalogServiceImpl implements CatalogService {
     private CategoryModelConverter categoryModelConverter;
     @Autowired
     private ProductModelConverter productModelConverter;
+    @Autowired
+    private CatalogRepository catalogRepository;
 
 
     public CatalogData getCatalogData() {
@@ -117,5 +121,19 @@ public class CatalogServiceImpl implements CatalogService {
 
     public Optional<CategoryModel> getCategory(long id) {
         return categoryRepository.findOne(id);
+    }
+
+    @Override
+    public CatalogModel getCatalogModel() {
+        List<CatalogModel> catalogModels = catalogRepository.findAll();
+        if (catalogModels != null && catalogModels.size() > 0) {
+            return catalogModels.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public void saveCatalog(CatalogModel catalogModel) {
+        catalogRepository.save(catalogModel);
     }
 }

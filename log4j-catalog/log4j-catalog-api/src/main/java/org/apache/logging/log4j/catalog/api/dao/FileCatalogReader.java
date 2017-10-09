@@ -18,7 +18,11 @@ package org.apache.logging.log4j.catalog.api.dao;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -40,6 +44,7 @@ public class FileCatalogReader extends AbstractCatalogReader {
     private static final String DEFAULT_CATALOG_FILE = "src/main/resources/catalog.json";
 
     private final String catalog;
+    private LocalDateTime lastUpdated;
 
     public FileCatalogReader(Map<String, String> attributes) throws IOException {
         StringBuilder catalogPath = new StringBuilder();
@@ -66,7 +71,10 @@ public class FileCatalogReader extends AbstractCatalogReader {
             LOGGER.warn("No catalogFile attribute was provided. Using {}", DEFAULT_CATALOG_FILE);
             catalogPath.append(DEFAULT_CATALOG_FILE);
         }
-        byte[] encoded = Files.readAllBytes(Paths.get(catalogPath.toString()));
+        Path path = Paths.get(catalogPath.toString());
+        lastUpdated = LocalDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()),
+                ZoneId.systemDefault());
+        byte[] encoded = Files.readAllBytes(path);
         catalog = new String(encoded, StandardCharsets.UTF_8);
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
@@ -86,5 +94,10 @@ public class FileCatalogReader extends AbstractCatalogReader {
     @Override
     public String readCatalog() {
         return catalog;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return null;
     }
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -69,4 +70,10 @@ public interface CatalogReader {
      * @return
      */
     Product getProduct(String name);
+
+    /**
+     * Returns the last update time of the catalog.
+     * @return The last update time of the catalog.
+     */
+    LocalDateTime getLastUpdated();
 }

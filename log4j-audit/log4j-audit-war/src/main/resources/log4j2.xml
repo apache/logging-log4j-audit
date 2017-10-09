@@ -20,7 +20,7 @@
         <property name="LOG_DIR">${sys:catalina.home}/logs/AuditService</property>
     </properties>
     <MarkerFilter marker="FLOW" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
-    <MarkerFilter marker="Audit" omMatch="ACCEPT" onMisMatch="NEUTRAL"/>
+    <MarkerFilter marker="Audit" onMatch="ACCEPT" onMisMatch="NEUTRAL"/>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{ABSOLUTE} %-5level # %class.%method %m%n" />
@@ -70,10 +70,10 @@
         <Logger name="org.apache.logging.log4j.audit" level="info" additivity="false">
             <AppenderRef ref="log4j"/>
         </Logger>
-        <Logger name="AuditLogger" level="trace" additivty="false">
+        <Logger name="AuditLogger" level="trace" additivity="false">
             <AppenderRef ref="audit"/>
         </Logger>
-        <Root level="warn">
+        <Root level="DEBUG">
             <AppenderRef ref="log4j" />
         </Root>
     </Loggers>

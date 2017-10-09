@@ -29,7 +29,6 @@ import com.jcraft.jsch.UserInfo;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
 import org.apache.logging.log4j.catalog.security.LocalAuthorizationInterceptor;
-import org.apache.logging.log4j.catalog.jpa.service.ConfigurationService;
 import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;

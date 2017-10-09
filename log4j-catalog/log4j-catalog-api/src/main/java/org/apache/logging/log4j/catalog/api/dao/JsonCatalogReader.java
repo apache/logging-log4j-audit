@@ -16,6 +16,8 @@
  */
 package org.apache.logging.log4j.catalog.api.dao;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,5 +65,10 @@ public class JsonCatalogReader extends AbstractCatalogReader {
             LOGGER.error("Unable to serialze Catalog", ex);
             return null;
         }
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return catalogReader.getLastUpdated();
     }
 }

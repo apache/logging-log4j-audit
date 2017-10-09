@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.DataType;
-import org.apache.logging.log4j.catalog.api.service.CatalogService;
+import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
 import org.apache.logging.log4j.catalog.jpa.config.ApplicationConfiguration;
 import org.apache.logging.log4j.catalog.jpa.dao.AttributeRepository;
 import org.apache.logging.log4j.catalog.jpa.dao.CategoryRepository;

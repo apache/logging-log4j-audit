@@ -19,6 +19,9 @@ package org.apache.logging.log4j.catalog.git.dao;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -101,6 +104,15 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
 
     public void setCatalogPath(String catalogPath) {
         this.catalogPath = catalogPath;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        if (localRepo == null) {
+            updateRepo();
+        }
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(catalogFile.lastModified()),
+                ZoneId.systemDefault());
     }
 
     @Override

@@ -14,21 +14,18 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.catalog.jpa.config;
+package org.apache.logging.log4j.catalog.jpa.service;
 
-import org.apache.logging.log4j.catalog.api.service.CatalogService;
-import org.apache.logging.log4j.catalog.jpa.service.CatalogServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.logging.log4j.catalog.api.CatalogData;
+import org.apache.logging.log4j.catalog.jpa.model.CatalogModel;
 
-@Configuration
-@ComponentScan(basePackages = { "org.apache.logging.log4j.catalog" })
-@Import(HibernatgeDataSourceConfig.class)
-public class ApplicationConfiguration {
-    @Bean
-    public CatalogService catalogService() {
-        return new CatalogServiceImpl();
-    }
+/**
+ * Catalog Service methods.
+ */
+public interface CatalogService {
+    CatalogData getCatalogData();
+
+    CatalogModel getCatalogModel();
+
+    void saveCatalog(CatalogModel catalogModel);
 }
