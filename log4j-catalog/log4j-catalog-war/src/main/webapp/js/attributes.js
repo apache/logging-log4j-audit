@@ -40,28 +40,28 @@ $(document).ready(function () {
                 title: 'Indexed',
                 width: '5%',
                 display: function (attributeData) {
-                    return attributeData.record.indexed ? "true" : "false";
+                    return attributeData.record.indexed ? 'true' : 'false';
                 }
             },
             sortable: {
                 title: 'Sortable',
                 width: '5%',
                 display: function (attributeData) {
-                    return attributeData.record.sortable ? "true" : "false";
+                    return attributeData.record.sortable ? 'true' : 'false';
                 }
             },
             required: {
                 title: 'Required',
                 width: '5%',
                 display: function (attributeData) {
-                    return attributeData.record.required ? "true" : "false";
+                    return attributeData.record.required ? 'true' : 'false';
                 }
             },
             requestContext: {
                 title: 'RequestContext',
                 width: '3%',
                 display: function (attributeData) {
-                    return attributeData.record.requestContext ? "true" : "false";
+                    return attributeData.record.requestContext ? 'true' : 'false';
                 }
             },
             constraints: {
@@ -71,11 +71,11 @@ $(document).ready(function () {
                 edit: false,
                 create: false,
                 display: function (attributeData) {
-                    var constraintList = "";
+                    var constraintList = '';
                     if (typeof(attributeData.record.constraints) != 'undefined' && attributeData.record.constraints != null) {
                         constraintList = attributeData.record.constraints.map(function (elem) {
                             return elem.constraintType.name + '("' + elem.value + '")'
-                        }).join(" | ");
+                        }).join(' | ');
                     }
                     //Create a div that will be used to view associated attributes
                     var $divConstraints = $('<div class="constraints">' + constraintList + '</div>');
@@ -103,12 +103,12 @@ $(document).ready(function () {
     });
     $.ajax({
         type: 'GET',
-        url: "/CatalogService/api/constraints/types",
+        url: 'api/constraints/types',
         success:function(response){
             localStorage.setItem('allConstraints', response);
         },
         error:function(jqXhr, textStatus, errorThrown){
-            console.error(textStatus + " - " + errorThrown);
+            console.error(textStatus + ' - ' + errorThrown);
         }
     });
     //Load attributes list from server
@@ -131,7 +131,7 @@ function deleteAttributeItem(attributeId) {
                 }
             },
             error:function(jqXhr, textStatus, errorThrown) {
-                console.error(textStatus + " - " + errorThrown);
+                console.error(textStatus + ' - ' + errorThrown);
             }
         });
     }
@@ -176,7 +176,7 @@ function addEditattributeItemHandler() {
               }
           },
           error:function(jqXhr, textStatus, errorThrown) {
-              console.error(textStatus + " - " + errorThrown);
+              console.error(textStatus + ' - ' + errorThrown);
           }
       });
   }
