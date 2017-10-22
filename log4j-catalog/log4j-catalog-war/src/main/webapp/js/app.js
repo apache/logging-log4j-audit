@@ -1,6 +1,11 @@
 $(document).ready(function () {
     // Clear localStorage
     localStorage.clear();
+
+    $('#save-all').click(function(e) {
+      e.preventDefault();
+      saveAllChanges();
+    });
 });
 
 // Modal action handlers
@@ -40,4 +45,21 @@ function validateFormContent() {
     });
     if (errors) return false;
     return true;
+}
+
+function saveAllChanges() {
+  $.ajax({
+      type: 'POST',
+      contentType: 'application/json',
+      url: 'catalog',
+      data: null,
+      success:function(response) {
+          if (response.Result === 'OK') {
+              $('.log4j-table-container"').jtable('load');
+          }
+      },
+      error:function(jqXhr, textStatus, errorThrown) {
+          console.error(textStatus + ' - ' + errorThrown);
+      }
+  });
 }

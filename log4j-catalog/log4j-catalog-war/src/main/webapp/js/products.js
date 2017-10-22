@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
     $.ajax({
         type: 'POST',
-        url: "api/events/list",
+        url: 'api/events/list',
         success:function(response){
             if (response.Result === 'OK') {
                 var allEvents = response.Records.map((item) => {
@@ -63,7 +63,7 @@ $(document).ready(function () {
             }
         },
         error:function(jqXhr, textStatus, errorThrown){
-            console.error(textStatus + " - " + errorThrown);
+            console.error(textStatus + ' - ' + errorThrown);
         }
     });
     //Load products list from server
@@ -86,7 +86,7 @@ function deleteProductItem(productId) {
               }
           },
           error:function(jqXhr, textStatus, errorThrown) {
-              console.error(textStatus + " - " + errorThrown);
+              console.error(textStatus + ' - ' + errorThrown);
           }
       });
     }
@@ -122,7 +122,7 @@ function addEditProductItemHandler() {
                 }
             },
             error:function(jqXhr, textStatus, errorThrown) {
-                console.error(textStatus + " - " + errorThrown);
+                console.error(textStatus + ' - ' + errorThrown);
             }
         });
     }

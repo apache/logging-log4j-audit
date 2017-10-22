@@ -1,15 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+  font-family: 'Lato', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 #nav {
-  text-align: center;
-  margin: 24px;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #e7e7e7;
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 #nav a {
-  margin: 0 14px;
+  border-right: 1px solid #e7e7e7;
+  color: #666;
+  font-size: 16px;
+  line-height: 48px;
+  padding: 0 14px;
+  text-decoration: none;
+}
+
+#nav #save-all {
+  border-right: none;
+  border-left: 1px solid #e7e7e7;
+  margin-left: auto;
+}
+
+#nav a:hover,
+#nav #save-all:hover {
+  background-color: #0b67cd;
+  border-right: 1px solid #0b67cd;
+  color: #fff;
 }
 
 #ftr {
   margin: 24px;
   text-align: center;
+}
+
+.log4j-table-container {
+  padding: 0 24px;
 }
 
 .form-processing {

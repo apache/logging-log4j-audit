@@ -39,7 +39,7 @@ $(document).ready(function () {
                 edit: false,
                 create: false,
                 display: function (eventData) {
-                    var attributeList = eventData.record.attributes.map(function(elem){return elem.name + (elem.required ? " (required)" : "")}).join(" | ");
+                    var attributeList = eventData.record.attributes.map(function(elem){return elem.name + (elem.required ? ' (required)' : '')}).join(' | ');
                     //Create a div that will be used to view associated attributes
                     var $divAttributes = $('<div class="event-attributes">' + attributeList + '</div>');
                     return $divAttributes;
@@ -66,14 +66,14 @@ $(document).ready(function () {
     });
     $.ajax({
         type: 'GET',
-        url: "/CatalogService/api/attributes",
+        url: 'api/attributes',
         success:function(response){
             if (response.result === 'OK') {
                 localStorage.setItem('allAttributes', response.data);
             }
         },
         error:function(jqXhr, textStatus, errorThrown){
-            console.error(textStatus + " - " + errorThrown);
+            console.error(textStatus + ' - ' + errorThrown);
         }
     });
     $('#EventsTableContainer').jtable('load');
@@ -95,7 +95,7 @@ function deleteEventItem(eventId) {
               }
           },
           error:function(jqXhr, textStatus, errorThrown) {
-              console.error(textStatus + " - " + errorThrown);
+              console.error(textStatus + ' - ' + errorThrown);
           }
       });
     }
@@ -135,7 +135,7 @@ function addEditEventItemHandler() {
                 }
             },
             error:function(jqXhr, textStatus, errorThrown) {
-                console.error(textStatus + " - " + errorThrown);
+                console.error(textStatus + ' - ' + errorThrown);
             }
         });
     }

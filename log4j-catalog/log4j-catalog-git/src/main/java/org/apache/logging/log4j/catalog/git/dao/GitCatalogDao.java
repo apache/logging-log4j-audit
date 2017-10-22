@@ -26,6 +26,7 @@ import java.time.ZoneId;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.CatalogData;
@@ -63,7 +64,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
     public GitCatalogDao() {
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        mapper = new ObjectMapper(factory);
+        mapper = new ObjectMapper(factory).enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public CredentialsProvider getCredentialsProvider() {
@@ -148,7 +149,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             try { if (writer != null) writer.close(); } catch(Exception exception) { }
         }
 
-        try (Git git = Git.open(catalogFile)) {
+        try (Git git = Git.open(localRepoFile)) {
             git.add().addFilepattern(catalogPath).call();
             git.commit().setMessage("Catalog updated").call();
             updateRepo();
