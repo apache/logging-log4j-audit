@@ -137,7 +137,7 @@ public class CatalogController {
     }
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Attribute", notes = "Creates a catalog attribute", tags = {"Catalog"})
+    @ApiOperation(value = "Create a catalog Attribute", notes = "Returns a catalog attribute", tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/attribute/{name}")
     public ResponseEntity<Attribute> getAttribute(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
                                                          @ApiParam(value = "attribute name", required = true) @PathVariable String name) {

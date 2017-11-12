@@ -20,13 +20,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  * Basic attributes common to all events.
  */
+@JsonFilter("catalogEvent")
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1512172827909901054L;
@@ -35,7 +37,6 @@ public class Event implements Serializable {
     private String displayName;
     private String description;
     private Set<String> aliases;
-    @JsonIgnore
     private String catalogId;
     private List<EventAttribute> attributes;
 
@@ -128,8 +129,11 @@ public class Event implements Serializable {
      * Set the catalog id this Event is associated with.
      * @param catalogId The catalog id or null.
      */
-    public void setCatalogId(String catalogId) {
-        this.catalogId = catalogId;
+    public Event setCatalogId(String catalogId) {
+        if (catalogId != null) {
+            this.catalogId = catalogId;
+        }
+        return this;
     }
 
     /**

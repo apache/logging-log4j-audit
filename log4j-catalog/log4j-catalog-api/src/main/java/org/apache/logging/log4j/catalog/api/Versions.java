@@ -16,11 +16,23 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.MediaType;
 
 public final class Versions {
-    public static final MediaType V1_0 = new MediaType("application", "vnd.nextiva.license-v1.0+json");
-    public static final String V1_0_VALUE = "application/vnd.nextiva.license-v1.0+json";
+
+    private static final String type = "application";
+    private static final String subType = "vnd.apache.logging.log4j.audit+json";
+    private static final String versionKey = "version";
+    private static final String version1 = "1.0";
+    private static final Map<String, String> V1Parameters = new HashMap<>();
+    static {
+        V1Parameters.put(versionKey, version1);
+    }
+    public static final MediaType V1_0 = new MediaType(type, subType, V1Parameters);
+    public static final String V1_0_VALUE = type + "/" + subType + "; " + versionKey + "=\"" + version1 +"\"";
 
     private Versions() { }
 }

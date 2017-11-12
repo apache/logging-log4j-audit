@@ -22,11 +22,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
+import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
 import org.apache.logging.log4j.catalog.security.LocalAuthorizationInterceptor;
 import org.eclipse.jgit.api.TransportConfigCallback;
@@ -160,7 +162,11 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
 
     @Bean
     public ObjectMapper objectMapper() {
-        return JsonObjectMapperFactory.createMapper();
+        ObjectMapper mapper = JsonObjectMapperFactory.createMapper();
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
+        mapper.setFilterProvider(filterProvider);
+        return mapper;
     }
 
     @Bean

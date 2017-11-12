@@ -30,6 +30,7 @@ import java.util.Set;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.Category;
@@ -41,6 +42,7 @@ import org.apache.logging.log4j.catalog.api.Product;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.plugins.MinValueConstraint;
 import org.apache.logging.log4j.catalog.api.plugins.PatternConstraint;
+import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -59,6 +61,9 @@ public class StringCatalogReader implements CatalogReader {
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
         ObjectMapper mapper = new ObjectMapper(factory);
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
+        mapper.setFilterProvider(filterProvider);
         catalogData = createCatalogData();
         json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(catalogData);
         assertNotNull("No json catalog created", json);

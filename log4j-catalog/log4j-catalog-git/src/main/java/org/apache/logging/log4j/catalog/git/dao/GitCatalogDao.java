@@ -27,6 +27,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.CatalogData;
@@ -35,6 +36,7 @@ import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.api.exception.CatalogModificationException;
 import org.apache.logging.log4j.catalog.api.exception.CatalogReadException;
 import org.apache.logging.log4j.catalog.api.exception.CatalogNotFoundException;
+import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
@@ -65,6 +67,9 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
         mapper = new ObjectMapper(factory).enable(SerializationFeature.INDENT_OUTPUT);
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
+        mapper.setFilterProvider(filterProvider);
     }
 
     public CredentialsProvider getCredentialsProvider() {

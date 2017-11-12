@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.AuditLogger;
@@ -32,6 +33,7 @@ import org.apache.logging.log4j.audit.util.JsonObjectMapperFactory;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.dao.ClassPathCatalogReader;
+import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -128,7 +130,11 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     @Bean
     public ObjectMapper objectMapper() {
-        return JsonObjectMapperFactory.createMapper();
+        ObjectMapper mapper = JsonObjectMapperFactory.createMapper();
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
+        mapper.setFilterProvider(filterProvider);
+        return mapper;
     }
 
     @Bean
