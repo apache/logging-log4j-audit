@@ -28,7 +28,7 @@ sample project that illustrates how to perform these tasks.
 
 By sending a pull request you grant the Apache Software Foundation sufficient rights to use and release the submitted 
 work under the Apache license. You grant the same rights (copyright license, patent license, etc.) to the 
-Apache Software Foundation as if you have signed a Contributor License Aggreement. For contributions that are 
+Apache Software Foundation as if you have signed a Contributor License Agreement. For contributions that are 
 judged to be non-trivial, you will be asked to actually signing a Contributor License Agreement.
 
 ## Packages
