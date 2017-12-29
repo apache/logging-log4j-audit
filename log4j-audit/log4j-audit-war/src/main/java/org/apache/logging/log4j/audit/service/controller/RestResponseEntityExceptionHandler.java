@@ -36,6 +36,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<?> handleAnyException(Exception e) {
         if (e instanceof IllegalArgumentException) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } else if (e instanceof IllegalStateException) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
         }
         return errorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }

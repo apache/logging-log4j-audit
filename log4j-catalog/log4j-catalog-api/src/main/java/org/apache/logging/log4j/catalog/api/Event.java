@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 

@@ -53,7 +53,7 @@ public class AuditController {
             for (Map.Entry<String, String> entry : auditDto.getRequestContextMap().entrySet()) {
                 ThreadContext.put(entry.getKey(), entry.getValue());
             }
-            auditLogger.logEvent(auditDto.getEventName(), auditDto.getProperties());
+            auditLogger.logEvent(auditDto.getEventName(), auditDto.getCatalogId(), auditDto.getProperties());
         } finally {
             ThreadContext.clearMap();
         }

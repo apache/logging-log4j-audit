@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
+
 /**
  *
  */
@@ -78,6 +80,14 @@ public abstract class AbstractEventLogger {
 
     public void logEvent(String eventName, Map<String, String> attributes) {
         Event event = catalogManager.getEvent(eventName);
+        if (event == null) {
+            throw new AuditException("Unable to locate definition of audit event " + eventName);
+        }
+        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+    }
+
+    public void logEvent(String eventName, String catalogId, Map<String, String> attributes) {
+        Event event = catalogManager.getEvent(eventName, catalogId);
         if (event == null) {
             throw new AuditException("Unable to locate definition of audit event " + eventName);
         }

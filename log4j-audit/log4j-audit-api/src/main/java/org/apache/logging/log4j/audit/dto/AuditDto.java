@@ -28,6 +28,11 @@ public class AuditDto {
     private String eventName;
 
     /**
+     * The catalog to use. If null the default catalog is used.
+     */
+    private String catalogId;
+
+    /**
      * The RequestContext Map.
      */
     private Map<String, String> requestContextMap;
@@ -51,6 +56,22 @@ public class AuditDto {
      */
     public void setEventName(String eventName) {
         this.eventName = eventName;
+    }
+
+    /**
+     * Get the Catalog id.
+     * @return the catalog id.
+     */
+    public String getCatalogId() {
+        return catalogId;
+    }
+
+    /**
+     * Set the catalog id.
+     * @param catalogId The catalog id.
+     */
+    public void setCatalogId(String catalogId) {
+        this.catalogId = catalogId;
     }
 
     /**

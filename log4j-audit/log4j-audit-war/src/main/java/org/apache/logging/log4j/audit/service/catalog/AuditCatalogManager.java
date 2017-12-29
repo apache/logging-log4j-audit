@@ -3,7 +3,6 @@ package org.apache.logging.log4j.audit.service.catalog;
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

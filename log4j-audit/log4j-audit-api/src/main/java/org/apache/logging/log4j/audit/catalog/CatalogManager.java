@@ -18,25 +18,46 @@ package org.apache.logging.log4j.audit.catalog;
 
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Event;
-import org.apache.logging.log4j.catalog.api.EventAttribute;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  *
  */
 public interface CatalogManager {
 
-    Event getEvent(String eventName);
+    default Event getEvent(String eventName) {
+        return getEvent(eventName, DEFAULT_CATALOG);
+    }
 
-    List<String> getRequiredContextAttributes(String eventName);
+    Event getEvent(String eventName, String catalogId);
 
-    List<String> getAttributeNames(String eventName);
+    default List<String> getRequiredContextAttributes(String eventName) {
+        return getRequiredContextAttributes(eventName, DEFAULT_CATALOG);
+    }
 
-    Map<String, Attribute> getAttributes(String eventName);
+    List<String> getRequiredContextAttributes(String eventName, String catalogId);
+
+    default List<String> getAttributeNames(String eventName) {
+        return getAttributeNames(eventName, DEFAULT_CATALOG);
+    }
+
+    List<String> getAttributeNames(String eventName, String catalogId);
+
+    default Map<String, Attribute> getAttributes(String eventName) {
+        return getAttributes(eventName, DEFAULT_CATALOG);
+    }
+
+    Map<String, Attribute> getAttributes(String eventName, String catalogId);
 
     Map<String, Attribute> getRequestContextAttributes();
 
-    Attribute getAttribute(String attributeName);
+    default Attribute getAttribute(String attributeName) {
+        return getAttribute(attributeName, DEFAULT_CATALOG);
+    }
+
+    Attribute getAttribute(String attributeName, String catalogId);
 }
