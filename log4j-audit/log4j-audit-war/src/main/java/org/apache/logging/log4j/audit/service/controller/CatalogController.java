@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.audit.service.catalog.AuditManager;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Category;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -90,6 +91,8 @@ public class CatalogController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private AuditManager auditManager;
 
     @Autowired
     private CategoryModelConverter categoryModelConverter;
@@ -243,8 +246,7 @@ public class CatalogController {
             throw new IllegalStateException("An event named "+ event.getName() + " in catalog " +
                     event.getCatalogId() + " already exists");
         }
-        EventModel model = eventConverter.convert(event);
-        model = eventService.saveEvent(model);
+        EventModel model = auditManager.saveEvent(event);
         return new ResponseEntity<>(eventModelConverter.convert(model), HttpStatus.CREATED);
     }
 

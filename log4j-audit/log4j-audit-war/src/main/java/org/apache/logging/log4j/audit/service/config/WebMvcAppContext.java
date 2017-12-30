@@ -16,6 +16,7 @@
  */
 package org.apache.logging.log4j.audit.service.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +24,16 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UserInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.AuditLogger;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.service.catalog.AuditCatalogManager;
+import org.apache.logging.log4j.audit.service.catalog.AuditManager;
 import org.apache.logging.log4j.audit.service.security.LocalAuthorizationInterceptor;
 import org.apache.logging.log4j.audit.util.JsonObjectMapperFactory;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
@@ -35,8 +41,15 @@ import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.dao.ClassPathCatalogReader;
 import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
+import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.JschConfigSessionFactory;
+import org.eclipse.jgit.transport.OpenSshConfig;
+import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.SshTransport;
+import org.eclipse.jgit.transport.Transport;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.util.FS;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +70,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 @Configuration
@@ -70,6 +84,27 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     @Autowired
     ConfigurationService configurationService;
+
+    @Value("${gitUserName")
+    private String gitUserName;
+
+    @Value("${gitPassword:#{null}}")
+    private String gitPassword;
+
+    @Value("${gitPassPhrase:#{null}}")
+    private String gitPassPhrase;
+
+    @Value("${gitLocalRepoPath:#{null}}")
+    private String localRepoUrl;
+
+    @Value("${privateKeyPath:#{null}}")
+    private String privateKeyPath;
+
+    @Value("${getRemoteRepoUri}")
+    private String remoteRepoUrl;
+
+    @Value("${remoteRepoCatalogPath:#{null}}")
+    private String remoteRepoCatalogPath;
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -148,16 +183,6 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CatalogDao catalogDao(@Value("${gitLocalRepoPath}") String gitLocalRepoPath, @Value("${gitRemoteRepoUri}") String gitRemoteRepoUri) {
-        GitCatalogDao catalogDao = new GitCatalogDao();
-        catalogDao.setLocalRepoPath(gitLocalRepoPath);
-        catalogDao.setRemoteRepoUri(gitRemoteRepoUri);
-        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider("waymirec", "w4ym1r3c");
-        catalogDao.setCredentialsProvider(credentialsProvider);
-        return catalogDao;
-    }
-
-    @Bean
     public CatalogReader catalogReader() {
         try {
             return new ClassPathCatalogReader();
@@ -168,14 +193,14 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CatalogManager catalogManager() {
+    public AuditManager auditManager() {
         return new AuditCatalogManager(catalogReader());
     }
 
     @Bean
     AuditLogger auditLogger() {
         AuditLogger auditLogger = new AuditLogger();
-        auditLogger.setCatalogManager(catalogManager());
+        auditLogger.setCatalogManager(auditManager());
         return auditLogger;
     }
 

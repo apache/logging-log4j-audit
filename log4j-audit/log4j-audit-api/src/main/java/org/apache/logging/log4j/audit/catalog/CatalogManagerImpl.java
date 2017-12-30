@@ -52,8 +52,6 @@ public class CatalogManagerImpl implements CatalogManager {
 
     private static final String REQCTX = "ReqCtx_";
 
-
-
     protected CatalogData catalogData;
 
     public CatalogManagerImpl(CatalogReader catalogReader) {
@@ -62,6 +60,10 @@ public class CatalogManagerImpl implements CatalogManager {
         } catch (Exception ex) {
             throw new AuditException("Unable to initialize catalog data", ex);
         }
+    }
+
+    protected Map<String, Map<String, CatalogInfo>> getInfoMap() {
+        return infoMap;
     }
 
     @Override
@@ -79,6 +81,10 @@ public class CatalogManagerImpl implements CatalogManager {
     @Override
     public Map<String, Attribute> getAttributes(String eventName, String catalogId) {
         Event event = getEvent(eventName, catalogId);
+        if (event == null) {
+            logger.warn("No event named {} counld be found in catalog {}", eventName, catalogId);
+            return null;
+        }
         Map<String, Attribute> attributes = new HashMap<>(event.getAttributes().size());
         for (EventAttribute eventAttribute : event.getAttributes()) {
             Attribute attr = getAttribute(eventAttribute.getName(), event.getCatalogId());
@@ -140,48 +146,52 @@ public class CatalogManagerImpl implements CatalogManager {
         Map<String, Map<String, CatalogInfo>> map = new HashMap<>();
         map.put(DEFAULT_CATALOG, new HashMap<>());
         for (Event event : catalogData.getEvents()) {
-            CatalogInfo info = new CatalogInfo();
-            info.event = event;
-            String catalogId = event.getCatalogId();
-            if (catalogId != null && catalogId.length() > 0 && !map.containsKey(catalogId)) {
-                map.put(catalogId, new HashMap<>());
-            }
-            List<String> required = new ArrayList<>();
-            List<String> names = new ArrayList<>();
-            info.attributes = new HashMap<>(names.size());
-            if (event.getAttributes() != null) {
-                for (EventAttribute eventAttribute : event.getAttributes()) {
-                    String name = eventAttribute.getName();
-                    Attribute attribute = getAttribute(name, event.getCatalogId());
-                    info.attributes.put(name, attribute);
-                    if (name.indexOf('.') != -1) {
-                        name = name.replaceAll("\\.", "");
-                    }
-                    if (name.indexOf('/') != -1) {
-                        name = name.replaceAll("/", "");
-                    }
-                    if (attribute.isRequestContext()) {
-                        if (attribute.isRequired()) {
-                            if (name.startsWith(REQCTX)) {
-                                name = name.substring(REQCTX.length());
-                            }
-                            required.add(name);
-                        }
-                    } else {
-                        names.add(name);
-                    }
-                }
-            }
-            info.requiredContextAttributes = required;
-            info.attributeNames = names;
-            Map<String, CatalogInfo> catalogMap = catalogId == null ?
-                    map.get(DEFAULT_CATALOG) : map.get(catalogId);
-            catalogMap.put(NamingUtils.getFieldName(event.getName()), info);
+            addEntry(map, event);
         }
         return map;
     }
 
-    private class CatalogInfo {
+    protected void addEntry(Map<String, Map<String, CatalogInfo>> map, Event event) {
+        CatalogInfo info = new CatalogInfo();
+        info.event = event;
+        String catalogId = event.getCatalogId();
+        if (catalogId != null && catalogId.length() > 0 && !map.containsKey(catalogId)) {
+            map.put(catalogId, new HashMap<>());
+        }
+        List<String> required = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        info.attributes = new HashMap<>(names.size());
+        if (event.getAttributes() != null) {
+            for (EventAttribute eventAttribute : event.getAttributes()) {
+                String name = eventAttribute.getName();
+                Attribute attribute = getAttribute(name, event.getCatalogId());
+                info.attributes.put(name, attribute);
+                if (name.indexOf('.') != -1) {
+                    name = name.replaceAll("\\.", "");
+                }
+                if (name.indexOf('/') != -1) {
+                    name = name.replaceAll("/", "");
+                }
+                if (attribute.isRequestContext()) {
+                    if (attribute.isRequired()) {
+                        if (name.startsWith(REQCTX)) {
+                            name = name.substring(REQCTX.length());
+                        }
+                        required.add(name);
+                    }
+                } else {
+                    names.add(name);
+                }
+            }
+        }
+        info.requiredContextAttributes = required;
+        info.attributeNames = names;
+        Map<String, CatalogInfo> catalogMap = catalogId == null ?
+                map.get(DEFAULT_CATALOG) : map.get(catalogId);
+        catalogMap.put(NamingUtils.getFieldName(event.getName()), info);
+    }
+
+    protected class CatalogInfo {
         private Event event;
 
         private List<String> requiredContextAttributes;

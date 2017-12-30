@@ -16,7 +16,6 @@ import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.Category;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.Product;
-import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.jpa.model.CatalogModel;
 import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
 import org.apache.logging.log4j.catalog.jpa.converter.AttributeConverter;
@@ -33,7 +32,7 @@ import org.apache.logging.log4j.catalog.jpa.service.EventService;
 import org.apache.logging.log4j.catalog.jpa.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AuditCatalogManager extends CatalogManagerImpl {
+public class AuditCatalogManager extends CatalogManagerImpl implements AuditManager {
 
     private static Logger logger = LogManager.getLogger();
 
@@ -51,9 +50,6 @@ public class AuditCatalogManager extends CatalogManagerImpl {
 
     @Autowired
     ProductService productService;
-
-    @Autowired
-    CatalogDao catalogDao;
 
     @Autowired
     AttributeConverter attributeConverter;
@@ -84,6 +80,15 @@ public class AuditCatalogManager extends CatalogManagerImpl {
         } else if (catalogModel.getLastUpdate().toLocalDateTime().isBefore(catalogReader.getLastUpdated())) {
             initialize(catalogModel);
         }
+    }
+
+    @Override
+    public EventModel saveEvent(Event event) {
+        EventModel model = eventConverter.convert(event);
+        model = eventService.saveEvent(model);
+        Map<String, Map<String, CatalogInfo>> infoMap = getInfoMap();
+        addEntry(infoMap, event);
+        return model;
     }
 
     private void initialize(CatalogModel catalogModel) {

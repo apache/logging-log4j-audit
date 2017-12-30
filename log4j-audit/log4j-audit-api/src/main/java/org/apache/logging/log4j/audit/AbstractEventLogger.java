@@ -129,7 +129,7 @@ public abstract class AbstractEventLogger {
                 }
             }
         }
-        Map<String, Attribute> attributeMap = catalogManager.getAttributes(eventName);
+        Map<String, Attribute> attributeMap = catalogManager.getAttributes(eventName, event.getCatalogId());
         for (String name : attributes.keySet()) {
             if (!attributeMap.containsKey(name) && !name.equals("completionStatus")) {
                 if (errors.length() > 0) {
@@ -147,7 +147,7 @@ public abstract class AbstractEventLogger {
         if (errors.length() > 0) {
             throw new AuditException(errors.toString());
         }
-        List<String> attributeNames = catalogManager.getAttributeNames(eventName);
+        List<String> attributeNames = catalogManager.getAttributeNames(eventName, event.getCatalogId());
         StringBuilder buf = new StringBuilder();
         for (String attribute : attributes.keySet()) {
             if (!attributeNames.contains(attribute)) {
@@ -161,7 +161,7 @@ public abstract class AbstractEventLogger {
             throw new AuditException("Event " + eventName + " contains invalid attribute(s) " + buf.toString());
         }
 
-        List<String> reqCtxAttrs = catalogManager.getRequiredContextAttributes(eventName);
+        List<String> reqCtxAttrs = catalogManager.getRequiredContextAttributes(eventName, event.getCatalogId());
 
         if (reqCtxAttrs != null) {
             StringBuilder sb = new StringBuilder();
