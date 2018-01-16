@@ -58,10 +58,10 @@ public class InterfacesGenerator {
     private static final String REQUIRED_ATTR = "required=true";
     private static final String REQUIRED = "@Required";
 
-    private static final String REQUEST_CONTEXT_IMPORT = "org.apache.logging.log4j.audit.annotation.RequestContextBase";
+    private static final String REQUEST_CONTEXT_IMPORT = "org.apache.logging.log4j.audit.annotation.RequestContext";
     private static final String PARENT_IMPORT = "org.apache.logging.log4j.audit.AuditEvent";
     private static final String MAX_LENGTH_IMPORT = "org.apache.logging.log4j.audit.annotation.MaxLength";
-    private static final String REQCTX_ANN = "@RequestContextBase(";
+    private static final String REQCTX_ANN = "@RequestContext(";
 
     private static final String PARENT_CLASS = "AuditEvent";
 
