@@ -23,7 +23,7 @@ public class EventAttribute {
 
     private String name;
 
-    private boolean isRequired;
+    private Boolean isRequired;
 
     public EventAttribute() {
     }
@@ -53,7 +53,7 @@ public class EventAttribute {
      * Indicates whether the attribute is required.
      * @return true if the Attribute is required, false otherwise.
      */
-    public boolean isRequired() {
+    public Boolean isRequired() {
         return isRequired;
     }
 
@@ -61,7 +61,7 @@ public class EventAttribute {
      * Sets whether the attribute is required.
      * @param required true if the attribute is required, false otherwise.
      */
-    public void setRequired(boolean required) {
+    public void setRequired(Boolean required) {
         isRequired = required;
     }
 }

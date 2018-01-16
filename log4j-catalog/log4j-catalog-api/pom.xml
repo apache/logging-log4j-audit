@@ -27,7 +27,14 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <log4jParentDir>${basedir}/../..</log4jParentDir>
   </properties>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit/log4j-catalog/log4j-catalog-api</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>io.springfox</groupId>

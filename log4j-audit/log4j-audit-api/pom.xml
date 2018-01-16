@@ -25,7 +25,15 @@
   <artifactId>log4j-audit-api</artifactId>
   <packaging>jar</packaging>
   <name>Log4j Audit API</name>
-
+  <properties>
+    <log4jParentDir>${basedir}/../..</log4jParentDir>
+  </properties>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit/log4j-audit/log4j-audit-api</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

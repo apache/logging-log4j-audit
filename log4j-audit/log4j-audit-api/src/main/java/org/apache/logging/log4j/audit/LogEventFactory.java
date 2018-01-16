@@ -52,7 +52,8 @@ import org.apache.logging.log4j.spi.ExtendedLogger;
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 
 /**
- *
+ * Handles logging generated Events. Every Event extends the AuditProxy, which handles construction of the
+ * Event and logging of the Event.
  */
 public class LogEventFactory {
 
@@ -80,6 +81,12 @@ public class LogEventFactory {
         defaultExceptionHandler = (exceptionHandler == null) ? NOOP_EXCEPTION_HANDLER : exceptionHandler;
     }
 
+    /**
+     * Constructs an Event object from its interface.
+     * @param intrface The Event interface.
+     * @param <T> The Event type.
+     * @return Returns an instance of the Event.
+     */
     @SuppressWarnings("unchecked")
 	public static <T> T getEvent(Class<T> intrface) {
 
@@ -94,10 +101,24 @@ public class LogEventFactory {
 		return (T) audit;
 	}
 
+    /**
+     *
+     * This method is used to construct and AuditMessage from a set of properties and the Event interface
+     * that represents the event being audited using the default error handler.
+     * @param intrface The Event interface.
+     * @param properties The properties to be included in the event.
+     */
     public static void logEvent(Class<?> intrface, Map<String, String> properties) {
 	    logEvent(intrface, properties, DEFAULT_HANDLER);
     }
 
+    /**
+     * This method is used to construct and AuditMessage from a set of properties and the Event interface
+     * that represents the event being audited.
+     * @param intrface The Event interface.
+     * @param properties The properties to be included in the event.
+     * @param handler Class that gets control when an exception occurs logging the event.
+     */
     public static void logEvent(Class<?> intrface, Map<String, String> properties, AuditExceptionHandler handler) {
         StringBuilder errors = new StringBuilder();
         validateContextConstraints(intrface, errors);
@@ -138,6 +159,11 @@ public class LogEventFactory {
         logEvent(msg, handler);
     }
 
+    /**
+     * Used to Log the actual AuditMessage.
+     * @param msg The AuditMessage.
+     * @param handler Class that gets control when an exception occurs logging the event.
+     */
     public static void logEvent(AuditMessage msg, AuditExceptionHandler handler) {
         try {
             LOGGER.logIfEnabled(FQCN, Level.OFF, EVENT_MARKER, msg, null);

@@ -1,0 +1,59 @@
+<!-- vim: set syn=markdown : -->
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+#set($h1='#')
+#set($h2='##')
+#set($h3='###')
+
+$h1 Apache Log4j Audit
+
+Log4j-Audit provides a framework for defining audit events and then logging them using Log4j. The framework focuses on
+defining the events and providing an easy mechanism for applications to log them, allowing products to provide
+consistency and validity to the events that are logged. It does not focus on how the log events are written to a
+data store. Log4j itself provides many options for that.
+
+$h2 Features
+
+$h3 Audit Event Catalog
+
+Log4j Audit uses a catalog of events to determine what events can be logged and to validate the events. Java
+interfaces are generated from the catalog for applications to use when generating the audit events. A web UI
+is provided to edit and manage the catalog but the UI requires a specific user's Git credentials and
+so is best run on the local user's computer.
+
+$h3 Dynamic Event Catalog
+
+In addition to the catalog that is managed by the web UI a set of dynamic catalogs can also be used. These catalogs
+can be used by multi-tenant applications where each tenant has a different set of events and/or attributes that need
+to be logged.
+
+$h3 Audit Service
+
+Non-Java applications can perform audit logging by generating the event data and passing it to an auditing service
+where the events will be validated and logged.
+
+$h3 Sample Project
+
+Users of Log4j Audit must provide a Git repository where the audit events will reside which will be used to generate
+the Java event interfaces. Log4j Audit provides a sample project that contains a sample catalog file and creates
+the Jave interfaces from that file. The project also contains a module that generates a war file containing the
+editor for that catalog as well as the REST endpoints to manipulate the dynamic catalogs.
+
+$h2 Requirements
+
+Log4j Audit requires Java 8 and Log4j 2.10.0 or greater.
+

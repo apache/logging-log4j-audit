@@ -1,0 +1,46 @@
+<!-- vim: set syn=markdown : -->
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+#set($h1='#')
+#set($h2='##')
+#set($h3='###')
+
+$h1 The Apache Log4j Audit Catalog
+
+Log4j-Audit uses a Catalog that describes the attributes and events that can be logged. The events may be grouped
+by Products and/or Categories, but at this time nothing in Log4j Audit makes use of the product or catalog
+definitions.
+
+$h2 Catalog Components
+
+$h3 Attributes
+
+Attributes are the discrete data elements to be captured in audit events. One of the goals of the audit catalog
+is to avoid having what are essentially the same attributes with different names in various events. When creating
+new events users are highly encouraged to scan the existing attributes for one that is already present.
+
+An Attribute definition contains the following items:
+*
+
+$h3 Events
+
+$h3 Products
+
+$h3 Categories
+
+
+

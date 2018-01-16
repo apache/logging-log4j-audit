@@ -35,7 +35,7 @@ import java.util.Set;
 import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
 
 /**
- *
+ * This class is used to log events generated remotely.
  */
 public abstract class AbstractEventLogger {
 
@@ -114,7 +114,8 @@ public abstract class AbstractEventLogger {
 
         for (EventAttribute eventAttribute : event.getAttributes()) {
             Attribute attr = catalogManager.getAttribute(eventAttribute.getName());
-            if (!attr.isRequestContext() && (attr.isRequired() || eventAttribute.isRequired())) {
+            if ((!attr.isRequestContext() && (attr.isRequired()) ||
+                    (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
                 String name = attr.getName();
                 if (!attributes.containsKey(name)) {
                     if (missingAttributes.length() > 0) {
@@ -175,7 +176,7 @@ public abstract class AbstractEventLogger {
             }
             if (sb.length() > 0) {
                 throw new IllegalStateException("Event " + msg.getId().getName() +
-                        " is missing required RequestContext values for " + sb.toString());
+                        " is missing required RequestContextBase values for " + sb.toString());
             }
         }
         Map<String, Attribute> reqCtxAttributes = catalogManager.getRequestContextAttributes();

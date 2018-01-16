@@ -19,6 +19,7 @@ package org.apache.logging.log4j.audit.generator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import joptsimple.OptionParser;
@@ -57,10 +58,10 @@ public class InterfacesGenerator {
     private static final String REQUIRED_ATTR = "required=true";
     private static final String REQUIRED = "@Required";
 
-    private static final String REQUEST_CONTEXT_IMPORT = "org.apache.logging.log4j.audit.annotation.RequestContext";
+    private static final String REQUEST_CONTEXT_IMPORT = "org.apache.logging.log4j.audit.annotation.RequestContextBase";
     private static final String PARENT_IMPORT = "org.apache.logging.log4j.audit.AuditEvent";
     private static final String MAX_LENGTH_IMPORT = "org.apache.logging.log4j.audit.annotation.MaxLength";
-    private static final String REQCTX_ANN = "@RequestContext(";
+    private static final String REQCTX_ANN = "@RequestContextBase(";
 
     private static final String PARENT_CLASS = "AuditEvent";
 
@@ -287,7 +288,16 @@ public class InterfacesGenerator {
                         if (name.startsWith(REQCTX)) {
                             name = name.substring(REQCTX.length());
                         }
-                        if (requestContextIsRequired.get(name)) {
+                        Boolean isRequired = null;
+                        final String attrName = name;
+                        if (event.getAttributes() != null) {
+                            Optional<EventAttribute> optional = event.getAttributes().stream().filter(a -> attrName.equals(a.getName())).findFirst();
+                            if (optional.isPresent()) {
+                                isRequired = optional.get().isRequired();
+                            }
+                        }
+                        if ((isRequired != null && isRequired) ||
+                                (isRequired == null && requestContextIsRequired.get(name))) {
                             reqCtx.append(", ").append(REQUIRED_ATTR);
                         }
                         Set<Constraint> constraints =  entry.getValue().getConstraints();

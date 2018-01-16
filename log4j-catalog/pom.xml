@@ -27,6 +27,9 @@
   <packaging>pom</packaging>
 
   <name>Log4j Catalog Parent</name>
+  <properties>
+    <log4jParentDir>${basedir}/..</log4jParentDir>
+  </properties>
   <modules>
     <module>log4j-catalog-api</module>
     <module>log4j-catalog-git</module>

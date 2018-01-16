@@ -25,6 +25,9 @@
   <artifactId>log4j-audit</artifactId>
   <packaging>pom</packaging>
   <name>Log4j Audit</name>
+  <properties>
+    <log4jParentDir>${basedir}/..</log4jParentDir>
+  </properties>
   <modules>
     <module>log4j-audit-api</module>
     <module>log4j-audit-war</module>

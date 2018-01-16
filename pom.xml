@@ -107,6 +107,7 @@
     <url>http://www.apache.org</url>
   </organization>
   <properties>
+    <log4jParentDir>${basedir}</log4jParentDir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     <Log4jAuditVersion>1.0.0</Log4jAuditVersion>
@@ -1135,7 +1136,7 @@
     </snapshotRepository>
     <site>
       <id>apache.website</id>
-      <url>scp://people.apache.org/www/logging.apache.org/log4j/2.0</url>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit</url>
     </site>
   </distributionManagement>
   <modules>

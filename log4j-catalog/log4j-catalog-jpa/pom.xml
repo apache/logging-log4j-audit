@@ -28,6 +28,15 @@
   <packaging>jar</packaging>
   <name>Log4j Catalog JPA DAO</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <log4jParentDir>${basedir}/../..</log4jParentDir>
+  </properties>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit/log4j-catalog/log4j-catalog-jpa</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>commons-logging</groupId>

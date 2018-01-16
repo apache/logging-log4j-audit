@@ -17,7 +17,8 @@
 package org.apache.logging.log4j.catalog.config;
 
 import java.io.File;
-import java.util.Collections;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,8 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
@@ -50,7 +53,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -63,11 +65,6 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring4.view.ThymeleafView;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -77,6 +74,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog"})
 @PropertySource("classpath:catalog-${env:}config.properties")
 public class WebMvcAppContext extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+
+    private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);
 
     @Autowired
     ConfigurationService configurationService;
@@ -201,53 +200,66 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         if (isNotBlank(gitUserName) && isNotBlank(gitPassword)) {
             dataSource.setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUserName, gitPassword));
         }
-        TransportConfigCallback transportConfigCallback = new TransportConfigCallback() {
-            final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
-                @Override
-                protected JSch createDefaultJSch( FS fs ) throws JSchException {
-                    JSch defaultJSch = super.createDefaultJSch( fs );
-                    if (isNotBlank(privateKeyPath)) {
-                        defaultJSch.addIdentity(privateKeyPath);
-                    }
-                    return defaultJSch;
-                }
-
-                @Override
-                protected void configure(OpenSshConfig.Host host, Session session) {
-                    session.setConfig("StrictHostKeyChecking", "no");
-                    if (isNotBlank(gitPassPhrase)) {
-                        session.setUserInfo(new UserInfo() {
+        if (isNotBlank(remoteRepoUrl)) {
+            try {
+                URI uri = new URI(remoteRepoUrl);
+                if (uri.getScheme().equalsIgnoreCase("SSH")) {
+                    TransportConfigCallback transportConfigCallback = new TransportConfigCallback() {
+                        final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
                             @Override
-                            public String getPassphrase() {
-                                return gitPassPhrase;
+                            protected JSch createDefaultJSch( FS fs ) throws JSchException {
+                                JSch defaultJSch = super.createDefaultJSch( fs );
+                                if (isNotBlank(privateKeyPath)) {
+                                    defaultJSch.addIdentity(privateKeyPath);
+                                }
+                                return defaultJSch;
                             }
 
                             @Override
-                            public String getPassword() {return null;}
+                            protected void configure(OpenSshConfig.Host host, Session session) {
+                                session.setConfig("StrictHostKeyChecking", "no");
+                                if (isNotBlank(gitPassPhrase)) {
+                                    session.setUserInfo(new UserInfo() {
+                                        @Override
+                                        public String getPassphrase() {
+                                            return gitPassPhrase;
+                                        }
 
-                            @Override
-                            public boolean promptPassword(String message) {return false;}
+                                        @Override
+                                        public String getPassword() {return null;}
 
-                            @Override
-                            public boolean promptPassphrase(String message) {return true;}
+                                        @Override
+                                        public boolean promptPassword(String message) {return false;}
 
-                            @Override
-                            public boolean promptYesNo(String message) {return false;}
+                                        @Override
+                                        public boolean promptPassphrase(String message) {return true;}
 
-                            @Override
-                            public void showMessage(String message) {}
-                        });
+                                        @Override
+                                        public boolean promptYesNo(String message) {return false;}
 
-                    }
+                                        @Override
+                                        public void showMessage(String message) {}
+                                    });
+
+                                }
+                            }
+                        };
+                        @Override
+                        public void configure(Transport transport) {
+                            SshTransport sshTransport = ( SshTransport )transport;
+                            sshTransport.setSshSessionFactory( sshSessionFactory );
+
+                        }
+                    };
+                    dataSource.setTransportConfigCallback(transportConfigCallback);
                 }
-            };
-            @Override
-            public void configure(Transport transport) {
-                SshTransport sshTransport = ( SshTransport )transport;
-                sshTransport.setSshSessionFactory( sshSessionFactory );
-
+            } catch (URISyntaxException ex) {
+                LOGGER.error("Invalid URI {}:", remoteRepoUrl, ex);
             }
-        };
+        } else {
+            LOGGER.error("No remote repo URL provided.");
+        }
+
         if (isNotBlank(localRepoUrl)) {
             dataSource.setLocalRepoPath(localRepoUrl);
         } else {
@@ -257,61 +269,11 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
             parent.mkdirs();
             dataSource.setLocalRepoPath(localRepoPath);
         }
-        dataSource.setTransportConfigCallback(transportConfigCallback);
+
         dataSource.setRemoteRepoUri(remoteRepoUrl);
         if (isNotBlank(remoteRepoCatalogPath)) {
             dataSource.setCatalogPath(remoteRepoCatalogPath);
         }
         return dataSource;
-    }
-
-    @Bean
-    public SpringResourceTemplateResolver templateResolver(){
-        // SpringResourceTemplateResolver automatically integrates with Spring's own
-        // resource resolution infrastructure, which is highly recommended.
-        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setApplicationContext(this.applicationContext);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        // HTML is the default value, added here for the sake of clarity.
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        // Template cache is true by default. Set to false if you want
-        // templates to be automatically updated when modified.
-        templateResolver.setCacheable(true);
-        return templateResolver;
-    }
-
-    @Bean
-    public SpringTemplateEngine templateEngine(){
-        // SpringTemplateEngine automatically applies SpringStandardDialect and
-        // enables Spring's own MessageSource message resolution mechanisms.
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
-        // speed up execution in most scenarios, but might be incompatible
-        // with specific cases when expressions in one template are reused
-        // across different data types, so this flag is "false" by default
-        // for safer backwards compatibility.
-        templateEngine.setEnableSpringELCompiler(true);
-        return templateEngine;
-    }
-
-    @Bean
-    public ThymeleafViewResolver thymeleafViewResolver(){
-        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
-        // NOTE 'order' and 'viewNames' are optional
-        viewResolver.setOrder(1);
-        viewResolver.setViewNames(new String[] {"products", "categories", "events", "attributes"});
-        return viewResolver;
-    }
-
-    @Bean
-    @Scope("prototype")
-    public ThymeleafView mainView() {
-        ThymeleafView view = new ThymeleafView("index"); // templateName = 'main'
-        view.setStaticVariables(
-                Collections.singletonMap("footer", "The ACME Fruit Company"));
-        return view;
     }
 }

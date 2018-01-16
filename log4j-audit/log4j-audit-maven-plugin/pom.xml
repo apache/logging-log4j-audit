@@ -26,6 +26,15 @@
   <packaging>maven-plugin</packaging>
 
   <name>log4j-audit-maven-plugin Maven Plugin</name>
+  <properties>
+    <log4jParentDir>${basedir}/../..</log4jParentDir>
+  </properties>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit/log4j-audit/log4j-audit-maven-plugin</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

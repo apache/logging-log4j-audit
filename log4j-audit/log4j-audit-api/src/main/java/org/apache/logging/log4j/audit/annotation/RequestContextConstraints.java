@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Container for RequestContext constraints.
+ * Container for RequestContextBase constraints.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

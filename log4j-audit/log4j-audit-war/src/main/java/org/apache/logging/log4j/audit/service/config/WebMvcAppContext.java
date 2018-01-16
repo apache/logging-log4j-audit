@@ -85,27 +85,6 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
     @Autowired
     ConfigurationService configurationService;
 
-    @Value("${gitUserName")
-    private String gitUserName;
-
-    @Value("${gitPassword:#{null}}")
-    private String gitPassword;
-
-    @Value("${gitPassPhrase:#{null}}")
-    private String gitPassPhrase;
-
-    @Value("${gitLocalRepoPath:#{null}}")
-    private String localRepoUrl;
-
-    @Value("${privateKeyPath:#{null}}")
-    private String privateKeyPath;
-
-    @Value("${getRemoteRepoUri}")
-    private String remoteRepoUrl;
-
-    @Value("${remoteRepoCatalogPath:#{null}}")
-    private String remoteRepoCatalogPath;
-
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
