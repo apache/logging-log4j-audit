@@ -112,9 +112,15 @@ function addEditEventItemHandler() {
         postData['displayName'] = $('#eventDisplayName').val();
         postData['description'] = $('#eventDescription').val();
         $('#eventAttributes .event-attribute-row').each(function() {
+            var required = null;
+            $(this).children('[type="checkbox"]').each(function(i, e) {
+                if ($(e).prop('checked')) {
+                  required = ($(e).attr('rel') == 'true');
+                }
+            });
             var eventAttributeItem = {
                 name: $(this).find('input')[0].value,
-                required: $(this).find('input')[1].checked,
+                required: required,
             };
             eventAttributes.push(eventAttributeItem);
         });
@@ -205,12 +211,21 @@ function populateEventAttributes(assignedAttributes, eventId) {
     if (eventId) {
         assignedAttributes.map((item) => {
             selectedAttributes.push(item.name);
-            var attributeRequired = item.required ? 'checked' : '';
+            var attributeRequiredTrue = '';
+            var attributeRequiredFalse = '';
+            var attributeRequired = item.required;
+            if (attributeRequired === true) {
+              attributeRequiredTrue = 'checked';
+            } else if (attributeRequired === false) {
+              attributeRequiredFalse = 'checked';
+            }
             $('#eventAttributes').append(' \
                 <span class="event-attribute-row"> \
                     <input type="text" name="attributes[]" value="' + item.name + '" disabled /> \
-                    <input type="checkbox" ' + attributeRequired + ' /> \
-                    <span class="event-attribute-item-required">required</span> \
+                    <input type="checkbox" name="attribute-required_' + item.name + '" rel="true" ' + attributeRequiredTrue + ' /> \
+                    <span class="event-attribute-item-required">YES</span> \
+                    <input type="checkbox" name="attribute-required_' + item.name + '" rel="false" ' + attributeRequiredFalse + ' /> \
+                    <span class="event-attribute-item-required">NO</span> \
                     <button class="remove-event-attribute-button" alt="' + eventId + '" rel="' + item.name + '">-</button> \
                 </span> \
             ');
@@ -249,5 +264,12 @@ function assignEventAttributeListeners(eventId) {
         eventData['attributes'] = newAttributes;
         localStorage.setItem('eventItem' + eventId, JSON.stringify(eventData));
         populateEventAttributes(eventData.attributes, eventId);
+    });
+
+    $('input[name^="attribute-required_"]').change(function() {
+        if ($(this).is(":checked")) {
+          $(this).siblings('input').prop('checked', false);
+          $(this).prop('checked', true);
+        }
     });
 }
