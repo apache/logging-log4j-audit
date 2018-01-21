@@ -17,7 +17,7 @@
 package org.apache.logging.log4j.audit.request;
 
 /**
- * Represents the mapping of a RequestContextBase variable that should be propogated from client to server.
+ * Represents the mapping of a RequestContextMapping variable that should be propogated from client to server.
  */
 public class ClientServerMapping extends RequestContextMapping {
     public ClientServerMapping(String fieldName) {

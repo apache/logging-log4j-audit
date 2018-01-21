@@ -20,12 +20,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-/**
- * Container for RequestContextMapping constraints.
- */
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequestContextConstraints {
-    RequestContext[] value();
+public @interface Chained {
+
+    String fieldName();
+
+    String chainedFieldName();
 }

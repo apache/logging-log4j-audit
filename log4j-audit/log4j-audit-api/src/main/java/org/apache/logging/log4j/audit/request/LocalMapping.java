@@ -17,7 +17,7 @@
 package org.apache.logging.log4j.audit.request;
 
 /**
- * Represents the Mapping for a RequestContextBase variable that only exists in the local application.
+ * Represents the Mapping for a RequestContextMapping variable that only exists in the local application.
  */
 public class LocalMapping extends RequestContextMapping {
     public LocalMapping(String fieldName) {

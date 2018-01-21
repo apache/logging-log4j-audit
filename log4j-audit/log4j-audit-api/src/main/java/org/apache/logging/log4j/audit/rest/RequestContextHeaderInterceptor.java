@@ -19,7 +19,7 @@ package org.apache.logging.log4j.audit.rest;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.logging.log4j.audit.request.RequestContextBase;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;
 import org.springframework.http.HttpHeaders;
@@ -29,29 +29,29 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
 /**
- * Creates a List of Headers containing the keys and values in the RequestContextBase that have a mapping indicating
+ * Creates a List of Headers containing the keys and values in the RequestContext that have a mapping indicating
  * they should be propogated to the service being called.
  *
- * This class is designed to be used by Spring as part of the REST Template configuration.
+ * This class is designed to be used by Spring as part of the REST Template configuration when calling a REST service.
  *
  */
 public class RequestContextHeaderInterceptor implements ClientHttpRequestInterceptor {
 
+    private RequestContextMappings mappings = null;
+
+    public void setRequestContextMappings(RequestContextMappings mappings) {
+        this.mappings = mappings;
+    }
+
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] body,
                                         ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
-        Map<String, String> map = RequestContextBase.get();
+        Map<String, String> map = ThreadContext.getImmutableContext();
         HttpHeaders headers = httpRequest.getHeaders();
-        RequestContextMappings mappings = RequestContextBase.getMappings();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             RequestContextMapping mapping = mappings.getMapping(entry.getKey());
-            if (mapping != null) {
-                if (mapping.isChained()) {
-
-                    headers.add(mappings.getHeaderPrefix() + mapping.getChainKey(), entry.getValue());
-                } else if (!mapping.isLocal()) {
-                    headers.add(mappings.getHeaderPrefix() + mapping.getFieldName(), entry.getValue());
-                }
+            if (mapping != null && !mapping.isLocal()) {
+                headers.add(mappings.getHeaderPrefix() + mapping.getFieldName(), entry.getValue());
             }
         }
         return clientHttpRequestExecution.execute(httpRequest, body);

@@ -21,11 +21,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Container for RequestContextMapping constraints.
- */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequestContextConstraints {
-    RequestContext[] value();
+public @interface HeaderPrefix {
+
+    String value() default "request-context-";
 }

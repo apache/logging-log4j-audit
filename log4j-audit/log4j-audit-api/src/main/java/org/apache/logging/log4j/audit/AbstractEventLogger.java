@@ -176,7 +176,7 @@ public abstract class AbstractEventLogger {
             }
             if (sb.length() > 0) {
                 throw new IllegalStateException("Event " + msg.getId().getName() +
-                        " is missing required RequestContextBase values for " + sb.toString());
+                        " is missing required RequestContextMapping values for " + sb.toString());
             }
         }
         Map<String, Attribute> reqCtxAttributes = catalogManager.getRequestContextAttributes();

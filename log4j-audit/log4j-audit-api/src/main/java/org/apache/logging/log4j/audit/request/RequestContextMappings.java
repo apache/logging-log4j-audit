@@ -16,19 +16,83 @@
  */
 package org.apache.logging.log4j.audit.request;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
+
+import org.apache.logging.log4j.audit.annotation.Chained;
+import org.apache.logging.log4j.audit.annotation.ChainedSupplier;
+import org.apache.logging.log4j.audit.annotation.ClientServer;
+import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
+import org.apache.logging.log4j.audit.annotation.Local;
 
 public class RequestContextMappings {
 
+    private static final String DEFAULT_HEADER_PREFIX = "request-context-";
     private final Map<String, RequestContextMapping> mappings = new HashMap<>();
     private final String headerPrefix;
 
-    public RequestContextMappings(RequestContextMapping[] mappingArray, String headerPrefix) {
-        this.headerPrefix = headerPrefix;
-        for (RequestContextMapping mapping : mappingArray) {
-            mappings.put(mapping.getFieldName().toLowerCase(), mapping);
+    public RequestContextMappings(String fqcn) {
+        this(getClass(fqcn));
+    }
+
+    private static Class<?> getClass(String fqcn) {
+        if (fqcn == null) {
+            throw new IllegalArgumentException("RequestContext class name cannot be null");
         }
+        try {
+            return Class.forName(fqcn);
+        } catch (ClassNotFoundException ex) {
+            throw new IllegalArgumentException("Invalid RequestContext class name", ex);
+        }
+    }
+
+    public RequestContextMappings(Class<?> clazz) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("A RequestContext class must be provided");
+        }
+        Annotation annotation = clazz.getAnnotation(HeaderPrefix.class);
+        this.headerPrefix = annotation != null ? ((HeaderPrefix) annotation).value().toLowerCase() : DEFAULT_HEADER_PREFIX;
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getType().equals(String.class)) {
+                String fieldName;
+                try {
+                    fieldName = (String) field.get(null);
+                } catch (IllegalAccessException ex) {
+                    continue;
+                }
+                if (fieldName == null) {
+                    continue;
+                }
+                annotation = field.getAnnotation(ClientServer.class);
+                if (annotation != null) {
+                    mappings.put(fieldName.toLowerCase(), new ClientServerMapping(fieldName));
+                    continue;
+                }
+
+                annotation = field.getAnnotation(Local.class);
+                if (annotation != null) {
+                    mappings.put(fieldName.toLowerCase(), new LocalMapping(fieldName));
+                }
+            } else if (field.getType().equals(Supplier.class)) {
+                annotation = field.getAnnotation(Chained.class);
+                if (annotation != null) {
+                    Chained chained = (Chained) annotation;
+                    try {
+                        @SuppressWarnings("unchecked")
+                        Supplier<String> supplier = (Supplier<String>) field.get(null);
+                        mappings.put(chained.fieldName().toLowerCase(),
+                                new ChainedMapping(chained.fieldName(), chained.chainedFieldName(), supplier));
+                    } catch (IllegalAccessException ex) {
+                        throw new IllegalArgumentException("Unable to retrieve Supplier for chained field " + chained.fieldName());
+                    }
+                }
+            }
+        }
+        mappings.entrySet().removeIf(a -> validateChained(a.getValue()));
     }
 
     public RequestContextMapping getMapping(String name) {
@@ -45,5 +109,9 @@ public class RequestContextMappings {
 
     public String getHeaderPrefix() {
         return headerPrefix;
+    }
+
+    private boolean validateChained(RequestContextMapping mapping) {
+        return mapping.getScope() == Scope.CHAIN && !mappings.containsKey(mapping.getChainKey().toLowerCase());
     }
 }

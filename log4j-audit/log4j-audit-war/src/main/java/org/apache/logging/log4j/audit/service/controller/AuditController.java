@@ -48,10 +48,12 @@ public class AuditController {
     @PostMapping(value = "/event/log", produces = Versions.V1_0_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public void logEvent(@RequestBody AuditDto auditDto) {
-        ThreadContext.clearMap();
         try {
-            for (Map.Entry<String, String> entry : auditDto.getRequestContextMap().entrySet()) {
-                ThreadContext.put(entry.getKey(), entry.getValue());
+            Map<String, String> requestContextMap = auditDto.getRequestContextMap();
+            if (requestContextMap != null) {
+                for (Map.Entry<String, String> entry : requestContextMap.entrySet()) {
+                    ThreadContext.put(entry.getKey(), entry.getValue());
+                }
             }
             auditLogger.logEvent(auditDto.getEventName(), auditDto.getCatalogId(), auditDto.getProperties());
         } finally {

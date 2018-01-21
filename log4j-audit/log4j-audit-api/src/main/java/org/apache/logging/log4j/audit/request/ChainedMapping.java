@@ -16,12 +16,25 @@
  */
 package org.apache.logging.log4j.audit.request;
 
+import java.util.function.Supplier;
+
 /**
- * Represents the mapping of a RequestContextBase variable that is propagated from the client to the server with
+ * Represents the mapping of a RequestContextMapping variable that is propagated from the client to the server with
  * as a new variable name.
  */
 public class ChainedMapping extends RequestContextMapping {
-    public ChainedMapping(String fieldName, String chainedFieldName) {
+    Supplier<String> supplier;
+
+    public ChainedMapping(String fieldName, String chainedFieldName, Supplier<String> localValueSupplier) {
         super(fieldName, Scope.CHAIN, chainedFieldName);
+        this.supplier = localValueSupplier;
+    }
+
+    public Supplier<String> getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier<String> supplier) {
+        this.supplier = supplier;
     }
 }

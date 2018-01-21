@@ -77,7 +77,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableWebMvc
 @EnableScheduling
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog.jpa", "org.apache.logging.log4j.audit.service"})
-//@ImportResource("classpath*:propertySources.xml")
 public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);
