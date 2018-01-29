@@ -57,6 +57,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -77,6 +78,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableWebMvc
 @EnableScheduling
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog.jpa", "org.apache.logging.log4j.audit.service"})
+@PropertySource(value= " classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
 public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);

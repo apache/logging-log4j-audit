@@ -15,11 +15,7 @@
  */
 package org.apache.logging.log4j.catalog.jpa.config;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import java.util.Properties;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -29,36 +25,31 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
-import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories("org.apache.logging.log4j.catalog.jpa.dao")
 @EnableTransactionManagement
-@Profile("default")
-public class EclipseLinkDataSourceConfig {
+@Profile("hibernate")
+public class HibernatgeConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        System.out.println("Running embedded database builder");
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.HSQL)
-                .addScript("classpath:sql/schema.sql")
-                .build();
-    }
+    @Autowired
+    private DataSourceConfig dataSourceConfig;
 
     @Bean
     public EntityManagerFactory entityManagerFactory() {
-        AbstractJpaVendorAdapter vendorAdapter = new EclipseLinkJpaVendorAdapter();
+        AbstractJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
+
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        Properties properties = new Properties();
-        properties.setProperty("eclipselink.weaving", "static");
-        factory.setJpaProperties(properties);
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("org.apache.logging.log4j.catalog");
-        factory.setDataSource(dataSource());
+        factory.setDataSource(dataSourceConfig.dataSource());
         factory.afterPropertiesSet();
 
         return factory.getObject();

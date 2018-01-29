@@ -16,19 +16,39 @@
  */
 package org.apache.logging.log4j.catalog.jpa.config;
 
-import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
-import org.apache.logging.log4j.catalog.jpa.service.CatalogServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.sql.SQLException;
+import javax.sql.DataSource;
 
+import com.mchange.v2.c3p0.DriverManagerDataSource;
+import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
+import org.postgresql.Driver;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Configure using Postgres as the database
+ */
 @Configuration
-@ComponentScan(basePackages = { "org.apache.logging.log4j.catalog" })
-@Import(HibernatgeConfig.class)
-public class ApplicationConfiguration {
+@JdbcUrl("postgresql")
+public class PostgresqlDataSourceConfig implements DataSourceConfig {
+
+    @Value("${jdbcUrl}")
+    private String url;
+
+    @Value("${dbUserName}")
+    private String userName;
+
+    @Value("${dbPassword}")
+    private String password;
+
     @Bean
-    public CatalogService catalogService() {
-        return new CatalogServiceImpl();
+    public DataSource dataSource() {
+        DriverManagerDataSource driver = new DriverManagerDataSource();
+        driver.setDriverClass("org.postgresql.Driver");
+        driver.setJdbcUrl(url);
+        driver.setUser(userName);
+        driver.setPassword(password);
+        return driver;
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,6 +90,16 @@ public class AuditCatalogManager extends CatalogManagerImpl implements AuditMana
         Map<String, Map<String, CatalogInfo>> infoMap = getInfoMap();
         addEntry(infoMap, event);
         return model;
+    }
+
+    @Override
+    public void saveAttribute(Attribute attribute) {
+        Map<String, Attribute> attrMap = attributeMap.get(attribute.getCatalogId());
+        if (attrMap == null) {
+            attrMap = new ConcurrentHashMap<>();
+            attributeMap.put(attribute.getCatalogId(), attrMap);
+        }
+        attrMap.put(attribute.getName(), attribute);
     }
 
     private void initialize(CatalogModel catalogModel) {

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.catalog.api.EventAttribute;
 import org.apache.logging.log4j.catalog.api.Versions;
 import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class CatalogTest {
 
     @Autowired
     private WebApplicationContext wac;
+
+    @BeforeClass
+    public static void setupClass() {
+        System.setProperty("spring.profiles.active", "eclipseLink");
+    }
 
     @Before
     public void setUp() {

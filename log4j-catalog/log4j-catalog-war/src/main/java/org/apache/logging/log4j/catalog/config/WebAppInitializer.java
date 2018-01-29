@@ -16,6 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.config;
 
+import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -31,6 +32,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.setInitParameter("applicationName", APPLICATION_NAME);
+        ProfileUtil.setActiveProfile(servletContext);
+        servletContext.setInitParameter("isEmbedded", "true");
         System.setProperty("applicationName", APPLICATION_NAME);
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.setDisplayName(APPLICATION_NAME);

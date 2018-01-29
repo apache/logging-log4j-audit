@@ -19,8 +19,6 @@ package org.apache.logging.log4j.catalog.api;
 import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
@@ -33,7 +31,6 @@ public class Category implements Serializable {
     private String name;
     private String displayName;
     private String description;
-    @JsonIgnore
     private String catalogId;
     private List<String> events;
 

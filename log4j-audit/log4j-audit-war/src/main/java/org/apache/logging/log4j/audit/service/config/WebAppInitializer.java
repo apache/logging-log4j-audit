@@ -16,6 +16,7 @@
  */
 package org.apache.logging.log4j.audit.service.config;
 
+import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -32,6 +33,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.setInitParameter("applicationName", APPLICATION_NAME);
         System.setProperty("applicationName", APPLICATION_NAME);
+        ProfileUtil.setActiveProfile(servletContext);
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.setDisplayName(APPLICATION_NAME);
         rootContext.register(ApplicationConfiguration.class);
@@ -45,4 +47,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         restServlet.setLoadOnStartup(1);
         restServlet.addMapping("/*");
     }
+
+
+
 }

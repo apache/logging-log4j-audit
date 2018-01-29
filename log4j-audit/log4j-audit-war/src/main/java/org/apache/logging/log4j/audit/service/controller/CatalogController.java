@@ -165,13 +165,17 @@ public class CatalogController {
         if (DEFAULT_CATALOG.equals(attribute.getCatalogId())) {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
-        Optional<AttributeModel> opt = attributeService.getAttribute(attribute.getCatalogId(), attribute.getName());
-        if (opt != null && opt.isPresent()) {
-            throw new IllegalStateException("An attribute named "+ attribute.getName() + " in catalog " +
-                    attribute.getCatalogId() + " already exists");
+        AttributeModel model;
+        synchronized(this) {
+            Optional<AttributeModel> opt = attributeService.getAttribute(attribute.getCatalogId(), attribute.getName());
+            if (opt != null && opt.isPresent()) {
+                throw new IllegalStateException(
+                    "An attribute named " + attribute.getName() + " in catalog " + attribute.getCatalogId() + " already exists");
+            }
+            model = attributeService.saveAttribute(attributeConverter.convert(attribute));
+            auditManager.saveAttribute(attribute);
+            eventConverter.addAttribute(model);
         }
-        AttributeModel model = attributeConverter.convert(attribute);
-        model = attributeService.saveAttribute(model);
         return new ResponseEntity<>(attributeModelConverter.convert(model), HttpStatus.CREATED);
     }
 
@@ -190,6 +194,7 @@ public class CatalogController {
         }
         AttributeModel model = attributeConverter.convert(attribute);
         model = attributeService.saveAttribute(model);
+        auditManager.saveAttribute(attribute);
         return new ResponseEntity<>(attributeModelConverter.convert(model), HttpStatus.OK);
     }
 

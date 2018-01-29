@@ -43,8 +43,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {ApplicationConfiguration.class})
 @SqlGroup({
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/beforeTestRun.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/afterTestRun.sql")
+        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/hsql/beforeTestRun.sql"),
+        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/hsql/afterTestRun.sql")
 })
 @Repository
 public class CatalogTest {
@@ -64,6 +64,7 @@ public class CatalogTest {
             System.setProperty("environment", "lab");
             System.setProperty("site", "dev1");
             System.setProperty("applicationName", "CatalogService");
+            System.setProperty("spring.profiles.active", "eclipseLink");
         } catch (RuntimeException ex) {
             throw ex;
         }

@@ -50,6 +50,10 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
         this.attributeModels = attributes;
     }
 
+    public void addAttribute(AttributeModel attribute) {
+        this.attributeModels.add(attribute);
+    }
+
     public  EventModel convert(Event event) {
         LOGGER.traceEntry(event.getName());
         EventModel model;

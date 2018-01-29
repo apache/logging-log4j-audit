@@ -16,19 +16,27 @@
  */
 package org.apache.logging.log4j.catalog.jpa.config;
 
-import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
-import org.apache.logging.log4j.catalog.jpa.service.CatalogServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import javax.sql.DataSource;
 
+import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+
+/**
+ * Use HSQL as the embedded database.
+ */
 @Configuration
-@ComponentScan(basePackages = { "org.apache.logging.log4j.catalog" })
-@Import(HibernatgeConfig.class)
-public class ApplicationConfiguration {
+@JdbcUrl("hsqldb")
+public class HsqldbDataSourceConfig implements DataSourceConfig {
+
     @Bean
-    public CatalogService catalogService() {
-        return new CatalogServiceImpl();
+    public DataSource dataSource() {
+        System.out.println("Running embedded database builder");
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.HSQL)
+                .addScript("classpath:sql/hsql/schema.sql")
+                .build();
     }
 }

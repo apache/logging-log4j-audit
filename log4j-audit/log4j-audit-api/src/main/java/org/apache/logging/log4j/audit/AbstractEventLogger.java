@@ -113,7 +113,7 @@ public abstract class AbstractEventLogger {
         StringBuilder errors = new StringBuilder();
 
         for (EventAttribute eventAttribute : event.getAttributes()) {
-            Attribute attr = catalogManager.getAttribute(eventAttribute.getName());
+            Attribute attr = catalogManager.getAttribute(eventAttribute.getName(), event.getCatalogId());
             if ((!attr.isRequestContext() && (attr.isRequired()) ||
                     (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
                 String name = attr.getName();

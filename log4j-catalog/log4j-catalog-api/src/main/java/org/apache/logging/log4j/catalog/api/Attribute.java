@@ -19,8 +19,6 @@ package org.apache.logging.log4j.catalog.api;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
@@ -41,7 +39,6 @@ public class Attribute implements Serializable {
     private Set<String> examples;
     private Set<String> aliases;
     private Set<Constraint> constraints;
-    @JsonIgnore
     private String catalogId;
 
     /**

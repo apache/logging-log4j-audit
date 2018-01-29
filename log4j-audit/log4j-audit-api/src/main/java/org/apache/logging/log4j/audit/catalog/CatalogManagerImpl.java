@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -48,7 +49,7 @@ public class CatalogManagerImpl implements CatalogManager {
 
     private Map<String, Attribute> requestContextAttributes = new HashMap<>();
 
-    private final Map<String, Map<String, Attribute>> attributeMap = new HashMap<>();
+    protected final Map<String, Map<String, Attribute>> attributeMap = new ConcurrentHashMap<>();
 
     private static final String REQCTX = "ReqCtx_";
 
@@ -165,22 +166,26 @@ public class CatalogManagerImpl implements CatalogManager {
             for (EventAttribute eventAttribute : event.getAttributes()) {
                 String name = eventAttribute.getName();
                 Attribute attribute = getAttribute(name, event.getCatalogId());
-                info.attributes.put(name, attribute);
-                if (name.indexOf('.') != -1) {
-                    name = name.replaceAll("\\.", "");
-                }
-                if (name.indexOf('/') != -1) {
-                    name = name.replaceAll("/", "");
-                }
-                if (attribute.isRequestContext()) {
-                    if (attribute.isRequired()) {
-                        if (name.startsWith(REQCTX)) {
-                            name = name.substring(REQCTX.length());
+                if (attribute != null) {
+                    info.attributes.put(name, attribute);
+                    if (name.indexOf('.') != -1) {
+                        name = name.replaceAll("\\.", "");
+                    }
+                    if (name.indexOf('/') != -1) {
+                        name = name.replaceAll("/", "");
+                    }
+                    if (attribute.isRequestContext()) {
+                        if (attribute.isRequired()) {
+                            if (name.startsWith(REQCTX)) {
+                                name = name.substring(REQCTX.length());
+                            }
+                            required.add(name);
                         }
-                        required.add(name);
+                    } else {
+                        names.add(name);
                     }
                 } else {
-                    names.add(name);
+                    throw new IllegalStateException("Attribute " + name + " is not defined");
                 }
             }
         }
