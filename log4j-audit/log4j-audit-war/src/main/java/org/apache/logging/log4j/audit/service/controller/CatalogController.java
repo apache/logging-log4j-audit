@@ -1,10 +1,26 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache license, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the license for the specific language governing permissions and
+ * limitations under the license.
+ */
 package org.apache.logging.log4j.audit.service.controller;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -48,6 +64,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 @RestController
@@ -174,7 +191,6 @@ public class CatalogController {
             }
             model = attributeService.saveAttribute(attributeConverter.convert(attribute));
             auditManager.saveAttribute(attribute);
-            eventConverter.addAttribute(model);
         }
         return new ResponseEntity<>(attributeModelConverter.convert(model), HttpStatus.CREATED);
     }
@@ -202,7 +218,12 @@ public class CatalogController {
     @ApiOperation(value = "Deletes a catalog Attribute", notes = "Deletes a catalog attribute", tags = {"Catalog"})
     @DeleteMapping(value = "/attribute/{id}")
     public ResponseEntity<?> deleteAttribute(@RequestParam("id") Long attributeId) {
-        attributeService.deleteAttribute(attributeId);
+        synchronized (this) {
+            Optional<AttributeModel> opt = attributeService.getAttribute(attributeId);
+            if (opt.isPresent()) {
+                attributeService.deleteAttribute(attributeId);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -246,12 +267,15 @@ public class CatalogController {
         if (DEFAULT_CATALOG.equals(event.getCatalogId())) {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
-        Optional<EventModel> opt = eventService.getEvent(event.getCatalogId(), event.getName());
-        if (opt != null && opt.isPresent()) {
-            throw new IllegalStateException("An event named "+ event.getName() + " in catalog " +
-                    event.getCatalogId() + " already exists");
+        EventModel model;
+        synchronized(this) {
+            Optional<EventModel> opt = eventService.getEvent(event.getCatalogId(), event.getName());
+            if (opt != null && opt.isPresent()) {
+                throw new IllegalStateException(
+                    "An event named " + event.getName() + " in catalog " + event.getCatalogId() + " already exists");
+            }
+            model = auditManager.saveEvent(event);
         }
-        EventModel model = auditManager.saveEvent(event);
         return new ResponseEntity<>(eventModelConverter.convert(model), HttpStatus.CREATED);
     }
 
@@ -265,8 +289,11 @@ public class CatalogController {
         if (DEFAULT_CATALOG.equals(event.getCatalogId())) {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
-        EventModel model = eventConverter.convert(event);
-        model = eventService.saveEvent(model);
+        EventModel model;
+        synchronized(this) {
+            model = eventConverter.convert(event);
+            model = eventService.saveEvent(model);
+        }
         return new ResponseEntity<>(eventModelConverter.convert(model), HttpStatus.OK);
     }
 

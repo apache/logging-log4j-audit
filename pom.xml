@@ -151,7 +151,7 @@
     <pdf.plugin.version>1.2</pdf.plugin.version>
     <pmd.plugin.version>3.6</pmd.plugin.version>
     <postgresql.version>42.2.0</postgresql.version>
-    <rat.plugin.version>0.11</rat.plugin.version>
+    <rat.plugin.version>0.12</rat.plugin.version>
     <release.plugin.version>2.5.3</release.plugin.version>
     <scm.plugin.version>1.9.4</scm.plugin.version>
     <site.plugin.version>3.4</site.plugin.version>
@@ -1301,6 +1301,12 @@
             <configuration>
               <excludes>
                 <exclude>**/*.asc</exclude>
+                <exclude>**/jquery*.js</exclude>
+                <exclude>**/json2*.js</exclude>
+                <exclude>**/jtable*.css</exclude>
+                <exclude>**/*.less</exclude>
+                <exclude>**/*.png</exclude>
+                <exclude>**/jquery-*/*.*</exclude>
                 <exclude>.idea/**/*</exclude>
                 <exclude>src/site/resources/js/jquery.js</exclude>
                 <exclude>src/site/resources/js/jquery.min.js</exclude>

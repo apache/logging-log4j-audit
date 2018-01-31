@@ -16,12 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.jpa.config;
 
-import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.mchange.v2.c3p0.DriverManagerDataSource;
 import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
-import org.postgresql.Driver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -309,7 +309,7 @@ public class AttributeModel implements Serializable {
     } */
 
     public int hashCode() {
-        return new HashCodeBuilder().append(name).toHashCode();
+        return new HashCodeBuilder().append(name).append(catalogId).toHashCode();
     }
 
     public boolean equals(Object o) {
@@ -318,6 +318,6 @@ public class AttributeModel implements Serializable {
         if (!(o instanceof AttributeModel)) return false;
 
         AttributeModel other = (AttributeModel)o;
-        return new EqualsBuilder().append(name, other.name).isEquals();
+        return new EqualsBuilder().append(name, other.name).append(catalogId, other.catalogId).isEquals();
     }
 }

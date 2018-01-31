@@ -25,10 +25,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
+import org.apache.logging.log4j.catalog.api.constant.Constants;
 import org.apache.logging.log4j.catalog.api.exception.CatalogModificationException;
 import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
 import org.apache.logging.log4j.catalog.jpa.model.EventAttributeModel;
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
+import org.apache.logging.log4j.catalog.jpa.service.AttributeService;
 import org.apache.logging.log4j.catalog.jpa.service.EventService;
 import org.modelmapper.AbstractConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +46,8 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
     @Autowired
     private EventService eventService;
 
-    private List<AttributeModel> attributeModels;
-
-    public void setAttributes(List<AttributeModel> attributes) {
-        this.attributeModels = attributes;
-    }
-
-    public void addAttribute(AttributeModel attribute) {
-        this.attributeModels.add(attribute);
-    }
+    @Autowired
+    private AttributeService attributeService;
 
     public  EventModel convert(Event event) {
         LOGGER.traceEntry(event.getName());
@@ -79,8 +74,7 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
                 if (eventAttributeModel != null) {
                     eventAttributeModel.setRequired(eventAttribute.isRequired());
                 } else {
-                    Optional<AttributeModel> optional =
-                            attributeModels.stream().filter(a -> a.getName().equals(eventAttribute.getName())).findFirst();
+                    Optional<AttributeModel> optional = getAttribute(event.getCatalogId(), eventAttribute.getName());
                     if (optional.isPresent()) {
                         eventAttributeModel = new EventAttributeModel();
                         eventAttributeModel.setRequired(eventAttribute.isRequired());
@@ -96,5 +90,13 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
         eventAttributeModels.removeIf(a -> eventAttributes.stream().noneMatch(b -> b.getName().equals(a.getAttribute().getName())));
         model.setAttributes(eventAttributeModels);
         return LOGGER.traceExit(model);
+    }
+
+    private Optional<AttributeModel> getAttribute(String catalogId, String name) {
+        Optional<AttributeModel> optional = attributeService.getAttribute(catalogId, name);
+        if (!optional.isPresent()) {
+            optional = attributeService.getAttribute(Constants.DEFAULT_CATALOG, name);
+        }
+        return optional;
     }
 }
