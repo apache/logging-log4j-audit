@@ -27,11 +27,17 @@ import javax.persistence.Converter;
 public class BooleanToStringConverter implements AttributeConverter<Boolean, String> {
     @Override
     public String convertToDatabaseColumn(Boolean value) {
-        return (value != null && value) ? "Y" : "N";
+        if (value == null) {
+            return null;
+        }
+        return value ? "Y" : "N";
     }
 
     @Override
     public Boolean convertToEntityAttribute(String value) {
+        if (value == null) {
+            return null;
+        }
         return "Y".equals(value);
     }
 }

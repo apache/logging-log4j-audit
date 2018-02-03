@@ -116,6 +116,7 @@ public class EventController {
         } catch (Exception ex) {
             response.put("Result", "FAILURE");
             response.put("Message", ex.getMessage());
+            LOGGER.warn("Unable to create event named {}", event.getName(), ex);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -131,6 +132,7 @@ public class EventController {
         } catch (Exception ex) {
             response.put("Result", "FAILURE");
             response.put("Message", ex.getMessage());
+            LOGGER.warn("Unable to update event named {}", event.getName(), ex);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

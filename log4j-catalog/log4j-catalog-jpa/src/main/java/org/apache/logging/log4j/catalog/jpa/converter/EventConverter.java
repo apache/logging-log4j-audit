@@ -72,12 +72,14 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
             for (EventAttribute eventAttribute : eventAttributes) {
                 EventAttributeModel eventAttributeModel = model.getAttribute(eventAttribute.getName());
                 if (eventAttributeModel != null) {
-                    eventAttributeModel.setRequired(eventAttribute.isRequired());
+                    eventAttributeModel.setRequired(eventAttribute != null ? eventAttribute.isRequired() : null);
                 } else {
                     Optional<AttributeModel> optional = getAttribute(event.getCatalogId(), eventAttribute.getName());
                     if (optional.isPresent()) {
                         eventAttributeModel = new EventAttributeModel();
-                        eventAttributeModel.setRequired(eventAttribute.isRequired());
+                        if (eventAttribute != null) {
+                            eventAttributeModel.setRequired(eventAttribute.isRequired());
+                        }
                         eventAttributeModel.setEvent(model);
                         eventAttributeModel.setAttribute(optional.get());
                         eventAttributeModels.add(eventAttributeModel);

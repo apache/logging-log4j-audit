@@ -19,6 +19,7 @@ package org.apache.logging.log4j.catalog.config;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +54,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -65,6 +68,11 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring4.view.ThymeleafView;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -136,6 +144,7 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         return proxyCreator;
     }
 
+    /*
     @Bean
     public ViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -144,7 +153,7 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         viewResolver.setSuffix(".jsp");
         viewResolver.setOrder(10);
         return viewResolver;
-    }
+    } */
 
     @Bean
     public MessageSource messageSource() {
@@ -275,5 +284,53 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
             dataSource.setCatalogPath(remoteRepoCatalogPath);
         }
         return dataSource;
+    }
+
+    public SpringResourceTemplateResolver templateResolver(){
+        // SpringResourceTemplateResolver automatically integrates with Spring's own
+        // resource resolution infrastructure, which is highly recommended.
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setApplicationContext(this.applicationContext);
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        // HTML is the default value, added here for the sake of clarity.
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        // Template cache is true by default. Set to false if you want
+        // templates to be automatically updated when modified.
+        templateResolver.setCacheable(true);
+        return templateResolver;
+    }
+
+    public SpringTemplateEngine templateEngine(){
+        // SpringTemplateEngine automatically applies SpringStandardDialect and
+        // enables Spring's own MessageSource message resolution mechanisms.
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
+        // speed up execution in most scenarios, but might be incompatible
+        // with specific cases when expressions in one template are reused
+        // across different data types, so this flag is "false" by default
+        // for safer backwards compatibility.
+        templateEngine.setEnableSpringELCompiler(true);
+        return templateEngine;
+    }
+
+    @Bean
+    public ViewResolver thymeleafViewResolver(){
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+        // NOTE 'order' and 'viewNames' are optional
+        viewResolver.setOrder(1);
+        viewResolver.setViewNames(new String[] {"products", "categories", "events", "attributes"});
+        return viewResolver;
+    }
+
+    @Bean
+    @Scope("prototype")
+    public ThymeleafView mainView() {
+        ThymeleafView view = new ThymeleafView("index"); // templateName = 'main'
+        view.setStaticVariables(
+                Collections.singletonMap("footer", "The Apache Software Foundation"));
+        return view;
     }
 }

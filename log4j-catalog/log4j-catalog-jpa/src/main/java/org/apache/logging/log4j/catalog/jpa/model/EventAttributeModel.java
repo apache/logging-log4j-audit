@@ -51,7 +51,7 @@ public class EventAttributeModel implements Serializable {
 
     @Column(name = "is_required")
     @Convert(converter=BooleanToStringConverter.class)
-    private boolean isRequired;
+    private Boolean isRequired;
 
     /**
      * Return the identifier for this event.
@@ -85,11 +85,11 @@ public class EventAttributeModel implements Serializable {
         this.attribute = attribute;
     }
 
-    public boolean isRequired() {
+    public Boolean isRequired() {
         return isRequired;
     }
 
-    public void setRequired(boolean required) {
+    public void setRequired(Boolean required) {
         isRequired = required;
     }
 

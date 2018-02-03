@@ -38,7 +38,7 @@ public class JdbcUrlCondition implements Condition {
             if (value.equals("hsqldb")) {
                 return jdbcUrl == null || isEmbedded;
             }
-            if (jdbcUrl == null) {
+            if (jdbcUrl == null || isEmbedded) {
                 return false;
             }
             if (!jdbcUrl.startsWith("jdbc:")) {
