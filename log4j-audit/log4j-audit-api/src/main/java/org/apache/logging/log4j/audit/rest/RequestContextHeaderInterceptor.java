@@ -51,7 +51,10 @@ public class RequestContextHeaderInterceptor implements ClientHttpRequestInterce
         for (Map.Entry<String, String> entry : map.entrySet()) {
             RequestContextMapping mapping = mappings.getMapping(entry.getKey());
             if (mapping != null && !mapping.isLocal()) {
-                headers.add(mappings.getHeaderPrefix() + mapping.getFieldName(), entry.getValue());
+                String key = mappings.getHeaderPrefix() + mapping.getFieldName();
+                if (!headers.containsKey(key)) {
+                    headers.add(key, entry.getValue());
+                }
             }
         }
         return clientHttpRequestExecution.execute(httpRequest, body);
