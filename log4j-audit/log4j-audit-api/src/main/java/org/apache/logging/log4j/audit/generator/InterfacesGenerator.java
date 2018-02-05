@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.util.NamingUtils;
@@ -36,11 +34,6 @@ import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.core.env.CommandLinePropertySource;
-import org.springframework.core.env.JOptCommandLinePropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -118,31 +111,6 @@ public class InterfacesGenerator {
 
     public void setEnterpriseId(int enterpriseId) {
         this.enterpriseId = enterpriseId;
-    }
-
-    /**
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        OptionParser parser = new OptionParser();
-        parser.accepts(CONTEXT);
-        OptionSet options = parser.parse(args);
-        CommandLinePropertySource<joptsimple.OptionSet> clps = new JOptCommandLinePropertySource(options);
-        ApplicationContext applicationContext = null;
-        if (clps.containsProperty(CONTEXT)) {
-            applicationContext = new FileSystemXmlApplicationContext(clps.getProperty(CONTEXT));
-        } else {
-            applicationContext = new ClassPathXmlApplicationContext();
-        }
-        InterfacesGenerator generator =
-                (InterfacesGenerator) applicationContext.getBean("org.apache.logging.log4j.audit.generator.InterfacesGenerator");
-        if (generator != null) {
-            generator.generateSource();
-            return;
-        }
-        LOGGER.error("Unable to generate source files, no generator is configured");
-        System.exit(-1);
     }
 
     public void generateSource() throws Exception {

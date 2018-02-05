@@ -143,11 +143,8 @@
     <json.version>20090211</json.version>
     <junit.version>4.12</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
-    <log4j.version>2.9.2-SNAPSHOT</log4j.version>
+    <log4j.version>2.10.0</log4j.version>
     <mockito.version>2.0.31-beta</mockito.version>
-    <nextiva.properties.version>6.0.26</nextiva.properties.version>
-    <nextiva.utilities.version>6.0.34-SNAPSHOT</nextiva.utilities.version>
-    <oracle.ojdbc.version>12.1.0.2</oracle.ojdbc.version>
     <pdf.plugin.version>1.2</pdf.plugin.version>
     <pmd.plugin.version>3.6</pmd.plugin.version>
     <postgresql.version>42.2.0</postgresql.version>

@@ -22,13 +22,3 @@
 
 [Manual change log](changes-report.html)
 
-Apache Log4j 2 is not compatible with the previous versions. Please have the following in mind when upgrading to
-Log4j 2 in your project:
-
-* Log4j 2.4 and greater requires Java 7, versions 2.0-alpha1 to 2.3 required Java 6.
-* The XML configuration has been simplified and is not compatible with Log4j 1.x.
-* Configuration via property files is supported from version 2.4, but is not compatible with Log4j 1.x.
-* Configuration via JSON or YAML is supported, but these formats require
-[additional runtime dependencies](runtime-dependencies.html).
-* Although Log4j 2 is not directly compatible with Log4j 1.x a compatibility bridge has been provided to reduce the
-need to make coding changes.

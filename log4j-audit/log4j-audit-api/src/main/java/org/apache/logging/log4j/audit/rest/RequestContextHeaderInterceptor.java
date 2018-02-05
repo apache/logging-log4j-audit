@@ -39,7 +39,7 @@ public class RequestContextHeaderInterceptor implements ClientHttpRequestInterce
 
     private RequestContextMappings mappings = null;
 
-    public void setRequestContextMappings(RequestContextMappings mappings) {
+    public RequestContextHeaderInterceptor(RequestContextMappings mappings) {
         this.mappings = mappings;
     }
 

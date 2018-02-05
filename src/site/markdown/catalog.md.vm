@@ -18,6 +18,7 @@
 #set($h1='#')
 #set($h2='##')
 #set($h3='###')
+#set($h4='####')
 
 $h1 The Apache Log4j Audit Catalog
 
@@ -33,14 +34,91 @@ Attributes are the discrete data elements to be captured in audit events. One of
 is to avoid having what are essentially the same attributes with different names in various events. When creating
 new events users are highly encouraged to scan the existing attributes for one that is already present.
 
-An Attribute definition contains the following items:
-*
+Attributes can have aliases and examples, however the Catalog UI provides no way to edit these and Log4j Audit
+currently doesn't do anything with these fields.
 
 $h3 Events
 
-$h3 Products
+Events represent the aggregation of attributes to be collected when a specific action is performed. Event
+names should identify what action took place and the associated attributes should identify the key characteristics
+of who performed the action and what they did.
 
-$h3 Categories
+Events can have aliases, however the Catalog UI provides no way to edit them and Log4j Audit
+currently doesn't do anything with alias fields.
+
+$h3 Products and Categories.
+
+Products and Categories can be defined as a way of grouping events. Log4j Audit doesn't do anything with
+this data but a user interface might use this data as a way to limit searches or provide a drop down list
+of events.
+
+$h2 The Catalog Editor
+
+Log4j Audit provides an AuditCatalog WAR that can be deployed to a servlet container for use in creating and
+maintaining the catalog. Because the Catalog Editor requires the credentials to be configured on the machine
+where the web application is running and it performs no other authentication of the user, it is recommended
+that the Catalog Editor be run locally on the user's machine.
+
+The catalog provides screens to maintain the attributes, events, products, and categories defined in the catalog.
+Changes made to these entities are stored in an in-memory database until the user elects to persist them, at which
+time the catalog is exported as JSON and stored into the configured git repository.
+
+Because the editor can only edit the default catalog and the persistant storage is the JSON file in the Git
+repository, the Catalog Editor is configured to only use the in memory database.
+
+$h3 Attributes
+
+The attribute edit screen allows attributes to be defined, modified or deleted. The fields that may be modified are:
+<table>
+<tr><th>Field</th><th>Description</th></tr>
+<tr><td>Name</td><td>The name of the attribute as it will be known to Java. It is expected to be defined in camelCase.</td></tr>
+<tr><td>Display Name</td><td>The text that should be used to display the field in an application</td></tr>
+<tr><td>Description</td><td>The description of the attribute as it would appear in help text in a UI.</td></tr>
+<tr><td>Data Type</td><td>The type of data contained in the field. Must be one of BIG_DECIMAL, BOOLEAN, DOUBLE, FLOAT, INT, LIST, LONG, MAP, STRING</td></tr>
+<tr><td>Indexed</td><td>True if this field should be indexed when stored in a database.</td></tr>
+<tr><td>Sortable</td><td>True if this field should be sortable when displayed in a UI.</td></tr>
+<tr><td>Required</td><td>True if this field is required by default</td></tr>
+<tr><td>Request Context</td><td>True if this attribute is provided in the RequestContext</td></tr>
+<tr><td>Constraints</td><td>Rules to use to validate the value. Must be null or one of ANYCASEENUM, ENUM, MAXLENGTH, MAXVALUE, MINLENGTH, MINVALUE, PATTERN</td></tr>
+</table>
+
+$h4 Data Types
+
+An attribute must be defined as being one of the supported data types. Log4j Audit will use this information when generating the
+event Interfaces. By doing so, the data being logged will be guaranteed to be of the correct type at compile time. When
+logging using the Audit Service the data will be validated for the correct type when the event is received.
+
+$h4 Constraints
+
+If a constraint is present on an attribute definition Log4j Audit will validate the value when the event is logged. The enum types must provide
+a list of valid values. The min and max constraints must be configured with an appropriate value. The pattern constraints must be configured
+with a regular expression to apply against the value. If the data fails to validate against a constraint the attempt to audit the event will fail.
+Using constraints can prevent garbage data from being included in the audit database but at the cost of potentially having auditing fail.
+
+![Attribute Editor](images/attributes.png "Attribute Editor")
+
+$h3 Events
+
+The event edit screen allows events to be defined, modified, or deleted. The fields that may be modified are:
+<table>
+<tr><th>Field</th><th>Description</th></tr>
+<tr><td>Name</td><td>The name of the event as it will be known in the catalog. It is expected to be defined in camelCase.</td></tr>
+<tr><td>Display Name</td><td>The text that should be used to display the name of the event in an application</td></tr>
+<tr><td>Description</td><td>The description of the event as it would appear in help text in a UI.</td></tr>
+<tr><td>Assigned Attributes</td><td>The attributes to be associated with this event and whether they are required.</td></tr>
+</table>
+
+RequestContext attributes are always part of audit events whether they are declared or not. Specifying a non-RequestContext
+attribute is required for it to be associated with an event. Specifying a value of True or False for whether the
+attribute is required to be present will override whatever definition was present when the attribute was defined. If
+neither box is checked the attribute definition's required attribute will be honored.
 
 
+![Event Editor](images/events.png "Event Editor")
+
+$h3 Products and Categories
+
+Events may be grouped into products and categories, however it is not required that an event be included in a product or category.
+Log4j Audit doesn't use the products or categories itself, however UI tools that display audit events may choose to filter based on
+products or categories.
 

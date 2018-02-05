@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd">
   <body>
     <links>
-      <item name="Logging Wiki" href="https://wiki.apache.org/logging"/>
+      <item name="Logging Wiki" href="https://cwiki.apache.org/confluence/display/LOGGING/Home"/>
       <item name="Apache" href="https://www.apache.org/"/>
       <item name="Logging Services" href="https://logging.apache.org/"/>
       <item name="GitHub" href="https://github.com/apache/logging-log4j-audit"/>
@@ -42,6 +42,7 @@
       <item name="Getting Started" href="/gettingStarted.html"/>
       <item name="RequestContext" href="/requestContext.html"/>
       <item name="Audit Catalog" href="catalog.html"/>
+      <item name="Sample Project" href="sample.html"/>
       <item name="Changelog" href="/changelog.html"/>
     </menu>
 

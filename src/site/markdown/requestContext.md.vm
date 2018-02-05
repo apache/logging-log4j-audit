@@ -1,0 +1,291 @@
+<!-- vim: set syn=markdown : -->
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+#set($h1='#')
+#set($h2='##')
+#set($h3='###')
+
+$h1 RequestContext
+
+Log4j-Audit incorporates Log4j ThreadContext variables as a way of including information into audit events that is
+common throughout the application. This would include things like a client account number (especially useful in
+multi-tenant applications), the user's login id, and the ip address of the user. In a services-based application
+these values need to be populated at the point of entry to the application and then passed to all the service
+endpoints. It is especially useful to create artificial request and session ids so that all the activities across
+all the servers can be correlated to the user's request and/or session.
+
+Log4j provides a convenient way to identify the RequestContext variables such that they can be reliably accessed by the
+application and passed to the target services. To do this the application should create a RequestContext class that
+resembles:
+
+```
+import org.apache.logging.log4j.ThreadContext;
+import org.apache.logging.log4j.audit.annotation.Chained;
+import org.apache.logging.log4j.audit.annotation.ClientServer;
+import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
+import org.apache.logging.log4j.audit.annotation.Local;
+import org.apache.logging.log4j.core.util.NetUtils;
+import org.apache.logging.log4j.core.util.UuidUtil;
+
+/**
+ * Defines all the variables that an application needs to be available in the ThreadContext for audit logging and
+ * general application usage.
+ */
+@HeaderPrefix("mycorp-context-")
+public final class RequestContext {
+    @ClientServer
+    public static final String REQUEST_ID = "requestId";
+    @ClientServer
+    public static final String SESSION_ID = "sessionId";
+    @ClientServer
+    public static final String ACCOUNT_NUMBER = "accountNumber";
+    @ClientServer
+    public static final String IP_ADDRESS = "ipAddress";
+    @ClientServer
+    public static final String USER_ID = "userId";
+    @ClientServer
+    public static final String LOGIN_ID = "loginId";
+    @Local
+    public static final String CALLING_HOST = "callingHost";
+
+    public static final String HOST_NAME = "hostName";
+
+    private static final String LOCAL_HOST_NAME = NetUtils.getLocalHostname();
+    /**
+     * The Supplier is used to populate the hostName key after the hostName value from the caller has been
+     * placed into the callingHost map entry.
+     */
+    @Chained(fieldName = HOST_NAME, chainedFieldName = CALLING_HOST)
+    public static final Supplier<String> LOCAL_HOST_SUPPLIER = () -> LOCAL_HOST_NAME;
+    /**
+     * The methods in this class are not required by framework components that use the RequestContext properties.
+     * They are provided as a convenience for applications. If they are not provided the properties can be accessed
+     * directly through the Log4j ThreadContext Map using the keys above.
+     */
+    public static void clear() {
+        ThreadContext.clearMap();
+    }
+
+    public static String getRequestId() {
+        String uuidStr = ThreadContext.get(REQUEST_ID);
+        UUID uuid;
+        if (uuidStr == null) {
+            uuid = UuidUtil.getTimeBasedUuid();
+            ThreadContext.put(REQUEST_ID, uuid.toString());
+        }
+        return uuidStr;
+    }
+
+    public static String getSessionId() {
+        return ThreadContext.get(SESSION_ID);
+    }
+
+    public static void setSessionId(UUID sessionId) {
+        if (sessionId != null) {
+            ThreadContext.put(SESSION_ID, sessionId.toString());
+        }
+    }
+
+    public static void setSessionId(String sessionId) {
+        if (sessionId != null) {
+            ThreadContext.put(SESSION_ID, sessionId);
+        }
+    }
+
+    public static void setAccountNumber(Long accountNumber) {
+        ThreadContext.put(ACCOUNT_NUMBER, accountNumber.toString());
+    }
+
+    public static Long getAccountNumber() {
+        String value = ThreadContext.get(ACCOUNT_NUMBER);
+        if (value == null || value.length() == 0) {
+            return 0L;
+        }
+        try {
+            return Long.parseLong(value);
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
+    public static void setIpAddress(String address) {
+        ThreadContext.put(IP_ADDRESS, address);
+    }
+
+    public static String getIpAddress() {
+        return ThreadContext.get(IP_ADDRESS);
+    }
+
+    public static void setUserId(String userId) {
+        ThreadContext.put(USER_ID, userId);
+    }
+
+    public static String getUserId() {
+        return ThreadContext.get(USER_ID);
+    }
+
+    public static void setLoginId(String loginId) {
+        ThreadContext.put(LOGIN_ID, loginId);
+    }
+
+    public static String getLoginId() {
+        return ThreadContext.get(LOGIN_ID);
+    }
+
+    public static String getHostName() {
+        return ThreadContext.get(HOST_NAME);
+    }
+
+    public static void setHostName(String hostName) {
+        ThreadContext.put(HOST_NAME, hostName);
+    }
+
+    public static String getCallingHost() {
+        return ThreadContext.get(CALLING_HOST);
+    }
+
+    public static void setCallingHost(String hostName) {
+        ThreadContext.put(CALLING_HOST, hostName);
+    }
+}
+```
+The HeaderPrefix annotation is used to define the string to be prepended to the names of the ThreadContext variables
+when they are passed to a REST service. The default value is "request-context-".
+
+The ClientServer, Local, and Chained annotations represent the 3 types of RequestContext variables.
+* ClientServer represents a variable whose value should be passed to the target service using the same name.
+* Local represents a variable that is used in the local application and should not be passed to a client service.
+* Chained represents a variable that should be passed to the target service using a new name. A variable with the
+same named may be created in the target service using a different value. This is primarily used to pass the name
+of the current server to the target service.
+
+The public static set and get methods are optional but provide a convenient way to access the variables stored in
+Log4j's ThreadContext Map.
+
+$h2 Initializing the RequestContext
+
+The RequestContext should be initialized at the beginning of every request and cleared at the end of the request. In
+a Spring web application this can be handled in a Servlet Filter similar to this example.
+
+```
+public class RequestContextInterceptor implements HandlerInterceptor {
+
+	private static Logger logger = LogManager.getLogger(RequestContextInterceptor.class);
+	private ThreadLocal<Long> startTime = new ThreadLocal<>();
+
+	@Override
+	public boolean preHandle(HttpServletRequest request,
+                        HttpServletResponse response, Object handler) throws Exception {
+
+        boolean success = true;
+        String uri = request.getRequestURI();
+        String queryString = request.getQueryString();
+        HttpSession session = request.getSession(true);
+
+
+        if (!uri.contains("login") {
+            // SessionData will be populated during login.
+            SessionData sessionData = SessionData.getSessionData(session);
+            if (sessionData == null) {
+                logger.info("no account logged in - send to login page");
+                response.sendRedirect("/login);
+                success = false;
+            } else {
+                startTime.set(System.nanoTime());
+				long corpAcctNbr = sessionData.getCorporateAccountNumber();
+                RequestContext.getRequestId();
+                RequestContext.setCorpAcctNumber(corpAcctNbr);
+                RequestContext.setUserId(Long.toString(sessionData.getUserId()));
+                RequestContext.setIpAddress(request.getRemoteAddr());
+                RequestContext.setOnBehalfOf(sessionData.getOnBehalfOf());
+    			RequestContext.setOnBehalfOfAccount(sessionData.getOnBehalfOfAccount());
+				RequestContext.setSessionId(sessionData.getSessionId());
+    			RequestContext.setLoginId(sessionData.getLoginId());
+                String localHost = NetUtils.getLocalHostname();
+                if (localHost != null && !localHost.equals("UNKNOWN_HOST")) {
+                    RequestContext.setHostName(localHost);
+                }
+                RequestContext.setProductName("Application");
+                RequestContext.setProductVersion("3");
+			}
+		} else {
+            RequestContext.setIpAddress(request.getRemoteAddr());
+            startTime.set(System.nanoTime());
+        }
+
+
+		return success;
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+	}
+
+	@Override
+	public void afterCompletion(HttpServletRequest request,
+			HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+	    Long start = startTime.get();
+        if (start != null) {
+            long elapsed = System.nanoTime() - start;
+            startTime.remove();
+            StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
+            ElapseUtil.addElapsed(elapsed, sb);
+            logger.info(sb.toString());
+        }
+		RequestContext.clear();
+	}
+```
+
+$h2 Passing the RequestContext to a Service
+
+Log4j Audit provides an Interceptor that can be used with Spring applications that will convert RequestContext
+variables to HTTP headers. The RequestContextHeaderInterceptor can be created by a java configuration method such as:
+
+```
+    @Bean
+    public List<ClientHttpRequestInterceptor> createInterceptor() {
+        List<ClientHttpRequestInterceptor> list = new ArrayList<>();
+        RequestContextMappings mappings = new RequestContextMappings(RequestContext.class));
+        list.add(new RequestContextHeaderInterceptor(mappings);
+        return list;
+    }
+```
+
+The returned list should then be added to the RestTemplate.
+
+The target application then needs to convert the headers back into RequestContext variables by creating a class that
+extends WebApplicationInitializer that does:
+
+```
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        RequestContextFilter filter = new RequestContextFilter(RequestContext.class);
+        servletContext.addFilter("requestContextFilter", filter).addMappingForUrlPatterns(null, true, "/*");
+    }
+```
+
+As an added benefit, the RequestContextFilter will log the beginning and end of each request and log the elapsed
+time at the end of the request.
+
+When logging RequestContext variables simply configure log4j2.xml to include specific ThreadContext variables or
+all of them using the %X pattern converter or by setting the includeMdc, includeThreadContext, or properties attribute
+to true on the desired Layout.
+
+
