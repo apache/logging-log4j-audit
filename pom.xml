@@ -35,7 +35,7 @@
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://builds.apache.org/job/Log4j%202.x/</url>
+    <url>https://builds.apache.org/job/Log4j-Audit/</url>
   </ciManagement>
   <inceptionYear>2016</inceptionYear>
   <developers>
@@ -97,8 +97,6 @@
   <scm>
     <connection>scm:git:https://git-wip-us.apache.org/repos/asf/logging-log4j-audit.git</connection>
     <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/logging-log4j-audit.git</developerConnection>
-    <!--<connection>scm:git:http://git-wip-us.apache.org/repos/asf/logging-log4j-audit.git</connection>
-    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/logging-log4j-audit.git</developerConnection>-->
     <url>https://git-wip-us.apache.org/repos/asf?p=logging-log4j-audit.git;a=summary</url>
     <tag>HEAD</tag>
   </scm>
@@ -129,7 +127,7 @@
     <commons.validator.version>1.5.0</commons.validator.version>
     <compiler.plugin.version>3.6.1</compiler.plugin.version>
     <failsafe.plugin.version>2.19.1</failsafe.plugin.version>
-    <findbugs.plugin.version>3.0.3</findbugs.plugin.version>
+    <findbugs.plugin.version>3.0.5</findbugs.plugin.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
     <eclipselink.version>2.7.0</eclipselink.version>
     <httpclient.version>4.5.3</httpclient.version>
@@ -146,7 +144,7 @@
     <log4j.version>2.10.0</log4j.version>
     <mockito.version>2.0.31-beta</mockito.version>
     <pdf.plugin.version>1.2</pdf.plugin.version>
-    <pmd.plugin.version>3.6</pmd.plugin.version>
+    <pmd.plugin.version>3.8</pmd.plugin.version>
     <postgresql.version>42.2.0</postgresql.version>
     <rat.plugin.version>0.12</rat.plugin.version>
     <release.plugin.version>2.5.3</release.plugin.version>
@@ -1095,6 +1093,31 @@
           <webAccessUrl>${project.scm.url}</webAccessUrl>
           <anonymousConnection>${project.scm.connection}</anonymousConnection>
           <developerConnection>${project.scm.developerConnection}</developerConnection>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${javadoc.plugin.version}</version>
+        <configuration>
+          <aggregate>true</aggregate>
+          <bottom><![CDATA[<p align="center">Copyright &#169; {inceptionYear}-{currentYear} {organizationName}. All Rights Reserved.<br />
+            Apache Logging, Apache Log4j, Apache Log4j Audit, Log4j, Log4j Audit, Apache, the Apache feather logo, the Apache Logging project logo,
+            and the Apache Log4j logo are trademarks of The Apache Software Foundation.</p>]]></bottom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
+        <configuration>
+          <!--<propertiesLocation>${vfs.parent.dir}/checkstyle.properties</propertiesLocation> -->
+          <configLocation>${log4jParentDir}/checkstyle.xml</configLocation>
+          <suppressionsLocation>${log4jParentDir}/checkstyle-suppressions.xml</suppressionsLocation>
+          <enableRulesSummary>false</enableRulesSummary>
+          <propertyExpansion>basedir=${basedir}</propertyExpansion>
+          <propertyExpansion>licensedir=${log4jParentDir}/checkstyle-header.txt</propertyExpansion>
         </configuration>
       </plugin>
       <!-- Surefire report -->
@@ -1128,6 +1151,45 @@
             <exclude>log4j-audit-distribution/.settings/**</exclude>
             <exclude>RELEASE-NOTES.md</exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>${findbugs.plugin.version}</version>
+        <configuration>
+          <fork>true</fork>
+          <jvmArgs>-Duser.language=en</jvmArgs>
+          <threshold>Normal</threshold>
+          <effort>Default</effort>
+          <excludeFilterFile>${log4jParentDir}/findbugs-exclude-filter.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${jxr.plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <id>non-aggregate</id>
+            <reports>
+              <report>jxr</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${pmd.plugin.version}</version>
+        <configuration>
+          <targetJdk>${maven.compiler.target}</targetJdk>
         </configuration>
       </plugin>
     </plugins>

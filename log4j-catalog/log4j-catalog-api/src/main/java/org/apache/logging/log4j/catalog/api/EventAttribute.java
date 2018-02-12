@@ -16,11 +16,14 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import java.io.Serializable;
+
 /**
  * Attribute used in an event
  */
-public class EventAttribute {
+public class EventAttribute implements Serializable {
 
+    private static final long serialVersionUID = 6234766849875135836L;
     private String name;
 
     private Boolean isRequired;

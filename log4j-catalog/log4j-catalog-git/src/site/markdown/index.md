@@ -16,9 +16,9 @@
     limitations under the License.
 -->
 
-# Log4j Audit API
+# Log4j Audit Catalog Git DAO
 
-The Log4j Audit API provides the event interfaces that applications should use when logging audit events.
+This module provides the DAO used to retrieve and store the JSON catalog in a Git repository.
 
 ## Requirements
 

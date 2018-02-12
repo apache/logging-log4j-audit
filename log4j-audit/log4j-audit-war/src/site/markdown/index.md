@@ -16,9 +16,13 @@
     limitations under the License.
 -->
 
-# Log4j Audit API
+# Log4j Audit Service
 
-The Log4j Audit API provides the event interfaces that applications should use when logging audit events.
+The Log4j Audit Service WAR that allows remote applications to perform audit logging and to manage dynamic 
+catalog entries. The generated war requires customization as shown in the 
+[sample project](https://github.com/apache/logging-log4j-audit-sample/tree/master/audit-service-war). Once
+that war is deployed navigating to http://localhost:8081/AuditService/swagger-ui.html in a web browser
+will show the REST endpoints that may be accessed.
 
 ## Requirements
 

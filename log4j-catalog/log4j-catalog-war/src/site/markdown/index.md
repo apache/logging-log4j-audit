@@ -16,9 +16,9 @@
     limitations under the License.
 -->
 
-# Log4j Audit API
+# Log4j Audit Catalog Editor
 
-The Log4j Audit API provides the event interfaces that applications should use when logging audit events.
+The Log4j Audit Catalog Editor module generates the web application used to edit the Log4j Audit Catalog.
 
 ## Requirements
 

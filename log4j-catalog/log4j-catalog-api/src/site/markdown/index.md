@@ -16,9 +16,9 @@
     limitations under the License.
 -->
 
-# Log4j Audit API
+# Log4j Audit Catalog API
 
-The Log4j Audit API provides the event interfaces that applications should use when logging audit events.
+The Log4j Audit Catalog API provides the interfaces and classes used to access the Log4j Audit catalog.
 
 ## Requirements
 

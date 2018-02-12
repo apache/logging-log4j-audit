@@ -16,9 +16,17 @@
     limitations under the License.
 -->
 
-# Log4j Audit API
+# Log4j Audit Catalog JPA DAO
 
-The Log4j Audit API provides the event interfaces that applications should use when logging audit events.
+This module provides the DAOs to retrieve, update, delete, and save Log4j Audit Catalog elements in a relational
+database.
+
+The specific database used is determined by the jdbcUrl scheme provided. Log4j Audit currently supports HSQL and 
+PostgresQL databases. Others may be added by providing a Spring configuration class that implements a method
+named datasource that takes no arguments and returns a DataSource. The class must be annotated with the 
+@JdbcUrl annotation with a parameter that matches the scheme specified in the JDBC Url String. See 
+[PostgresqlDataSourceConfig.java](https://github.com/apache/logging-log4j-audit/blob/master/log4j-catalog/log4j-catalog-jpa/src/main/java/org/apache/logging/log4j/catalog/jpa/config/PostgresqlDataSourceConfig.java)
+for an example.
 
 ## Requirements
 

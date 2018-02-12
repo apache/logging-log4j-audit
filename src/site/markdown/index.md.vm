@@ -21,10 +21,59 @@
 
 $h1 Apache Log4j Audit
 
-Log4j-Audit provides a framework for defining audit events and then logging them using Log4j. The framework focuses on
+$h2 What is Audit Logging
+
+The basic purpose of audit logging is to provide the information to determine what actions have been performed, or
+attempted to be performed, by whom, when they did it and what the data associated with the action was. Audit log
+data is most typically used by security teams to monitor for fraud or illegal or otherwise unauthorized activities
+and to be able to correct changes that were incorrectly made. Audit logs are often used to demonstrate compliance
+with legal obligations such as Sarbanes-Oxley or HIPPA.
+
+$h3 What is the difference between audit logging and "normal" logging?
+
+In a typical application developers add logging statements at key points to help diagnose problems or to
+document unexpected occurances, such as a failure to communicate with a key service. These are normally referred
+to as diagnostic logs. Diagnostic logs are critical in aiding in maintaining the servicability of the application
+but generally aren't very useful in helping to determine who made a paticular change and when it was done.
+On the other hand, audit logs focus on identifying when a change was made, who made it, and what data elements were
+changed. While audit logs can sometimes help in troubleshooting problems, that isn't their primary purpose just as
+the primary purpose of diagnostic logging is not to record actions taken by people using the system.
+
+A key difference between diagnostic logs and audit logs is that while diagnostic logs are generally free form
+with the content left up to the developer, audit logs usually contain the action being performed and the data
+elements that have been impacted. In many systems audit logs are written to a database where the values for these
+elements may be written to specific columns. In recent times it is more common to see audit logs written to NoSQL
+data stores where they can be efficiently queried.
+
+Another key difference is that audit logs are often used to generate reports that are of value to several parts of
+the organization. For example, an auditor at a bank might be interested in locating all the accounts with more than
+3 failed login attempts the prior day, or all the transfers for more than $10,000.00. A customer service representative
+might want to watch the audit events for a specific user while they are on the phone with them troubleshooting a problem.
+Generally, diagnostic logs do not provide the information to support these use cases while audit logs do.
+
+Finally, diagnostic logs and audit logs differ in that diagnostic logs typcially are categorized via "levels"
+while audit logs are not. Diagnostic logging typcially includes fairly detailed logging of the internals of the system
+via debug level messages. Other messages may be classified as informational or, in response to some kind of an
+error, a warning or error log message may be generated.  In contrast to this, audit logs are usually always logged
+so a level is meaningless.
+
+While audit logs and diagnostic logs may differ in their format and usage, Log4j can still play a part in delivering
+both. Unlike systems where audit logs are written directly to a database, the use of Log4j and Log4j-Audit allows
+applications to be written to perform audit logging without any knowledge of where those will end up and what they will
+be used for. Furthermore, the log events can be easily transformed into various formats that best matches their
+intended uses.
+
+$h2 What is Log4j Audit?
+
+Log4j Audit provides a framework for defining audit events and then logging them using Log4j. The framework focuses on
 defining the events and providing an easy mechanism for applications to log them, allowing products to provide
 consistency and validity to the events that are logged. It does not focus on how the log events are written to a
 data store. Log4j itself provides many options for that.
+
+Log4j Audit builds upon Log4j by defining its own AuditMessage. An AuditMessage is a container for
+[StructuredDataMessage](http://logging.apache.org/log4j/2.x/manual/messages.html)s which allows a log message to be
+generated that contains a set of keys and values. The AuditMessage passes through Log4j as any other log event
+would.
 
 $h2 Features
 

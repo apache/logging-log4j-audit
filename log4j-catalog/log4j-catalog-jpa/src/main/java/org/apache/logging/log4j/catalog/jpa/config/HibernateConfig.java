@@ -36,7 +36,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories("org.apache.logging.log4j.catalog.jpa.dao")
 @EnableTransactionManagement
 @Profile("hibernate")
-public class HibernatgeConfig {
+public class HibernateConfig {
 
     @Autowired
     private DataSourceConfig dataSourceConfig;

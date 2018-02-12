@@ -24,35 +24,9 @@ $h1 The Apache Log4j Audit Catalog
 
 Log4j-Audit uses a Catalog that describes the attributes and events that can be logged. The events may be grouped
 by Products and/or Categories, but at this time nothing in Log4j Audit makes use of the product or catalog
-definitions.
+definitions. The catalog is required to generate the audit events and to validate events being logged.
 
-$h2 Catalog Components
-
-$h3 Attributes
-
-Attributes are the discrete data elements to be captured in audit events. One of the goals of the audit catalog
-is to avoid having what are essentially the same attributes with different names in various events. When creating
-new events users are highly encouraged to scan the existing attributes for one that is already present.
-
-Attributes can have aliases and examples, however the Catalog UI provides no way to edit these and Log4j Audit
-currently doesn't do anything with these fields.
-
-$h3 Events
-
-Events represent the aggregation of attributes to be collected when a specific action is performed. Event
-names should identify what action took place and the associated attributes should identify the key characteristics
-of who performed the action and what they did.
-
-Events can have aliases, however the Catalog UI provides no way to edit them and Log4j Audit
-currently doesn't do anything with alias fields.
-
-$h3 Products and Categories.
-
-Products and Categories can be defined as a way of grouping events. Log4j Audit doesn't do anything with
-this data but a user interface might use this data as a way to limit searches or provide a drop down list
-of events.
-
-$h2 The Catalog Editor
+$h2 The Catalog and Catalog Editor
 
 Log4j Audit provides an AuditCatalog WAR that can be deployed to a servlet container for use in creating and
 maintaining the catalog. Because the Catalog Editor requires the credentials to be configured on the machine
@@ -67,6 +41,13 @@ Because the editor can only edit the default catalog and the persistant storage 
 repository, the Catalog Editor is configured to only use the in memory database.
 
 $h3 Attributes
+
+Attributes are the discrete data elements to be captured in audit events. One of the goals of the audit catalog
+is to avoid having what are essentially the same attributes with different names in various events. When creating
+new events users are highly encouraged to scan the existing attributes for one that is already present.
+
+Attributes can have aliases and examples, however the Catalog Editor provides no way to edit these and Log4j Audit
+currently doesn't do anything with these fields.
 
 The attribute edit screen allows attributes to be defined, modified or deleted. The fields that may be modified are:
 <table>
@@ -98,6 +79,13 @@ Using constraints can prevent garbage data from being included in the audit data
 ![Attribute Editor](images/attributes.png "Attribute Editor")
 
 $h3 Events
+
+Events represent the aggregation of attributes to be collected when a specific action is performed. Event
+names should identify what action took place and the associated attributes should identify the key characteristics
+of who performed the action and what they did.
+
+Events can have aliases, however the Catalog UI provides no way to edit them and Log4j Audit
+currently doesn't do anything with alias fields.
 
 The event edit screen allows events to be defined, modified, or deleted. The fields that may be modified are:
 <table>

@@ -22,25 +22,47 @@
 $h1 RequestContext
 
 Log4j-Audit incorporates Log4j ThreadContext variables as a way of including information into audit events that is
-common throughout the application. This would include things like a client account number (especially useful in
-multi-tenant applications), the user's login id, and the ip address of the user. In a services-based application
-these values need to be populated at the point of entry to the application and then passed to all the service
-endpoints. It is especially useful to create artificial request and session ids so that all the activities across
-all the servers can be correlated to the user's request and/or session.
+common throughout the application. While usage of a RequestContext is not required, the use of one should be
+considered a best practice.
+
+In a typcial application that might use a ThreadContext Map, it will place variables in the Map so that they will
+be included in all Log4j log events. Log4j Audit takes advantage of this so that variables placed into the
+ThreadContext Map will be automatically be available in audit events as well. In addition, through the use of
+the RequestContextFilter and RequestContextHeaderInterceptor, these variable will automatically be passed from a
+client application to a REST service.
+
+A common use case is to include a request id and/or a session id in the RequestContext. By generating these variables
+when a user first logs in and at the start of every action a user takes all log eveents, including audit events,
+can be correlated in the application and through all the microservices the application might use. This could also
+include things like a client account number (especially useful in multi-tenant applications), the user's login id,
+and the ip address of the user. In a services-based application these values need to be populated at the point of
+entry to the application and then passed to all the service endpoints. It is especially useful to create artificial
+request and session ids so that all the activities acrossall the servers can be correlated to the user's request
+and/or session.
+
+When defining audit events there are generally two types of data included in the event. The first are data elements
+that are specific to a particular or small set of log events. The second are data elements that would be expected
+to be included in all audit events. The second type are normally included in the RequestContext. Although they do
+not have to be placed in the RequestContext doing so reduces the effort require to create an audit event since only
+the data specific to that event needs to be added by the application.
+
+Another use case for RequestContext or ThreadContext Map variables is when lower level components need access to
+data elements that the components calling them have no use for. For example, an application may shard its database
+based on a customer's account number. A particular component may not need the account number in any of its operations
+but would be forced to pass it through so the database access component could use it to determine which datbase to
+use. By using the RequestContext the intermediate component no longer has to be aware of what customer it is performing
+work for.
+
+One aspect of the Log4j ThreadContext should be noted. When an application directly creates a thread ThreadContext
+variables are NOT automatically provided to that thread. Applications may make use of the RequestContext when
+determining which variables in the ThreadContext Map should be passed to the child thread.
 
 Log4j provides a convenient way to identify the RequestContext variables such that they can be reliably accessed by the
 application and passed to the target services. To do this the application should create a RequestContext class that
-resembles:
+resembles [RequestContext.java](https://github.com/apache/logging-log4j-audit-sample/blob/master/audit-service-war/src/main/java/org/apache/logging/log4j/audit/service/RequestContext.java)
+in the log4j-audit-sample project. A portion of that is shown here:
 
 ```
-import org.apache.logging.log4j.ThreadContext;
-import org.apache.logging.log4j.audit.annotation.Chained;
-import org.apache.logging.log4j.audit.annotation.ClientServer;
-import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
-import org.apache.logging.log4j.audit.annotation.Local;
-import org.apache.logging.log4j.core.util.NetUtils;
-import org.apache.logging.log4j.core.util.UuidUtil;
-
 /**
  * Defines all the variables that an application needs to be available in the ThreadContext for audit logging and
  * general application usage.
@@ -51,14 +73,6 @@ public final class RequestContext {
     public static final String REQUEST_ID = "requestId";
     @ClientServer
     public static final String SESSION_ID = "sessionId";
-    @ClientServer
-    public static final String ACCOUNT_NUMBER = "accountNumber";
-    @ClientServer
-    public static final String IP_ADDRESS = "ipAddress";
-    @ClientServer
-    public static final String USER_ID = "userId";
-    @ClientServer
-    public static final String LOGIN_ID = "loginId";
     @Local
     public static final String CALLING_HOST = "callingHost";
 
@@ -71,115 +85,54 @@ public final class RequestContext {
      */
     @Chained(fieldName = HOST_NAME, chainedFieldName = CALLING_HOST)
     public static final Supplier<String> LOCAL_HOST_SUPPLIER = () -> LOCAL_HOST_NAME;
-    /**
-     * The methods in this class are not required by framework components that use the RequestContext properties.
-     * They are provided as a convenience for applications. If they are not provided the properties can be accessed
-     * directly through the Log4j ThreadContext Map using the keys above.
-     */
-    public static void clear() {
-        ThreadContext.clearMap();
-    }
-
-    public static String getRequestId() {
-        String uuidStr = ThreadContext.get(REQUEST_ID);
-        UUID uuid;
-        if (uuidStr == null) {
-            uuid = UuidUtil.getTimeBasedUuid();
-            ThreadContext.put(REQUEST_ID, uuid.toString());
-        }
-        return uuidStr;
-    }
-
-    public static String getSessionId() {
-        return ThreadContext.get(SESSION_ID);
-    }
-
-    public static void setSessionId(UUID sessionId) {
-        if (sessionId != null) {
-            ThreadContext.put(SESSION_ID, sessionId.toString());
-        }
-    }
-
-    public static void setSessionId(String sessionId) {
-        if (sessionId != null) {
-            ThreadContext.put(SESSION_ID, sessionId);
-        }
-    }
-
-    public static void setAccountNumber(Long accountNumber) {
-        ThreadContext.put(ACCOUNT_NUMBER, accountNumber.toString());
-    }
-
-    public static Long getAccountNumber() {
-        String value = ThreadContext.get(ACCOUNT_NUMBER);
-        if (value == null || value.length() == 0) {
-            return 0L;
-        }
-        try {
-            return Long.parseLong(value);
-        } catch (Exception e) {
-            return 0L;
-        }
-    }
-
-    public static void setIpAddress(String address) {
-        ThreadContext.put(IP_ADDRESS, address);
-    }
-
-    public static String getIpAddress() {
-        return ThreadContext.get(IP_ADDRESS);
-    }
-
-    public static void setUserId(String userId) {
-        ThreadContext.put(USER_ID, userId);
-    }
-
-    public static String getUserId() {
-        return ThreadContext.get(USER_ID);
-    }
-
-    public static void setLoginId(String loginId) {
-        ThreadContext.put(LOGIN_ID, loginId);
-    }
-
-    public static String getLoginId() {
-        return ThreadContext.get(LOGIN_ID);
-    }
-
-    public static String getHostName() {
-        return ThreadContext.get(HOST_NAME);
-    }
-
-    public static void setHostName(String hostName) {
-        ThreadContext.put(HOST_NAME, hostName);
-    }
-
-    public static String getCallingHost() {
-        return ThreadContext.get(CALLING_HOST);
-    }
-
-    public static void setCallingHost(String hostName) {
-        ThreadContext.put(CALLING_HOST, hostName);
-    }
 }
 ```
+$h2 RequestContext Annotations
+$h3 HeaderPrefix
 The HeaderPrefix annotation is used to define the string to be prepended to the names of the ThreadContext variables
 when they are passed to a REST service. The default value is "request-context-".
 
-The ClientServer, Local, and Chained annotations represent the 3 types of RequestContext variables.
-* ClientServer represents a variable whose value should be passed to the target service using the same name.
-* Local represents a variable that is used in the local application and should not be passed to a client service.
-* Chained represents a variable that should be passed to the target service using a new name. A variable with the
-same named may be created in the target service using a different value. This is primarily used to pass the name
-of the current server to the target service.
+$h3 Mapping Annotations
 
-The public static set and get methods are optional but provide a convenient way to access the variables stored in
+The ClientServer, Local, and Chained annotations represent the 3 types of RequestContext variables.
+<ul>
+<li>ClientServer represents a variable whose value should be passed to the target service using the same name.</li>
+<li>Local represents a variable that is used in the local application and should not be passed to a client service.</li>
+<li>Chained represents a variable that should be passed to the target service using a new name. A variable with the
+same named may be created in the target service using a different value. This is primarily used to pass the name
+of the current server to the target service.</li>
+</ul>
+
+$h2 RequestContext methods
+
+The public static set and get methods shown in
+[RequestContext.java](https://github.com/apache/logging-log4j-audit-sample/blob/master/audit-service-war/src/main/java/org/apache/logging/log4j/audit/service/RequestContext.java)
+are optional but provide a convenient way to access the variables stored in
 Log4j's ThreadContext Map.
 
-$h2 Initializing the RequestContext
+It should also be noted that it is possible to allow the RequestContext variables to be copied into an instance of the
+RequestContext so they can be passed to a child thread where the instance will be used to populate that thread's
+ThreadContext Map. See the save and restore methods in the sample
+[RequestContext.java](https://github.com/apache/logging-log4j-audit-sample/blob/master/audit-service-war/src/main/java/org/apache/logging/log4j/audit/service/RequestContext.java)
+for an example of how that can be done.
 
-The RequestContext should be initialized at the beginning of every request and cleared at the end of the request. In
-a Spring web application this can be handled in a Servlet Filter similar to this example.
+$h2 Transporting the RequestContext
+
+This diagram shows how the RequestContext is created at the beginning of every request where it is used by the
+application (including audit logging). It is then converted to HTTP headers by a Spring Interceptor (provided by
+Log4j Audit) that are passed on a REST call to a service. The service then uses a servlet filter (provided by Log4j
+Audit) to create a RequestContext for use by the service.
+
+![RequestContext Flow](images/request-context.png)
+
+$h3 Initializing the RequestContext
+
+The RequestContext should be initialized at the beginning of every request and cleared at the end of the request.
+In a web application, typically some data is captured during login and is captured in the HTTP session. In a web
+application that does not use an HTTP session this data would be stored wherever the equivalent of session data
+is stored (for example, the local storage of the browser). This session data is then copied into the RequestContext
+on each request in a ServletFilter or a Spring Interceptor similar to the example that follows. Although this
+example uses Spring it could be implemented as a Servlet Filter or something similar.
 
 ```
 public class RequestContextInterceptor implements HandlerInterceptor {
@@ -202,7 +155,7 @@ public class RequestContextInterceptor implements HandlerInterceptor {
             SessionData sessionData = SessionData.getSessionData(session);
             if (sessionData == null) {
                 logger.info("no account logged in - send to login page");
-                response.sendRedirect("/login);
+                response.sendRedirect("/login");
                 success = false;
             } else {
                 startTime.set(System.nanoTime());
@@ -251,11 +204,12 @@ public class RequestContextInterceptor implements HandlerInterceptor {
         }
 		RequestContext.clear();
 	}
+}
 ```
 
-$h2 Passing the RequestContext to a Service
+$h3 Passing the RequestContext to a Service
 
-Log4j Audit provides an Interceptor that can be used with Spring applications that will convert RequestContext
+Log4j Audit provides an Interceptor that can be used with Spring web applications that will convert RequestContext
 variables to HTTP headers. The RequestContextHeaderInterceptor can be created by a java configuration method such as:
 
 ```
@@ -268,7 +222,10 @@ variables to HTTP headers. The RequestContextHeaderInterceptor can be created by
     }
 ```
 
-The returned list should then be added to the RestTemplate.
+Assuming spring-web is being used, the returned list should then be added to the RestTemplate.
+
+If Spring is not being used a component similar to the RequestContextHeaderInterceptor that is appropriate for the
+application could be used instead.
 
 The target application then needs to convert the headers back into RequestContext variables by creating a class that
 extends WebApplicationInitializer that does:
@@ -284,8 +241,15 @@ extends WebApplicationInitializer that does:
 As an added benefit, the RequestContextFilter will log the beginning and end of each request and log the elapsed
 time at the end of the request.
 
+Although the preceding example uses Spring the code within the method will work for any Java web application that
+uses version 3.0 of the servlet spec or greater, provided it is called as the application is being initialized.
+
+$h2 Configuring Logging to Include RequestContext Variables
+
 When logging RequestContext variables simply configure log4j2.xml to include specific ThreadContext variables or
 all of them using the %X pattern converter or by setting the includeMdc, includeThreadContext, or properties attribute
 to true on the desired Layout.
+```
+```
 
 

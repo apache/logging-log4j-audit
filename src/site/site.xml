@@ -30,20 +30,12 @@
     <menu name="Apache Log4j Audit™" inherit="top" img="icon-home">
       <item name="About" href="/index.html"/>
       <item name="Download" href="/download.html"/>
-      <item name="Javadoc" href="/javadoc.html" collapse="true">
-        <item name="Log4j Audit API" href="/log4j-audit/log4j-audit-api/apidocs/index.html" />
-        <item name="Audit Service" href="log4j-audit/log4j-audit-war/apidocs/index.html"/>
-        <item name="Maven Plugin" href="log4j-audit/log4j-audit-maven-plugin/apidocs/index.html"/>
-        <item name="Catalog API" href="log4j-catalog/log4j-catalog-api/apidocs/index.html"/>
-        <item name="Git Catalog Access" href="log4j-catalog/log4j-catalog-git/apidocs/index.html"/>
-        <item name="JPA Catalog Access" href="log4j-catalog/log4j-catalog-jpa/apidocs/index.html"/>
-        <item name="Catalog Editor" href="log4j-catalog/log4j-catalog-war/apidocs/index.html"/>
-      </item>
       <item name="Getting Started" href="/gettingStarted.html"/>
       <item name="RequestContext" href="/requestContext.html"/>
       <item name="Audit Catalog" href="catalog.html"/>
       <item name="Sample Project" href="sample.html"/>
       <item name="Changelog" href="/changelog.html"/>
+      <item name="Javadoc" href="/apidocs/index.html"/>
     </menu>
 
     <menu name="For Contributors" inherit="top" img="icon-pencil">
@@ -52,7 +44,7 @@
       <item name="Style Guide" href="/javastyle.html"/>
     </menu>
 
-    <menu name="Components" inherit="top" img="icon-cog">
+    <menu name="Component Reports" inherit="top" img="icon-cog">
       <item name="Audit API" href="log4j-audit/log4j-audit-api/index.html"/>
       <item name="Audit Service" href="log4j-audit/log4j-audit-war/index.html"/>
       <item name="Maven Plugin" href="log4j-audit/log4j-audit-maven-plugin/index.html"/>
@@ -77,7 +69,6 @@
     <menu name="Project Reports" img="icon-cog">
       <item name="Changes Report" href="/changes-report.html" />
       <item name="JIRA Report" href="/jira-report.html" />
-      <item name="Surefire Report" href="/surefire-report.html" />
       <item name="RAT Report" href="/rat-report.html" />
     </menu>
   </body>
