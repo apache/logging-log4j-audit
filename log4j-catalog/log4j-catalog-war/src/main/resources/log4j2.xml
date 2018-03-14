@@ -17,7 +17,7 @@
   -->
 <Configuration status="ERROR">
     <properties>
-        <property name="LOG_DIR">${sys:catalina.home}/logs/AuditCatalog</property>
+        <property name="LOG_DIR">${sys:catalina.home:-.}/logs/AuditCatalog</property>
     </properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
@@ -36,7 +36,7 @@
         <Logger name="org.apache.logging.log4j.catalog" level="WARN" additivity="false">
             <AppenderRef ref="log4j"/>
         </Logger>
-        <Root level="INFO">
+        <Root level="DEBUG">
             <AppenderRef ref="log4j" />
         </Root>
     </Loggers>

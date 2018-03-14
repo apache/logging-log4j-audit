@@ -66,8 +66,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafView;
@@ -77,10 +75,8 @@ import org.thymeleaf.templatemode.TemplateMode;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration
-@EnableWebMvc
-@EnableScheduling
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog"})
-@PropertySource("classpath:catalog-${env:}config.properties")
+//@PropertySource(value = "classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
 public class WebMvcAppContext extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);
@@ -168,8 +164,8 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         return new LocalAuthorizationInterceptor(configurationService.getCatalogServiceAuthToken());
     }
 
-    @Bean
     public ObjectMapper objectMapper() {
+        LOGGER.debug("Creating custom ObjectMapper");
         ObjectMapper mapper = JsonObjectMapperFactory.createMapper();
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();
         filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
@@ -177,7 +173,6 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         return mapper;
     }
 
-    @Bean
     public MappingJackson2HttpMessageConverter jsonMessageConverter() {
         return new MappingJackson2HttpMessageConverter(objectMapper());
     }

@@ -17,6 +17,8 @@ package org.apache.logging.log4j.catalog.api.annotation;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.env.Environment;
@@ -26,6 +28,8 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  *
  */
 public class JdbcUrlCondition implements Condition {
+
+    private static final Logger LOGGER = LogManager.getLogger(JdbcUrlCondition.class);
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment env = context.getEnvironment();
@@ -34,18 +38,20 @@ public class JdbcUrlCondition implements Condition {
             String value = map.get("value").toString();
             String jdbcUrl = env.getProperty("jdbcUrl");
             Boolean isEmbedded = Boolean.parseBoolean(env.getProperty("isEmbedded"));
+            boolean result;
             if (value.equals("hsqldb")) {
-                return jdbcUrl == null || isEmbedded;
+                result = jdbcUrl == null || isEmbedded;
+            } else if (jdbcUrl == null || isEmbedded) {
+                result = false;
+            } else if (!jdbcUrl.startsWith("jdbc:")) {
+                result = false;
+            } else {
+                result = jdbcUrl.substring(5).toLowerCase().startsWith(value.toLowerCase());
             }
-            if (jdbcUrl == null || isEmbedded) {
-                return false;
-            }
-            if (!jdbcUrl.startsWith("jdbc:")) {
-                return false;
-            }
-            boolean result = jdbcUrl.substring(5).toLowerCase().startsWith(value.toLowerCase());
+            LOGGER.debug("Returning {} for {}", result, value);
             return result;
         }
+        LOGGER.debug("No data provided");
         return false;
     }
 }

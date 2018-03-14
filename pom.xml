@@ -150,6 +150,7 @@
     <release.plugin.version>2.5.3</release.plugin.version>
     <scm.plugin.version>1.9.4</scm.plugin.version>
     <site.plugin.version>3.4</site.plugin.version>
+    <spring.boot.version>1.5.10.RELEASE</spring.boot.version>
     <slf4j.version>1.8.0-alpha2</slf4j.version>
     <spring.version>4.3.11.RELEASE</spring.version>
     <spring.agent.version>2.5.6</spring.agent.version>
@@ -164,6 +165,8 @@
     <swagger.ui.version>2.2.2</swagger.ui.version>
     <swagger.annotations.version>1.5.8</swagger.annotations.version>
     <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
+    <thymeleaf-extras-java8time.version>3.0.0.RELEASE</thymeleaf-extras-java8time.version>
+    <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
     <c3p0.version>0.9.5.2</c3p0.version>
     <serp.version>1.15.1</serp.version>
     <!-- make sure to update these for each release! -->
@@ -192,7 +195,13 @@
   </pluginRepositories>
   <dependencyManagement>
     <dependencies>
-
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-audit-api</artifactId>
@@ -486,121 +495,6 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-agent</artifactId>
-        <version>${spring.agent.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context-support</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-jpa</artifactId>
-        <version>${spring.data.jpa.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-redis</artifactId>
-        <version>${spring.data.redis.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-rest-webmvc</artifactId>
-        <version>${spring.data.rest.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-expression</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-core</artifactId>
-        <version>${spring.security.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-tx</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-orm</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-jdbc</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aspects</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.ws</groupId>
-        <artifactId>spring-ws-core</artifactId>
-        <version>${spring.ws.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.ws</groupId>
-        <artifactId>spring-ws-security</artifactId>
-        <version>${spring.ws.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.ws</groupId>
-        <artifactId>spring-xml</artifactId>
-        <version>${spring.ws.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.hateoas</groupId>
-        <artifactId>spring-hateoas</artifactId>
-        <version>${spring.hateoas.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-commons</artifactId>
-        <version>1.13.3.RELEASE</version>
-      </dependency>
-      <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
         <version>1.8.9</version>
@@ -644,6 +538,11 @@
         <groupId>org.thymeleaf</groupId>
         <artifactId>thymeleaf-spring4</artifactId>
         <version>${thymeleaf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>nz.net.ultraq.thymeleaf</groupId>
+        <artifactId>thymeleaf-layout-dialect</artifactId>
+        <version>${thymeleaf-layout-dialect.version}</version>
       </dependency>
       <dependency>
         <groupId>com.jcraft</groupId>

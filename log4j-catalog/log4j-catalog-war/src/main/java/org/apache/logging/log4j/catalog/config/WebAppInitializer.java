@@ -16,7 +16,12 @@
  */
 package org.apache.logging.log4j.catalog.config;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -26,22 +31,30 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-public class WebAppInitializer implements WebApplicationInitializer {
+public class WebAppInitializer {
     private static final String APPLICATION_NAME = "AuditCatalog";
+    private static Logger LOGGER = LogManager.getLogger(WebAppInitializer.class);
 
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        servletContext.setInitParameter("applicationName", APPLICATION_NAME);
-        ProfileUtil.setActiveProfile(servletContext);
-        servletContext.setInitParameter("isEmbedded", "true");
-        System.setProperty("applicationName", APPLICATION_NAME);
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.setDisplayName(APPLICATION_NAME);
-        rootContext.register(WebMvcAppContext.class);
-        servletContext.addListener(new ContextLoaderListener(rootContext));
+    @Bean
+    public ServletContextInitializer initializer() {
+        return new ServletContextInitializer() {
 
-        ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(rootContext));
-        restServlet.setLoadOnStartup(1);
-        restServlet.addMapping("/*");
+            @Override
+            public void onStartup(ServletContext servletContext) throws ServletException {
+                LOGGER.info("Starting Audit Catalog Editor");
+                servletContext.setInitParameter("applicationName", APPLICATION_NAME);
+                ProfileUtil.setActiveProfile(servletContext);
+                servletContext.setInitParameter("isEmbedded", "true");
+                System.setProperty("applicationName", APPLICATION_NAME);
+                //AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+                //rootContext.setDisplayName(APPLICATION_NAME);
+                //rootContext.register(WebMvcAppContext.class);
+                //servletContext.addListener(new ContextLoaderListener(rootContext));
+
+                //ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(rootContext));
+                //restServlet.setLoadOnStartup(1);
+                //restServlet.addMapping("/*");
+            }
+        };
     }
 }

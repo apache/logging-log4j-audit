@@ -18,6 +18,8 @@ package org.apache.logging.log4j.catalog.jpa.config;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +33,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 @JdbcUrl("hsqldb")
 public class HsqldbDataSourceConfig implements DataSourceConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger(HsqldbDataSourceConfig.class);
+
     @Bean
     public DataSource dataSource() {
-        System.out.println("Running embedded database builder");
+        LOGGER.debug("Running embedded database builder");
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.HSQL)
                 .addScript("classpath:sql/hsql/schema.sql")

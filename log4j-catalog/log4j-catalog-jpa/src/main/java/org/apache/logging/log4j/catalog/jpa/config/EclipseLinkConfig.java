@@ -19,6 +19,8 @@ import javax.persistence.EntityManagerFactory;
 
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +39,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Profile("eclipseLink")
 public class EclipseLinkConfig {
 
+    private static Logger LOGGER = LogManager.getLogger(EclipseLinkConfig.class);
+
     @Autowired
     private DataSourceConfig dataSourceConfig;
 
     @Bean
     public EntityManagerFactory entityManagerFactory() {
+        LOGGER.debug("Creating EclipseLink entity manager.");
         AbstractJpaVendorAdapter vendorAdapter = new EclipseLinkJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();

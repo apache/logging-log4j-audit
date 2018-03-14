@@ -19,6 +19,8 @@ package org.apache.logging.log4j.catalog.jpa.config;
 import javax.sql.DataSource;
 
 import com.mchange.v2.c3p0.DriverManagerDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,8 @@ import org.springframework.context.annotation.Configuration;
 @JdbcUrl("postgresql")
 public class PostgresqlDataSourceConfig implements DataSourceConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger(PostgresqlDataSourceConfig.class);
+
     @Value("${jdbcUrl}")
     private String url;
 
@@ -42,6 +46,7 @@ public class PostgresqlDataSourceConfig implements DataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
+        LOGGER.debug("Creating PostgresQL data source for {}", url);
         DriverManagerDataSource driver = new DriverManagerDataSource();
         driver.setDriverClass("org.postgresql.Driver");
         driver.setJdbcUrl(url);
