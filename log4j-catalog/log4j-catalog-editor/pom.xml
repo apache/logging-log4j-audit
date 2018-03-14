@@ -22,10 +22,10 @@
 		<artifactId>log4j-catalog</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>log4j-catalog-war</artifactId>
+	<artifactId>log4j-catalog-editor</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Log4j Catalog Service</name>
+	<name>Log4j Catalog Editor</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

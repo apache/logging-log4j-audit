@@ -34,6 +34,6 @@
     <module>log4j-catalog-api</module>
     <module>log4j-catalog-git</module>
     <module>log4j-catalog-jpa</module>
-    <module>log4j-catalog-war</module>
+    <module>log4j-catalog-editor</module>
   </modules>
 </project>
