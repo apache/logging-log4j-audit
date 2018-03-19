@@ -105,4 +105,6 @@ editor for that catalog as well as the REST endpoints to manipulate the dynamic 
 $h2 Requirements
 
 Log4j Audit requires Java 8 and Log4j 2.10.0 or greater.
-
+A Git repo to maintain the JSON catalog of events and attributes is required.
+A database is required if the application wants to define dynamic catalog events and attributes. Log4j Audit provides
+built in support for PostgresQL.
