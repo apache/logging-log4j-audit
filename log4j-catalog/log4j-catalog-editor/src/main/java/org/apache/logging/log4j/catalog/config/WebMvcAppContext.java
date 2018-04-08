@@ -99,9 +99,9 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
+        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
@@ -119,37 +119,12 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         converters.add(jsonMessageConverter());
     }
 
-
-    /*
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localAuthorizationInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/swagger**")
-                .excludePathPatterns("/v2/api-docs**")
-                .excludePathPatterns("/configuration/security**")
-                .excludePathPatterns("/configuration/ui**")
-                .excludePathPatterns("/webjars/**");
-    }
-    */
-
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
         proxyCreator.setProxyTargetClass(true);
         return proxyCreator;
     }
-
-    /*
-    @Bean
-    public ViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/views/");
-        viewResolver.setSuffix(".jsp");
-        viewResolver.setOrder(10);
-        return viewResolver;
-    } */
 
     @Bean
     public MessageSource messageSource() {
@@ -188,6 +163,9 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
 
     @Value("${localRepoUrl:#{null}}")
     private String localRepoUrl;
+
+    @Value("${branch:#{null}}")
+    private String branch;
 
     @Value("${privateKeyPath:#{null}}")
     private String privateKeyPath;
@@ -263,6 +241,9 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         } else {
             LOGGER.error("No remote repo URL provided.");
         }
+        if (isNotBlank(branch)) {
+            dataSource.setBranch(branch);
+        }
 
         if (isNotBlank(localRepoUrl)) {
             dataSource.setLocalRepoPath(localRepoUrl);
@@ -279,53 +260,5 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
             dataSource.setCatalogPath(remoteRepoCatalogPath);
         }
         return dataSource;
-    }
-
-    public SpringResourceTemplateResolver templateResolver(){
-        // SpringResourceTemplateResolver automatically integrates with Spring's own
-        // resource resolution infrastructure, which is highly recommended.
-        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setApplicationContext(this.applicationContext);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        // HTML is the default value, added here for the sake of clarity.
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        // Template cache is true by default. Set to false if you want
-        // templates to be automatically updated when modified.
-        templateResolver.setCacheable(true);
-        return templateResolver;
-    }
-
-    public SpringTemplateEngine templateEngine(){
-        // SpringTemplateEngine automatically applies SpringStandardDialect and
-        // enables Spring's own MessageSource message resolution mechanisms.
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
-        // speed up execution in most scenarios, but might be incompatible
-        // with specific cases when expressions in one template are reused
-        // across different data types, so this flag is "false" by default
-        // for safer backwards compatibility.
-        templateEngine.setEnableSpringELCompiler(true);
-        return templateEngine;
-    }
-
-    @Bean
-    public ViewResolver thymeleafViewResolver(){
-        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
-        // NOTE 'order' and 'viewNames' are optional
-        viewResolver.setOrder(1);
-        viewResolver.setViewNames(new String[] {"products", "categories", "events", "attributes"});
-        return viewResolver;
-    }
-
-    @Bean
-    @Scope("prototype")
-    public ThymeleafView mainView() {
-        ThymeleafView view = new ThymeleafView("index"); // templateName = 'main'
-        view.setStaticVariables(
-                Collections.singletonMap("footer", "The Apache Software Foundation"));
-        return view;
     }
 }

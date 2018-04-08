@@ -58,6 +58,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
     private String remoteRepoUri = null;
     private String localRepoPath = null;
     private String catalogPath = DEFAULT_CATALOG_PATH;
+    private String branch = null;
 
     private Repository localRepo = null;
     private Git git = null;
@@ -110,6 +111,14 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
 
     public void setCatalogPath(String catalogPath) {
         this.catalogPath = catalogPath;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     @Override
@@ -183,6 +192,9 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             LOGGER.debug("local git repo {} does not exist - creating it", localRepoPath);
             localRepoFile.getParentFile().mkdirs();
             CloneCommand cloneCommand = Git.cloneRepository().setURI(remoteRepoUri).setDirectory(localRepoFile);
+            if (branch != null) {
+                cloneCommand.setBranch(branch);
+            }
             if (credentialsProvider != null) {
                 cloneCommand.setCredentialsProvider(credentialsProvider);
             }
