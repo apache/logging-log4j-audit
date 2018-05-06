@@ -44,7 +44,6 @@
          <li>A favorite text editor or IDE</li>
          <li>JDK 1.8 or later</li>
          <li>Apache Maven 3.0+</li>
-         <li>Apache Tomcat 7.0+ (Any servlet 2.5+ compatible container will work)</li>
         </ul>
       </subsection>
       <a name="how_to_complete"/>
@@ -111,6 +110,7 @@
             <code><pre>
               remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git
               remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
+              branch=<![CDATA[<branchname>]]>
               gitUserName=
               gitPassword=
               gitPassPhrase=</pre></code></li>
@@ -150,7 +150,8 @@
              will be able to view the catalog but not update it.
               <code><pre>
     remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git  
-    remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json  
+    remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
+    branch=<![CDATA[<branchname>]]>
     gitUserName=  
     gitPassword=  
     gitPassPhrase=</pre></code></li>
