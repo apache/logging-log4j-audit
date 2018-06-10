@@ -30,7 +30,7 @@
          - "update" - Change
          - "remove" - Removed
     -->
-    <release version="1.0.0" date="2018-xx-xx" description="Release 1.0.0">
+    <release version="1.0.0" date="2018-06-10" description="Release 1.0.0">
     </release>
   </body>
 </document>
