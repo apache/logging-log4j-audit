@@ -78,7 +78,54 @@
       <subsection name="Inspect the build results">
 
         <p>List the contents of audit-service-api/target/generated-sources/log4j-audit directory. The event interfaces
-          generated from the catalog will be located in this directory.</p>
+          generated from the catalog will be located in this directory. As an example, the Class that represents
+          a transfer event looks like:
+
+          <code><pre>
+            package org.apache.logging.log4j.audit.event;
+
+            import java.math.BigDecimal;
+            import org.apache.logging.log4j.audit.AuditEvent;
+            import org.apache.logging.log4j.audit.annotation.Constraint;
+            import org.apache.logging.log4j.audit.annotation.MaxLength;
+            import org.apache.logging.log4j.audit.annotation.RequestContext;
+            import org.apache.logging.log4j.audit.annotation.Required;
+
+            /**
+            * Transfer between accounts
+            * @author generated
+            */
+            @MaxLength(32)
+            @RequestContext(key="hostName")
+            @RequestContext(key="loginId", required=true)
+            @RequestContext(key="ipAddress", constraints={@Constraint(constraintType="pattern", constraintValue="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")})
+            @RequestContext(key="accountNumber", required=true)
+            @RequestContext(key="userId", required=true)
+            public interface Transfer extends AuditEvent {
+
+                /**
+                 * Amount : Amount to transfer
+                 * @param amount Amount to transfer
+                 */
+                @Required
+                public void setAmount(BigDecimal amount);
+
+                /**
+                 * From Account Number : Source of funds
+                 * @param fromAccount Source of funds
+                 */
+                @Required
+                public void setFromAccount(int fromAccount);
+
+                /**
+                 * To Account Number : Destination account
+                 * @param toAccount Destination account
+                 */
+                @Required
+                @Constraint(constraintType="minValue", constraintValue="1")
+                public void setToAccount(int toAccount);
+            }</pre></code>
+        </p>
       </subsection>
       <a name="Run"/>
       <subsection name="Run an application that performs auditing">
@@ -91,6 +138,50 @@
     ./sample-app.sh  
     vi target/logs/audit.log</pre></code></li>
         </ol>
+        <p>The output from the logs should look similar to:
+        <code><pre><![CDATA[
+          <128>1 2018-06-09T19:54:26.018-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser"][login@18060]
+          <128>1 2018-06-09T19:54:26.021-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][login@18060 completionStatus="Success"]
+          <128>1 2018-06-09T19:54:26.026-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][deposit@18060 account="123456" amount="100"]
+          <128>1 2018-06-09T19:54:26.027-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][deposit@18060 account="123456" amount="100" completionStatus="Success"]]]></pre>
+        </code>
+        Note that the formatting is completely controlled by the Log4j configuration. In this case, the RFC5424Layout was used.</p>
+
+        <p>The application that generated these logs is:
+          <code><pre>
+            public class SampleApp {
+
+                public static void main(String[] args) throws Exception {
+                    String hostName = NetUtils.getLocalHostname();
+                    RequestContext.setHostName(hostName);
+                    String inetAddress = InetAddress.getLocalHost().getHostAddress();
+                    RequestContext.setIpAddress(inetAddress);
+                    RequestContext.setLoginId("testuser");
+                    Login login = LogEventFactory.getEvent(Login.class);
+                    login.logEvent();
+                    String result = login("testuser");
+                    login.setCompletionStatus(result);
+                    login.logEvent();
+                    Deposit deposit = LogEventFactory.getEvent(Deposit.class);
+                    deposit.setAccount(123456);
+                    deposit.setAmount(new BigDecimal(100.00));
+                    deposit.logEvent();
+                    result = deposit(deposit);
+                    deposit.setCompletionStatus(result);
+                    deposit.logEvent();
+                    RequestContext.clear();
+                }
+
+                private static String login(String user) {
+                    RequestContext.setUserId("1111");
+                    RequestContext.setAccountNumber(12345L);
+                    return "Success";
+                }
+
+                private static String deposit(Deposit deposit) {
+                return "Success";
+            }</pre></code>
+        </p>
       </subsection>
       <a name="DeployAuditService"/>
       <subsection name="Deploy the Audit Service WAR">

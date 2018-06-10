@@ -25,7 +25,7 @@ Log4j-Audit incorporates Log4j ThreadContext variables as a way of including inf
 common throughout the application. While usage of a RequestContext is not required, the use of one should be
 considered a best practice.
 
-In a typcial application that might use a ThreadContext Map, it will place variables in the Map so that they will
+In a typical application that might use a ThreadContext Map, it will place variables in the Map so that they will
 be included in all Log4j log events. Log4j Audit takes advantage of this so that variables placed into the
 ThreadContext Map will be automatically be available in audit events as well. In addition, through the use of
 the RequestContextFilter and RequestContextHeaderInterceptor, these variable will automatically be passed from a
@@ -37,7 +37,7 @@ can be correlated in the application and through all the microservices the appli
 include things like a client account number (especially useful in multi-tenant applications), the user's login id,
 and the ip address of the user. In a services-based application these values need to be populated at the point of
 entry to the application and then passed to all the service endpoints. It is especially useful to create artificial
-request and session ids so that all the activities acrossall the servers can be correlated to the user's request
+request and session ids so that all the activities across all the servers can be correlated to the user's request
 and/or session.
 
 When defining audit events there are generally two types of data included in the event. The first are data elements
@@ -49,7 +49,7 @@ the data specific to that event needs to be added by the application.
 Another use case for RequestContext or ThreadContext Map variables is when lower level components need access to
 data elements that the components calling them have no use for. For example, an application may shard its database
 based on a customer's account number. A particular component may not need the account number in any of its operations
-but would be forced to pass it through so the database access component could use it to determine which datbase to
+but would be forced to pass it through so the database access component could use it to determine which database to
 use. By using the RequestContext the intermediate component no longer has to be aware of what customer it is performing
 work for.
 
@@ -122,6 +122,10 @@ This diagram shows how the RequestContext is created at the beginning of every r
 application (including audit logging). It is then converted to HTTP headers by a Spring Interceptor (provided by
 Log4j Audit) that are passed on a REST call to a service. The service then uses a servlet filter (provided by Log4j
 Audit) to create a RequestContext for use by the service.
+
+This same mechanism can be applied to other kinds of distributed requests. For example, when using Spring AMQP the
+RequestContext fields can be captured as AMQP headers using a MessagePostProcessor and the RequestContext recreated
+in the consumer using an Interceptor.
 
 ![RequestContext Flow](images/request-context.png)
 
@@ -207,7 +211,7 @@ public class RequestContextInterceptor implements HandlerInterceptor {
 }
 ```
 
-$h3 Passing the RequestContext to a Service
+$h3 Passing the RequestContext to a Spring REST Service
 
 Log4j Audit provides an Interceptor that can be used with Spring web applications that will convert RequestContext
 variables to HTTP headers. The RequestContextHeaderInterceptor can be created by a java configuration method such as:

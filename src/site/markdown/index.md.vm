@@ -33,7 +33,7 @@ $h3 What is the difference between audit logging and "normal" logging?
 
 In a typical application developers add logging statements at key points to help diagnose problems or to
 document unexpected occurances, such as a failure to communicate with a key service. These are normally referred
-to as diagnostic logs. Diagnostic logs are critical in aiding in maintaining the servicability of the application
+to as diagnostic logs. Diagnostic logs are critical in maintaining the servicability of the application
 but generally aren't very useful in helping to determine who made a paticular change and when it was done.
 On the other hand, audit logs focus on identifying when a change was made, who made it, and what data elements were
 changed. While audit logs can sometimes help in troubleshooting problems, that isn't their primary purpose just as
@@ -77,7 +77,17 @@ would.
 
 $h2 Features
 
+Each application has its own events that need to be audited. Before using Log4j Audit, application owners need to define
+the AuditMessages that capture the exact attributes of that need to be captured. The [Getting Started](link) page
+provides a tutorial that explains how to define audit events for an application.
+
 $h3 Audit Event Catalog
+
+Once audit events are defined, they need to be maintained: as the application evolves, developers will inevitably
+discover they need to add, remove or change attributes of the audit events. Log4j Audit can persist the audit event
+definitions in a JSON file. This file becomes the Audit Event Catalog for the application. Log4j Audit is designed
+to store the event definition file in a Git repository so that the evolution of the audit events themselves have an
+audit trail in the Git history of the file. Log4j Audit provides a web interface for editing the events.
 
 Log4j Audit uses a catalog of events to determine what events can be logged and to validate the events. Java
 interfaces are generated from the catalog for applications to use when generating the audit events. A web UI
@@ -86,9 +96,15 @@ so is best run on the local user's computer.
 
 $h3 Dynamic Event Catalog
 
+The typical event catalog is considered static. It is defined during the development process and cannot be changed in
+a running system without a new release.
+
 In addition to the catalog that is managed by the web UI a set of dynamic catalogs can also be used. These catalogs
 can be used by multi-tenant applications where each tenant has a different set of events and/or attributes that need
-to be logged.
+to be logged. The dynamic events are defined while the application is running and because they are specific to a
+tenant in the running system. Because they are dynamic they are maintained in a database. Changes to the dynamic
+catalog do not affect the static catalog. Changes to the dynamic catalog are performed using the audit service's REST
+APi.
 
 $h3 Audit Service
 

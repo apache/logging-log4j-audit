@@ -22,9 +22,8 @@
 
 $h1 The Apache Log4j Audit Catalog
 
-Log4j-Audit uses a Catalog that describes the attributes and events that can be logged. The events may be grouped
-by Products and/or Categories, but at this time nothing in Log4j Audit makes use of the product or catalog
-definitions. The catalog is required to generate the audit events and to validate events being logged.
+Log4j-Audit uses a Catalog that describes the attributes and events that can be logged.  The catalog is required
+to generate the audit events and to validate events being logged.
 
 $h2 The Catalog and Catalog Editor
 

@@ -31,8 +31,8 @@
       <item name="About" href="/index.html"/>
       <item name="Download" href="/download.html"/>
       <item name="Getting Started" href="/gettingStarted.html"/>
-      <item name="RequestContext" href="/requestContext.html"/>
       <item name="Audit Catalog" href="catalog.html"/>
+      <item name="RequestContext" href="/requestContext.html"/>
       <item name="Sample Project" href="sample.html"/>
       <item name="Changelog" href="/changelog.html"/>
       <item name="Javadoc" href="/apidocs/index.html"/>

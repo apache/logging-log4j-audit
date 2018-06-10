@@ -33,7 +33,8 @@ public class AuditDto {
     private String catalogId;
 
     /**
-     * The RequestContext Map.
+     * The RequestContext Map. This may be used as an alternative to passing the RequestContext as
+     * headers.
      */
     private Map<String, String> requestContextMap;
 
