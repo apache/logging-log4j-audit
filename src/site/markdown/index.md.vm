@@ -34,7 +34,7 @@ $h3 What is the difference between audit logging and "normal" logging?
 In a typical application developers add logging statements at key points to help diagnose problems or to
 document unexpected occurances, such as a failure to communicate with a key service. These are normally referred
 to as diagnostic logs. Diagnostic logs are critical in maintaining the servicability of the application
-but generally aren't very useful in helping to determine who made a paticular change and when it was done.
+but generally aren't very useful in helping to determine who made a particular change and when it was done.
 On the other hand, audit logs focus on identifying when a change was made, who made it, and what data elements were
 changed. While audit logs can sometimes help in troubleshooting problems, that isn't their primary purpose just as
 the primary purpose of diagnostic logging is not to record actions taken by people using the system.
@@ -51,8 +51,8 @@ the organization. For example, an auditor at a bank might be interested in locat
 might want to watch the audit events for a specific user while they are on the phone with them troubleshooting a problem.
 Generally, diagnostic logs do not provide the information to support these use cases while audit logs do.
 
-Finally, diagnostic logs and audit logs differ in that diagnostic logs typcially are categorized via "levels"
-while audit logs are not. Diagnostic logging typcially includes fairly detailed logging of the internals of the system
+Finally, diagnostic logs and audit logs differ in that diagnostic logs typically are categorized via "levels"
+while audit logs are not. Diagnostic logging typically includes fairly detailed logging of the internals of the system
 via debug level messages. Other messages may be classified as informational or, in response to some kind of an
 error, a warning or error log message may be generated.  In contrast to this, audit logs are usually always logged
 so a level is meaningless.
@@ -78,7 +78,7 @@ would.
 $h2 Features
 
 Each application has its own events that need to be audited. Before using Log4j Audit, application owners need to define
-the AuditMessages that capture the exact attributes of that need to be captured. The [Getting Started](link) page
+the AuditMessages that capture the exact attributes of that need to be captured. The [Getting Started](gettingStarted.html) page
 provides a tutorial that explains how to define audit events for an application.
 
 $h3 Audit Event Catalog
@@ -104,7 +104,7 @@ can be used by multi-tenant applications where each tenant has a different set o
 to be logged. The dynamic events are defined while the application is running and because they are specific to a
 tenant in the running system. Because they are dynamic they are maintained in a database. Changes to the dynamic
 catalog do not affect the static catalog. Changes to the dynamic catalog are performed using the audit service's REST
-APi.
+API.
 
 $h3 Audit Service
 
@@ -115,7 +115,7 @@ $h3 Sample Project
 
 Users of Log4j Audit must provide a Git repository where the audit events will reside which will be used to generate
 the Java event interfaces. Log4j Audit provides a sample project that contains a sample catalog file and creates
-the Jave interfaces from that file. The project also contains a module that generates a war file containing the
+the Java interfaces from that file. The project also contains a module that generates a war file containing the
 editor for that catalog as well as the REST endpoints to manipulate the dynamic catalogs.
 
 $h2 Requirements
