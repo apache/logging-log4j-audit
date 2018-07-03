@@ -33,18 +33,18 @@ the originals on the main distribution server.
 | Apache Log4j Audit source (tar.gz) | [apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz][srctar] | [apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.md5][srctarmd5] | [apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.asc][srctarasc] |
 | Apache Log4j Audit source (zip)    | [apache-log4j-audit-${Log4jAuditVersion}-src.zip][srczip]    | [apache-log4j-audit-${Log4jAuditVersion}-src.zip.md5][srczipmd5]    | [apache-log4j-audit-${Log4jAuditVersion}-src.zip.asc][srczipasc]    |
 
-[bintar]: https://www.apache.org/dyn/closer.lua/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz
-[bintarmd5]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz.md5
-[bintarasc]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz.asc
-[binzip]: https://www.apache.org/dyn/closer.lua/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.zip
-[binzipmd5]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.zip.md5
-[binzipasc]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.zip.asc
-[srctar]: https://www.apache.org/dyn/closer.lua/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz
-[srctarmd5]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.md5
-[srctarasc]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.asc
-[srczip]: https://www.apache.org/dyn/closer.lua/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.zip
-[srczipmd5]: https://www.apache.org/dist/logging/log4j/log4j-aduit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.zip.md5
-[srczipasc]: https://www.apache.org/dist/logging/log4j/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-src.zip.asc
+[bintar]: https://www.apache.org/dyn/closer.lua/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz
+[bintarmd5]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz.md5
+[bintarasc]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.tar.gz.asc
+[binzip]: https://www.apache.org/dyn/closer.lua/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.zip
+[binzipmd5]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.zip.md5
+[binzipasc]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-bin.zip.asc
+[srctar]: https://www.apache.org/dyn/closer.lua/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz
+[srctarmd5]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.md5
+[srctarasc]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-src.tar.gz.asc
+[srczip]: https://www.apache.org/dyn/closer.lua/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-src.zip
+[srczipmd5]: https://www.apache.org/dist/logging/log4j-aduit/apache-log4j-audit-${Log4jAuditVersion}-src.zip.md5
+[srczipasc]: https://www.apache.org/dist/logging/log4j-audit/apache-log4j-audit-${Log4jAuditVersion}-src.zip.asc
 
 It is essential that you verify the integrity of the downloaded files using the PGP or MD5 signatures.
 Please read [Verifying Apache HTTP Server Releases](https://httpd.apache.org/dev/verification.html) for more
