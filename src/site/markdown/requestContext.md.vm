@@ -89,16 +89,16 @@ public final class RequestContext {
 ```
 $h2 RequestContext Annotations
 $h3 HeaderPrefix
-The HeaderPrefix annotation is used to define the string to be prepended to the names of the ThreadContext variables
+The `@HeaderPrefix` annotation is used to define the string to be prepended to the names of the ThreadContext variables
 when they are passed to a REST service. The default value is "request-context-".
 
 $h3 Mapping Annotations
 
-The ClientServer, Local, and Chained annotations represent the 3 types of RequestContext variables.
+The `@ClientServer`, `@Local`, and `@Chained` annotations represent the 3 types of RequestContext variables.
 <ul>
-<li>ClientServer represents a variable whose value should be passed to the target service using the same name.</li>
-<li>Local represents a variable that is used in the local application and should not be passed to a client service.</li>
-<li>Chained represents a variable that should be passed to the target service using a new name. A variable with the
+<li>`@ClientServer` represents a variable whose value should be passed to the target service using the same name.</li>
+<li>`@Local` represents a variable that is used in the local application and should not be passed to a client service.</li>
+<li>`@Chained` represents a variable that should be passed to the target service using a new name. A variable with the
 same named may be created in the target service using a different value. This is primarily used to pass the name
 of the current server to the target service.</li>
 </ul>
@@ -253,7 +253,3 @@ $h2 Configuring Logging to Include RequestContext Variables
 When logging RequestContext variables simply configure log4j2.xml to include specific ThreadContext variables or
 all of them using the %X pattern converter or by setting the includeMdc, includeThreadContext, or properties attribute
 to true on the desired Layout.
-```
-```
-
-
