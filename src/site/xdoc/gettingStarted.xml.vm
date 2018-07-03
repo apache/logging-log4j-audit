@@ -50,20 +50,20 @@
       <subsection name="How to complete this guide">
 
         <p>Create a directory for this guide:<br />
-          <code><pre>
+          <pre><code>
     cd ~
     mkdir log4j-audit-guide
-    cd log4j-audit-guide</pre></code></p>
+    cd log4j-audit-guide</code></pre></p>
 
         <p><a href="https://github.com/apache/logging-log4j-audit-sample/archive/master.zip">Download</a> and unzip the
           sample source repository, or clone it using <a href="https://git-scm.com/downloads">Git</a>:<br />
-          <code><pre>
-    git clone https://github.com/apache/logging-log4j-audit-sample</pre></code></p>
+          <pre><code>
+    git clone https://github.com/apache/logging-log4j-audit-sample</code></pre></p>
 
         <p>Change to the root directory of the project and build it using Maven:<br />
-        <code><pre>
+        <pre><code>
     cd logging-log4j-audit-sample
-    mvn clean install</pre></code></p>
+    mvn clean install</code></pre></p>
 
         <p>Three artifacts will have been created and installed into your local Maven repository:
         <ol>
@@ -81,7 +81,7 @@
           generated from the catalog will be located in this directory. As an example, the Class that represents
           a transfer event looks like:
 
-          <code><pre>
+          <pre><code>
             package org.apache.logging.log4j.audit.event;
 
             import java.math.BigDecimal;
@@ -124,31 +124,30 @@
                 @Required
                 @Constraint(constraintType="minValue", constraintValue="1")
                 public void setToAccount(int toAccount);
-            }</pre></code>
+            }</code></pre>
         </p>
       </subsection>
       <a name="Run"/>
       <subsection name="Run an application that performs auditing">
         <ol>
           <li>Change to the sample-app diretory.
-            <code><pre>
-    cd sample-app</pre></code></li>
+            <pre><code>
+    cd sample-app</code></pre></li>
           <li>Run the sample app and view the logs
-            <code><pre>
+            <pre><code>
     ./sample-app.sh  
-    vi target/logs/audit.log</pre></code></li>
+    vi target/logs/audit.log</code></pre></li>
         </ol>
         <p>The output from the logs should look similar to:
-        <code><pre><![CDATA[
+        <pre><code><![CDATA[
           <128>1 2018-06-09T19:54:26.018-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser"][login@18060]
           <128>1 2018-06-09T19:54:26.021-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][login@18060 completionStatus="Success"]
           <128>1 2018-06-09T19:54:26.026-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][deposit@18060 account="123456" amount="100"]
-          <128>1 2018-06-09T19:54:26.027-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][deposit@18060 account="123456" amount="100" completionStatus="Success"]]]></pre>
-        </code>
+          <128>1 2018-06-09T19:54:26.027-07:00 RalphGoers-MacBook-Pro.local SampleApp 18815 Audit [RequestContext@18060 accountNumber="12345" hostName="RalphGoers-MacBook-Pro.local" ipAddress="192.168.1.15" loginId="testuser" userId="1111"][deposit@18060 account="123456" amount="100" completionStatus="Success"]]]></code></pre>
         Note that the formatting is completely controlled by the Log4j configuration. In this case, the RFC5424Layout was used.</p>
 
         <p>The application that generated these logs is:
-          <code><pre>
+          <pre><code>
             public class SampleApp {
 
                 public static void main(String[] args) throws Exception {
@@ -180,17 +179,17 @@
 
                 private static String deposit(Deposit deposit) {
                 return "Success";
-            }</pre></code>
+            }</code></pre>
         </p>
       </subsection>
       <a name="DeployAuditService"/>
       <subsection name="Deploy the Audit Service WAR">
         <ol>
-          <li>Create a temporary directory and copy the audit service jar to it.<code><pre>
+          <li>Create a temporary directory and copy the audit service jar to it.<pre><code>
     cd ~
     mkdir auditService
     cd auditService
-    cp ~/log4j-audit-guide/logging-audit-sample/audit-service/target/audit-service-${Log4jAuditVersion}.jar .</pre></code></li>
+    cp ~/log4j-audit-guide/logging-audit-sample/audit-service/target/audit-service-${Log4jAuditVersion}.jar .</code></pre></li>
           <li>Use an editor to create a file named application.properties in the directory.</li>
           <li>Copy the following lines into the file. The value for remoteRepoUrl should the Git repo where your
             version of catalog.json should be stored. remoteRepoCatalogPath is the location within that Git repository
@@ -198,22 +197,22 @@
             when SSH is used. gitUserName and gitPassPhrase are the credentials required to access the Git
             repository when using HTTP or HTTPS. If the credentials or pass phrase are not provided typically you
             will be able to view the catalog but not update it.
-            <code><pre>
+            <pre><code>
               remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git
               remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
               branch=<![CDATA[<branchname>]]>
               gitUserName=
               gitPassword=
-              gitPassPhrase=</pre></code></li>
+              gitPassPhrase=</code></pre></li>
           <li>Start the application.
-            <code><pre>
-    java -jar audit-service-${Log4jAuditVersion}.jar</pre></code></li>
+            <pre><code>
+    java -jar audit-service-${Log4jAuditVersion}.jar</code></pre></li>
           <li>Wait for the application to start.</li>
-          <li>Generate an audit event.<code><pre>
+          <li>Generate an audit event.<pre><code>
           curl -i -X POST -H 'Content-Type: application/vnd.apache.logging.log4j.audit+json; version="1.0"' \
           http://localhost:8080/event/log -d '{ "eventName": "transfer", "requestContextMap": {"loginId": "rgoers", "corpAccountNumber": "12345", "ipAddress": "127.0.0.1"}, "properties": {"toAccount": "111111", "fromAccount": "222222", "amount": "100.00"}}'
-          </pre></code></li>
-          <li>The command should respond with <code><pre>HTTP/1.1 200</pre></code></li>
+          </code></pre></li>
+          <li>The command should respond with <code>HTTP/1.1 200</code></li>
           <li>View the audit log at logs/AuditService/audit.log. The audit event should be present in the file.</li>
         </ol>
        </subsection>
@@ -222,16 +221,16 @@
          <ol>
            <li><a href="http://www.apache.org/dist/logging/apache-log4j-audit-${Log4jAuditVersion}-bin.zip">Download</a>
             the Log4j audit binary zip.
-             <code><pre>
-    wget http://www.apache.org/dist/logging/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.zip</pre></code></li>
+             <pre><code>
+    wget http://www.apache.org/dist/logging/log4j-audit/${Log4jAuditVersion}/apache-log4j-audit-${Log4jAuditVersion}-bin.zip</code></pre></li>
            <li>Unzip the contents.
-             <code><pre>
-    unzip apache-log4j-audit-${Log4jAuditVersion}-bin.zip</pre></code></li>
+             <pre><code>
+    unzip apache-log4j-audit-${Log4jAuditVersion}-bin.zip</code></pre></li>
            <li>Copy the Log4j Catalog Editor jar to any directory.
-             <code><pre>
+             <pre><code>
     mkdir catalogEditor
     cd catalogEditor
-    cp apache-log4j-audit-${Log4jAuditVersion}-bin/log4j-catalog-editor-${Log4jAuditVersion}.jar .</pre></code></li>
+    cp apache-log4j-audit-${Log4jAuditVersion}-bin/log4j-catalog-editor-${Log4jAuditVersion}.jar .</code></pre></li>
            <li>Use an editor to create a file named application.properties in this directory.</li>
            <li>Copy the following lines into the file. The value for remoteRepoUrl should the Git repo where your
              version of catalog.json should be stored. remoteRepoCatalogPath is the location within that Git repository
@@ -239,15 +238,15 @@
              when SSH is used. gitUserName and gitPassPhrase are the credentials required to access the Git
              repository when using HTTP or HTTPS. If the credentials or pass phrase are not provided typically you
              will be able to view the catalog but not update it.
-              <code><pre>
+              <pre><code>
     remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git  
     remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
     branch=<![CDATA[<branchname>]]>
     gitUserName=  
     gitPassword=  
-    gitPassPhrase=</pre></code></li>
+    gitPassPhrase=</code></pre></li>
            <li>Start the application.
-             <code><pre>java -jar log4j-catalog-editor-${Log4jAuditVersion}.jar</pre></code></li>
+             <pre><code>java -jar log4j-catalog-editor-${Log4jAuditVersion}.jar</code></pre></li>
          </ol>
        </subsection>
        <a name="CatalogEditor"/>
