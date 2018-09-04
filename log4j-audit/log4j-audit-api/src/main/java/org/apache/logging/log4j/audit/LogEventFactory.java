@@ -87,7 +87,7 @@ public class LogEventFactory {
      * @return Returns an instance of the Event.
      */
     @SuppressWarnings("unchecked")
-	public static <T> T getEvent(Class<T> intrface) {
+	public static <T extends AuditEvent> T getEvent(Class<T> intrface) {
 
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
