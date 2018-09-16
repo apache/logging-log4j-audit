@@ -43,7 +43,7 @@ import org.apache.logging.log4j.audit.annotation.RequestContextConstraints;
 import org.apache.logging.log4j.audit.annotation.Required;
 import org.apache.logging.log4j.audit.exception.AuditException;
 import org.apache.logging.log4j.audit.util.NamingUtils;
-import org.apache.logging.log4j.catalog.api.exception.ConstraintValidationException;
+import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 import org.apache.logging.log4j.spi.ExtendedLogger;

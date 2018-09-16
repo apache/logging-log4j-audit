@@ -14,18 +14,14 @@
  * See the license for the specific language governing permissions and
  * limitations under the license.
  */
-package org.apache.logging.log4j.catalog.api.exception;
+package org.apache.logging.log4j.audit.exception;
 
 /**
  *
  */
-public class ConstraintValidationException extends RuntimeException {
+public class ConstraintValidationException extends AuditException {
 
     private static final long serialVersionUID = 2142398619256674767L;
-
-    public ConstraintValidationException() {
-        super();
-    }
 
     public ConstraintValidationException(String msg) {
         super(msg);

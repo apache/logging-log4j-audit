@@ -22,7 +22,7 @@ import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.audit.catalog.StringCatalogReader;
-import org.apache.logging.log4j.catalog.api.exception.ConstraintValidationException;
+import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;

@@ -25,15 +25,13 @@ import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
-import org.apache.logging.log4j.catalog.api.exception.ConstraintValidationException;
+import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
 
 /**
  * This class is used to log events generated remotely.
