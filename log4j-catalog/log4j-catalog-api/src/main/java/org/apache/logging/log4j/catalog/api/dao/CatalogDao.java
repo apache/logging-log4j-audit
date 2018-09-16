@@ -19,15 +19,11 @@ package org.apache.logging.log4j.catalog.api.dao;
 import java.util.Map;
 
 import org.apache.logging.log4j.catalog.api.Attribute;
-import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.CatalogWriter;
 import org.apache.logging.log4j.catalog.api.Category;
-import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.Product;
-import org.apache.logging.log4j.catalog.api.exception.DuplicateNameException;
-import org.apache.logging.log4j.catalog.api.exception.NameNotFoundException;
 
 /**
  * Provides access to the Catalog.
