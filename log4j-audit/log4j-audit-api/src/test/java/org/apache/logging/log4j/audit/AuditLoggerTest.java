@@ -85,7 +85,7 @@ public class AuditLoggerTest {
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
         try {
-            auditLogger.logEvent("transfer", properties);
+            auditLogger.logEvent("Transfer", properties);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail();
@@ -94,6 +94,7 @@ public class AuditLoggerTest {
         assertNotNull("No messages", msgs);
         assertTrue("No messages", msgs.size() == 1);
         String msg = msgs.get(0);
+        assertTrue("Normalized event name", msg.contains("transfer@"));
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));
         assertTrue("No toAccount", msg.contains("toAccount=\"123456\""));
@@ -110,6 +111,6 @@ public class AuditLoggerTest {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("toAccount", "123456");
         properties.put("amount", "111.55");
-        auditLogger.logEvent("transfer", properties);
+        auditLogger.logEvent("Transfer", properties);
     }
 }

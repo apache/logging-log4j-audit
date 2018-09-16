@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.exception.AuditException;
+import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -91,11 +92,12 @@ public abstract class AbstractEventLogger {
     }
 
     private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        Event event = catalogId == null ? catalogManager.getEvent(eventName) : catalogManager.getEvent(eventName, catalogId);
+        String eventId = NamingUtils.lowerFirst(eventName);
+        Event event = catalogId == null ? catalogManager.getEvent(eventId) : catalogManager.getEvent(eventId, catalogId);
         if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
+            throw new AuditException("Unable to locate definition of audit event " + eventId);
         }
-        logEvent(eventName, attributes, event, exceptionHandler);
+        logEvent(eventId, attributes, event, exceptionHandler);
     }
 
     protected abstract void logEvent(StructuredDataMessage message);
