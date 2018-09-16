@@ -25,6 +25,7 @@ import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
+import org.apache.logging.log4j.catalog.api.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
@@ -146,7 +147,7 @@ public abstract class AbstractEventLogger {
             errors.append("Event ").append(eventName).append(" is missing required attribute(s) ").append(missingAttributes.toString());
         }
         if (errors.length() > 0) {
-            throw new AuditException(errors.toString());
+            throw new ConstraintValidationException(errors.toString());
         }
         List<String> attributeNames = catalogManager.getAttributeNames(eventName, event.getCatalogId());
         StringBuilder buf = new StringBuilder();
@@ -159,7 +160,7 @@ public abstract class AbstractEventLogger {
             }
         }
         if (buf.length() > 0) {
-            throw new AuditException("Event " + eventName + " contains invalid attribute(s) " + buf.toString());
+            throw new ConstraintValidationException("Event " + eventName + " contains invalid attribute(s) " + buf.toString());
         }
 
         List<String> reqCtxAttrs = catalogManager.getRequiredContextAttributes(eventName, event.getCatalogId());
@@ -175,7 +176,7 @@ public abstract class AbstractEventLogger {
                 }
             }
             if (sb.length() > 0) {
-                throw new IllegalStateException("Event " + msg.getId().getName() +
+                throw new ConstraintValidationException("Event " + msg.getId().getName() +
                         " is missing required RequestContextMapping values for " + sb.toString());
             }
         }
@@ -193,7 +194,7 @@ public abstract class AbstractEventLogger {
             }
         }
         if (errors.length() > 0) {
-            throw new AuditException("Event " + eventName + " has incorrect data in the Thread Context: " + errors.toString());
+            throw new ConstraintValidationException("Event " + eventName + " has incorrect data in the Thread Context: " + errors.toString());
         }
         msg.putAll(attributes);
         try {
