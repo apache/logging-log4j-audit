@@ -79,24 +79,19 @@ public abstract class AbstractEventLogger {
     }
 
     public void logEvent(String eventName, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, null, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, String catalogId, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName, catalogId);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, catalogId, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        Event event = catalogManager.getEvent(eventName);
+        logEvent(eventName, null, attributes, exceptionHandler);
+    }
 
+    private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
+        Event event = catalogId == null ? catalogManager.getEvent(eventName) : catalogManager.getEvent(eventName, catalogId);
         if (event == null) {
             throw new AuditException("Unable to locate definition of audit event " + eventName);
         }
