@@ -195,9 +195,9 @@ public abstract class AbstractEventLogger {
                                              " is missing required Thread Context values for " + errors.toString());
         }
 
-        for (Map.Entry<String, String> entry : ThreadContext.getImmutableContext().entrySet()) {
+        for (Map.Entry<String, Attribute> entry : reqCtxAttributes.entrySet()) {
             Attribute attribute = reqCtxAttributes.get(entry.getKey());
-            if (attribute == null) {
+            if (!ThreadContext.containsKey(entry.getKey())) {
                 continue;
             }
             Set<Constraint> constraintList = attribute.getConstraints();
