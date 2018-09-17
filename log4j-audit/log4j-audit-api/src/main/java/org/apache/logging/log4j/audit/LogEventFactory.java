@@ -92,14 +92,18 @@ public class LogEventFactory {
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
-        int msgLength = maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
+        int msgLength = getMaxLength(intrface);
         AuditMessage msg = new AuditMessage(eventId, msgLength);
 		AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
 				.getClassLoader(), interfaces, new AuditProxy(msg, intrface));
 
 		return (T) audit;
 	}
+
+    private static <T> int getMaxLength(Class<T> intrface) {
+        MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
+        return maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
+    }
 
     /**
      *
@@ -124,7 +128,7 @@ public class LogEventFactory {
         validateContextConstraints(intrface, errors);
 
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int maxLength = intrface.getAnnotation(MaxLength.class).value();
+        int maxLength = getMaxLength(intrface);
         AuditMessage msg = new AuditMessage(eventId, maxLength);
         List<Property> props = getProperties(intrface);
         Map<String, Property> propertyMap = new HashMap<>();
