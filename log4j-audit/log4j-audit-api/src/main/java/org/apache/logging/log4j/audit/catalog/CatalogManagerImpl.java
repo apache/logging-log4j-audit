@@ -36,6 +36,7 @@ import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
 
+import static java.util.Collections.emptyList;
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
@@ -83,11 +84,12 @@ public class CatalogManagerImpl implements CatalogManager {
     public Map<String, Attribute> getAttributes(String eventName, String catalogId) {
         Event event = getEvent(eventName, catalogId);
         if (event == null) {
-            logger.warn("No event named {} counld be found in catalog {}", eventName, catalogId);
+            logger.warn("The event named {} could not be found in catalog {}", eventName, catalogId);
             return null;
         }
-        Map<String, Attribute> attributes = new HashMap<>(event.getAttributes().size());
-        for (EventAttribute eventAttribute : event.getAttributes()) {
+        List<EventAttribute> eventAttributes = event.getAttributes() == null ? emptyList() : event.getAttributes();
+        Map<String, Attribute> attributes = new HashMap<>(eventAttributes.size());
+        for (EventAttribute eventAttribute : eventAttributes) {
             Attribute attr = getAttribute(eventAttribute.getName(), event.getCatalogId());
             if (attr != null) {
                 attributes.put(attr.getName(), attr);
@@ -128,22 +130,27 @@ public class CatalogManagerImpl implements CatalogManager {
     }
 
     private Map<String, Map<String, CatalogInfo>> initializeData(CatalogReader catalogReader) throws Exception {
-        String catalog = catalogReader.readCatalog();
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_COMMENTS);
         ObjectMapper mapper = new ObjectMapper(factory);
+
+        String catalog = catalogReader.readCatalog();
         catalogData = mapper.readValue(catalog, CatalogData.class);
-        for (Attribute attr : catalogData.getAttributes()) {
-            if (attr.isRequestContext()) {
-                requestContextAttributes.put(attr.getName(), attr);
+
+        if (catalogData.getAttributes() != null) {
+            for (Attribute attr : catalogData.getAttributes()) {
+                if (attr.isRequestContext()) {
+                    requestContextAttributes.put(attr.getName(), attr);
+                }
+                Map<String, Attribute> attrMap = attributeMap.get(attr.getCatalogId());
+                if (attrMap == null) {
+                    attrMap = new HashMap<>();
+                    attributeMap.put(attr.getCatalogId(), attrMap);
+                }
+                attrMap.put(attr.getName(), attr);
             }
-            Map<String, Attribute> attrMap = attributeMap.get(attr.getCatalogId());
-            if (attrMap == null) {
-                attrMap = new HashMap<>();
-                attributeMap.put(attr.getCatalogId(), attrMap);
-            }
-            attrMap.put(attr.getName(), attr);
         }
+
         Map<String, Map<String, CatalogInfo>> map = new HashMap<>();
         map.put(DEFAULT_CATALOG, new HashMap<>());
         for (Event event : catalogData.getEvents()) {
