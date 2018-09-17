@@ -79,7 +79,7 @@ public class RequestContextFilter implements Filter {
         if (servletRequest instanceof HttpServletRequest) {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            logger.info("Starting request {}" + request.getRequestURI());
+            logger.info("Starting request {}", request.getRequestURI());
             try {
                 Enumeration headers = request.getHeaderNames();
                 while (headers.hasMoreElements()) {

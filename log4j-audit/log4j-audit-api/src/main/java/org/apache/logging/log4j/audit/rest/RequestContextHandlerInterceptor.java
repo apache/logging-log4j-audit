@@ -44,7 +44,7 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        logger.info("Starting request {}" + request.getRequestURI());
+        logger.info("Starting request {}", request.getRequestURI());
         Enumeration headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String name = (String) headers.nextElement();
