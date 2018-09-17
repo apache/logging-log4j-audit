@@ -70,11 +70,14 @@ public class AuditLoggerTest {
     @Before
     public void before() {
         app.clear();
+        ThreadContext.clearMap();
     }
 
     @Test
     public void testAuditLogger() {
+        ThreadContext.put("accountNumber", "12345");
         ThreadContext.put("companyId", "12345");
+        ThreadContext.put("userId", "JohnDoe");
         ThreadContext.put("ipAddress", "127.0.0.1");
         ThreadContext.put("environment", "dev");
         ThreadContext.put("product", "TestProduct");
@@ -100,7 +103,16 @@ public class AuditLoggerTest {
     }
 
     @Test(expected = AuditException.class)
-    public void testBadAttribute() {
+    public void testMissingRequestContextAttribute() {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("toAccount", "123456");
+        properties.put("fromAccount", "111111");
+        properties.put("amount", "111.55");
+        auditLogger.logEvent("transfer", properties);
+    }
+
+    @Test(expected = AuditException.class)
+    public void testMissingEventAttribute() {
         ThreadContext.put("companyId", "12345");
         ThreadContext.put("ipAddress", "127.0.0.1");
         ThreadContext.put("environment", "dev");

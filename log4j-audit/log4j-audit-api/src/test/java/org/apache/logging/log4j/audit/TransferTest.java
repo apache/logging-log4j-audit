@@ -65,7 +65,7 @@ public class TransferTest {
     }
 
     @Test(expected = ConstraintValidationException.class)
-    public void testValidationFailure() {
+    public void testValidationFailureForMissingRequestContextAttribute() {
         Transfer transfer = LogEventFactory.getEvent(Transfer.class);
         ThreadContext.put("companyId", "12345");
         ThreadContext.put("ipAddress", "127.0.0.1");
@@ -76,6 +76,23 @@ public class TransferTest {
         transfer.setToAccount(123456);
         transfer.setFromAccount(111111);
         transfer.setAmount(new BigDecimal(111.55));
+        transfer.logEvent();
+        fail("Should have thrown an AuditException");
+    }
+
+    @Test(expected = ConstraintValidationException.class)
+    public void testValidationFailureForMissingEventAttribute() {
+        Transfer transfer = LogEventFactory.getEvent(Transfer.class);
+        ThreadContext.put("accountNumber", "12345");
+        ThreadContext.put("companyId", "12345");
+        ThreadContext.put("userId", "JohnDoe");
+        ThreadContext.put("ipAddress", "127.0.0.1");
+        ThreadContext.put("environment", "dev");
+        ThreadContext.put("product", "TestProduct");
+        ThreadContext.put("timeZone", "America/Phoenix");
+        ThreadContext.put("loginId", "TestUser");
+        transfer.setToAccount(123456);
+        transfer.setFromAccount(111111);
         transfer.logEvent();
         fail("Should have thrown an AuditException");
     }
@@ -117,7 +134,7 @@ public class TransferTest {
     }
 
     @Test(expected = ConstraintValidationException.class)
-    public void testAuditLogException() {
+    public void testAuditLogWithMissingRequestContextAttribute() {
         ThreadContext.put("userId", "JohnDoe");
         ThreadContext.put("ipAddress", "127.0.0.1");
         ThreadContext.put("environment", "dev");
@@ -128,6 +145,21 @@ public class TransferTest {
         properties.put("toAccount", "123456");
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
+        LogEventFactory.logEvent(Transfer.class, properties);
+    }
+
+    @Test(expected = ConstraintValidationException.class)
+    public void testAuditLogWithMissingEventAttribute() {
+        ThreadContext.put("accountNumber", "12345");
+        ThreadContext.put("userId", "JohnDoe");
+        ThreadContext.put("ipAddress", "127.0.0.1");
+        ThreadContext.put("environment", "dev");
+        ThreadContext.put("product", "TestProduct");
+        ThreadContext.put("timeZone", "America/Phoenix");
+        ThreadContext.put("loginId", "TestUser");
+        Map<String, String> properties = new HashMap<>();
+        properties.put("toAccount", "123456");
+        properties.put("fromAccount", "111111");
         LogEventFactory.logEvent(Transfer.class, properties);
     }
 

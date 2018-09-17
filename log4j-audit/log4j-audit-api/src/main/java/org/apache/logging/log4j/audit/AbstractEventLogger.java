@@ -163,8 +163,7 @@ public abstract class AbstractEventLogger {
         }
 
         List<String> reqCtxAttrs = catalogManager.getRequiredContextAttributes(eventName, event.getCatalogId());
-
-        if (reqCtxAttrs != null) {
+        if (reqCtxAttrs != null && !reqCtxAttrs.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (String attr : reqCtxAttrs) {
                 if (!ThreadContext.containsKey(attr)) {
@@ -179,7 +178,23 @@ public abstract class AbstractEventLogger {
                         " is missing required RequestContextMapping values for " + sb.toString());
             }
         }
+
         Map<String, Attribute> reqCtxAttributes = catalogManager.getRequestContextAttributes();
+        for (Map.Entry<String, Attribute> entry : reqCtxAttributes.entrySet()) {
+            Attribute attribute = entry.getValue();
+            String attr = entry.getKey();
+            if (attribute.isRequired() && !ThreadContext.containsKey(attr)) {
+                if (errors.length() > 0) {
+                    errors.append(", ");
+                }
+                errors.append(attr);
+            }
+        }
+        if (errors.length() > 0) {
+            throw new AuditException("Event " + eventName +
+                                             " is missing required Thread Context values for " + errors.toString());
+        }
+
         for (Map.Entry<String, String> entry : ThreadContext.getImmutableContext().entrySet()) {
             Attribute attribute = reqCtxAttributes.get(entry.getKey());
             if (attribute == null) {
@@ -195,6 +210,7 @@ public abstract class AbstractEventLogger {
         if (errors.length() > 0) {
             throw new AuditException("Event " + eventName + " has incorrect data in the Thread Context: " + errors.toString());
         }
+
         msg.putAll(attributes);
         try {
             logEvent(msg);
