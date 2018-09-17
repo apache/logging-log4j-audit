@@ -20,10 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -130,10 +127,14 @@ public class LogEventFactory {
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
         int maxLength = getMaxLength(intrface);
         AuditMessage msg = new AuditMessage(eventId, maxLength);
+
+        if (properties == null) {
+            properties = Collections.emptyMap();
+        }
         List<Property> props = getProperties(intrface);
         Map<String, Property> propertyMap = new HashMap<>();
 
-        for (Property property : props ) {
+        for (Property property : props) {
             propertyMap.put(property.name, property);
             if (property.isRequired && !properties.containsKey(property.name)) {
                 if (errors.length() > 0) {
