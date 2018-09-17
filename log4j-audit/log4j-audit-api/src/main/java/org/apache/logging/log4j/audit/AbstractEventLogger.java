@@ -28,9 +28,7 @@ import org.apache.logging.log4j.catalog.api.EventAttribute;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
 
@@ -124,8 +122,7 @@ public abstract class AbstractEventLogger {
                     missingAttributes.append(name);
                 } else {
                     if (attr.getConstraints() != null && attr.getConstraints().size() > 0) {
-                        Constraint[] constraints = attr.getConstraints().toArray(new Constraint[attr.getConstraints().size()]);
-                        validateConstraints(false, constraints, name, attributes.get(name), errors);
+                        validateConstraints(false, attr.getConstraints(), name, attributes.get(name), errors);
                     }
                 }
             }
@@ -202,9 +199,7 @@ public abstract class AbstractEventLogger {
             }
             Set<Constraint> constraintList = attribute.getConstraints();
             if (constraintList != null && constraintList.size() > 0) {
-                Constraint[] constraints =
-                        attribute.getConstraints().toArray(new Constraint[attribute.getConstraints().size()]);
-                validateConstraints(true, constraints, entry.getKey(), ThreadContext.get(entry.getKey()), errors);
+                validateConstraints(true, constraintList, entry.getKey(), ThreadContext.get(entry.getKey()), errors);
             }
         }
         if (errors.length() > 0) {
@@ -223,7 +218,7 @@ public abstract class AbstractEventLogger {
         }
     }
 
-    private static void validateConstraints(boolean isRequestContext, Constraint[] constraints, String name,
+    private static void validateConstraints(boolean isRequestContext, Collection<Constraint> constraints, String name,
                                             String value, StringBuilder errors) {
         for (Constraint constraint : constraints) {
             constraintPlugins.validateConstraint(isRequestContext, constraint.getConstraintType().getName(), name, value,
