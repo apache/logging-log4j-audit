@@ -40,29 +40,7 @@ import static org.junit.Assert.fail;
 /**
  *
  */
-public class TransferTest {
-
-    private static LoggerContext ctx;
-    private static ListAppender app;
-
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
-        for (Map.Entry<String, Appender> entry : config.getAppenders().entrySet()) {
-            if (entry.getKey().equals("List")) {
-                app = (ListAppender) entry.getValue();
-                break;
-            }
-        }
-        assertNotNull("No Appender", app);
-    }
-
-    @Before
-    public void before() {
-        app.clear();
-        ThreadContext.clearMap();
-    }
+public class TransferTest extends BaseEventTest {
 
     @Test(expected = ConstraintValidationException.class)
     public void testValidationFailure() {

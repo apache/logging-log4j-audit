@@ -92,7 +92,8 @@ public class LogEventFactory {
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int msgLength = intrface.getAnnotation(MaxLength.class).value();
+        MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
+        int msgLength = maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
         AuditMessage msg = new AuditMessage(eventId, msgLength);
 		AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
 				.getClassLoader(), interfaces, new AuditProxy(msg, intrface));
@@ -382,6 +383,11 @@ public class LogEventFactory {
     }
 
     private static void validateContextConstraint(RequestContext constraint, StringBuilder errors) {
+        if (constraint == null) {
+            // the request context is not mandatory
+            return;
+        }
+
         String value = ThreadContext.get(constraint.key());
         if (value != null) {
             validateConstraints(true, constraint.constraints(), constraint.key(), value, errors);
