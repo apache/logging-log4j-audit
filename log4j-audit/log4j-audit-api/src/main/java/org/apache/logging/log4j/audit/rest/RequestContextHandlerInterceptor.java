@@ -44,10 +44,10 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        logger.info("Starting request {}", request.getRequestURI());
-        Enumeration headers = request.getHeaderNames();
+        logger.trace("Starting request {}", request.getRequestURI());
+        Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
-            String name = (String) headers.nextElement();
+            String name = headers.nextElement();
             RequestContextMapping mapping = mappings.getMappingByHeader(name);
             logger.debug("Got Mapping:{} for Header:{}", mapping, name);
             if (mapping != null) {
@@ -63,17 +63,21 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
                 }
             }
         }
-        startTime.set(System.nanoTime());
+        if (logger.isTraceEnabled()) {
+            startTime.set(System.nanoTime());
+        }
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        long elapsed = System.nanoTime() - startTime.get();
-        StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
-        ElapsedUtil.addElapsed(elapsed, sb);
-        logger.info(sb.toString());
-        startTime.remove();
+        if (logger.isTraceEnabled()) {
+            long elapsed = System.nanoTime() - startTime.get();
+            StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
+            ElapsedUtil.addElapsed(elapsed, sb);
+            logger.trace(sb.toString());
+            startTime.remove();
+        }
     }
 
     @Override
