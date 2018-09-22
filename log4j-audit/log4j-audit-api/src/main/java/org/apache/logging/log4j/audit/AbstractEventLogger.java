@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
+import static java.util.Collections.*;
 
 /**
  * This class is used to log events generated remotely.
@@ -106,10 +106,15 @@ public abstract class AbstractEventLogger {
                           AuditExceptionHandler exceptionHandler) {
         AuditMessage msg = new AuditMessage(eventName, maxLength);
 
+        if (attributes == null) {
+            attributes = emptyMap();
+        }
+
         StringBuilder missingAttributes = new StringBuilder();
         StringBuilder errors = new StringBuilder();
 
-        for (EventAttribute eventAttribute : event.getAttributes()) {
+        List<EventAttribute> eventAttributes = event.getAttributes() == null ? emptyList() : event.getAttributes();
+        for (EventAttribute eventAttribute : eventAttributes) {
             Attribute attr = catalogManager.getAttribute(eventAttribute.getName(), event.getCatalogId());
             if ((!attr.isRequestContext() && (attr.isRequired()) ||
                     (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
