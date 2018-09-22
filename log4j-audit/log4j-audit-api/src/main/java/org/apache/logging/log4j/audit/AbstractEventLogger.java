@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.exception.AuditException;
+import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -79,28 +80,24 @@ public abstract class AbstractEventLogger {
     }
 
     public void logEvent(String eventName, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, null, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, String catalogId, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName, catalogId);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, catalogId, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        Event event = catalogManager.getEvent(eventName);
+        logEvent(eventName, null, attributes, exceptionHandler);
+    }
 
+    private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
+        String eventId = NamingUtils.lowerFirst(eventName);
+        Event event = catalogId == null ? catalogManager.getEvent(eventId) : catalogManager.getEvent(eventId, catalogId);
         if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
+            throw new AuditException("Unable to locate definition of audit event " + eventId);
         }
-        logEvent(eventName, attributes, event, exceptionHandler);
+        logEvent(eventId, attributes, event, exceptionHandler);
     }
 
     protected abstract void logEvent(StructuredDataMessage message);
