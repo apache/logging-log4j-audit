@@ -48,7 +48,6 @@ import static org.junit.Assert.fail;
 public class AuditLoggerTest {
 
     private static CatalogReader catalogReader;
-    private static LoggerContext ctx;
     private static ListAppender app;
 
     private AbstractEventLogger auditLogger;
@@ -56,7 +55,7 @@ public class AuditLoggerTest {
     @BeforeClass
     public static void setupClass() throws Exception {
         catalogReader = new StringCatalogReader();
-        ctx = (LoggerContext) LogManager.getContext(false);
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration config = ctx.getConfiguration();
         for (Map.Entry<String, Appender> entry : config.getAppenders().entrySet()) {
             if (entry.getKey().equals("List")) {
@@ -67,7 +66,7 @@ public class AuditLoggerTest {
         assertNotNull("No Appender", app);
     }
 
-    private AbstractEventLogger buildAuditLogger(CatalogReader catalogReader) throws Exception {
+    private AbstractEventLogger buildAuditLogger(CatalogReader catalogReader) {
         CatalogManager catalogManager = new CatalogManagerImpl(catalogReader);
         AuditLogger auditLogger = new AuditLogger();
         auditLogger.setCatalogManager(catalogManager);
@@ -81,7 +80,7 @@ public class AuditLoggerTest {
     }
 
     @Test
-    public void testAuditLogger() throws Exception {
+    public void testAuditLogger() {
         auditLogger = buildAuditLogger(catalogReader);
 
         ThreadContext.put("accountNumber", "12345");
@@ -113,7 +112,7 @@ public class AuditLoggerTest {
     }
 
     @Test(expected = AuditException.class)
-    public void testMissingRequestContextAttribute() throws Exception {
+    public void testMissingRequestContextAttribute() {
         auditLogger = buildAuditLogger(catalogReader);
 
         Map<String, String> properties = new HashMap<String, String>();
@@ -124,7 +123,7 @@ public class AuditLoggerTest {
     }
 
     @Test(expected = AuditException.class)
-    public void testMissingEventAttribute() throws Exception {
+    public void testMissingEventAttribute() {
         auditLogger = buildAuditLogger(catalogReader);
 
         ThreadContext.put("companyId", "12345");
