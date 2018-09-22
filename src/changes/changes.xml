@@ -31,6 +31,9 @@
          - "remove" - Removed
     -->
     <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
+      <action issue="LOG4J2-2417" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Better handling of optional properties.
+      </action>
       <action issue="LOG4J2-2420" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         RequestContextFilter logging cleanup.
       </action>
