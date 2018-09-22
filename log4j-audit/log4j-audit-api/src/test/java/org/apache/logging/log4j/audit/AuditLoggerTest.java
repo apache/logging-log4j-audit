@@ -23,6 +23,8 @@ import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.audit.catalog.StringCatalogReader;
 import org.apache.logging.log4j.audit.exception.AuditException;
+import org.apache.logging.log4j.catalog.api.CatalogReader;
+import org.apache.logging.log4j.catalog.api.dao.ClassPathCatalogReader;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -31,6 +33,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,18 +47,15 @@ import static org.junit.Assert.fail;
  */
 public class AuditLoggerTest {
 
-    private static AbstractEventLogger auditLogger;
-
-    private static CatalogManager catalogManager;
-
+    private static CatalogReader catalogReader;
     private static LoggerContext ctx;
     private static ListAppender app;
 
+    private AbstractEventLogger auditLogger;
+
     @BeforeClass
     public static void setupClass() throws Exception {
-        catalogManager = new CatalogManagerImpl(new StringCatalogReader());
-        auditLogger = new AuditLogger();
-        auditLogger.setCatalogManager(catalogManager);
+        catalogReader = new StringCatalogReader();
         ctx = (LoggerContext) LogManager.getContext(false);
         Configuration config = ctx.getConfiguration();
         for (Map.Entry<String, Appender> entry : config.getAppenders().entrySet()) {
@@ -67,6 +67,13 @@ public class AuditLoggerTest {
         assertNotNull("No Appender", app);
     }
 
+    private AbstractEventLogger buildAuditLogger(CatalogReader catalogReader) throws Exception {
+        CatalogManager catalogManager = new CatalogManagerImpl(catalogReader);
+        AuditLogger auditLogger = new AuditLogger();
+        auditLogger.setCatalogManager(catalogManager);
+        return auditLogger;
+    }
+
     @Before
     public void before() {
         app.clear();
@@ -74,7 +81,9 @@ public class AuditLoggerTest {
     }
 
     @Test
-    public void testAuditLogger() {
+    public void testAuditLogger() throws Exception {
+        auditLogger = buildAuditLogger(catalogReader);
+
         ThreadContext.put("accountNumber", "12345");
         ThreadContext.put("companyId", "12345");
         ThreadContext.put("userId", "JohnDoe");
@@ -88,7 +97,7 @@ public class AuditLoggerTest {
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
         try {
-            auditLogger.logEvent("transfer", properties);
+            auditLogger.logEvent("Transfer", properties);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail();
@@ -97,13 +106,16 @@ public class AuditLoggerTest {
         assertNotNull("No messages", msgs);
         assertTrue("No messages", msgs.size() == 1);
         String msg = msgs.get(0);
+        assertTrue("Normalized event name", msg.contains("transfer@"));
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));
         assertTrue("No toAccount", msg.contains("toAccount=\"123456\""));
     }
 
     @Test(expected = AuditException.class)
-    public void testMissingRequestContextAttribute() {
+    public void testMissingRequestContextAttribute() throws Exception {
+        auditLogger = buildAuditLogger(catalogReader);
+
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("toAccount", "123456");
         properties.put("fromAccount", "111111");
@@ -112,7 +124,9 @@ public class AuditLoggerTest {
     }
 
     @Test(expected = AuditException.class)
-    public void testMissingEventAttribute() {
+    public void testMissingEventAttribute() throws Exception {
+        auditLogger = buildAuditLogger(catalogReader);
+
         ThreadContext.put("companyId", "12345");
         ThreadContext.put("ipAddress", "127.0.0.1");
         ThreadContext.put("environment", "dev");
@@ -122,6 +136,13 @@ public class AuditLoggerTest {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("toAccount", "123456");
         properties.put("amount", "111.55");
-        auditLogger.logEvent("transfer", properties);
+        auditLogger.logEvent("Transfer", properties);
+    }
+
+    @Test
+    public void testAuditLoggerWithBasicCatalog() throws Exception {
+        auditLogger = buildAuditLogger(new ClassPathCatalogReader(Collections.singletonMap("catalogFile", "basicCatalog.json")));
+
+        auditLogger.logEvent("login", null);
     }
 }

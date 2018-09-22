@@ -30,6 +30,20 @@
          - "update" - Change
          - "remove" - Removed
     -->
+    <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
+      <action issue="LOG4J2-2417" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Better handling of optional properties.
+      </action>
+      <action issue="LOG4J2-2420" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        RequestContextFilter logging cleanup.
+      </action>
+      <action issue="LOG4J2-2442" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Normalize the event names logged through AbstractEventLogger.logEvent.
+      </action>
+      <action issue="LOG4J2-2431" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Narrow the return type of getEvent.
+      </action>
+    </release>
     <release version="1.0.0" date="2018-06-10" description="Release 1.0.0">
     </release>
   </body>

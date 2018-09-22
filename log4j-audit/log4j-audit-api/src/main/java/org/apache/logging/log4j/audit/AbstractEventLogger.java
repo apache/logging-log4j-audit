@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.exception.AuditException;
+import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -30,7 +31,7 @@ import org.apache.logging.log4j.message.StructuredDataMessage;
 
 import java.util.*;
 
-import static org.apache.logging.log4j.catalog.api.constant.Constants.*;
+import static java.util.Collections.*;
 
 /**
  * This class is used to log events generated remotely.
@@ -77,28 +78,24 @@ public abstract class AbstractEventLogger {
     }
 
     public void logEvent(String eventName, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, null, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, String catalogId, Map<String, String> attributes) {
-        Event event = catalogManager.getEvent(eventName, catalogId);
-        if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
-        }
-        logEvent(eventName, attributes, event, defaultAuditExceptionHandler);
+        logEvent(eventName, catalogId, attributes, defaultAuditExceptionHandler);
     }
 
     public void logEvent(String eventName, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        Event event = catalogManager.getEvent(eventName);
+        logEvent(eventName, null, attributes, exceptionHandler);
+    }
 
+    private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
+        String eventId = NamingUtils.lowerFirst(eventName);
+        Event event = catalogId == null ? catalogManager.getEvent(eventId) : catalogManager.getEvent(eventId, catalogId);
         if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventName);
+            throw new AuditException("Unable to locate definition of audit event " + eventId);
         }
-        logEvent(eventName, attributes, event, exceptionHandler);
+        logEvent(eventId, attributes, event, exceptionHandler);
     }
 
     protected abstract void logEvent(StructuredDataMessage message);
@@ -107,10 +104,15 @@ public abstract class AbstractEventLogger {
                           AuditExceptionHandler exceptionHandler) {
         AuditMessage msg = new AuditMessage(eventName, maxLength);
 
+        if (attributes == null) {
+            attributes = emptyMap();
+        }
+
         StringBuilder missingAttributes = new StringBuilder();
         StringBuilder errors = new StringBuilder();
 
-        for (EventAttribute eventAttribute : event.getAttributes()) {
+        List<EventAttribute> eventAttributes = event.getAttributes() == null ? emptyList() : event.getAttributes();
+        for (EventAttribute eventAttribute : eventAttributes) {
             Attribute attr = catalogManager.getAttribute(eventAttribute.getName(), event.getCatalogId());
             if ((!attr.isRequestContext() && (attr.isRequired()) ||
                     (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
