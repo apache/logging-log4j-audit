@@ -32,6 +32,9 @@
     -->
     <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
       <action issue="LOG4J2-2421" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Add verbose parameter to the Log4j audit Maven plugin.
+      </action>
+      <action issue="LOG4J2-2421" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         AbstractEventLogger.logEvent doesn't check for missing required context attributes.
       </action>
       <action issue="LOG4J2-2417" dev="rgoers" type="fix" due-to="Andrei Ivanov">
