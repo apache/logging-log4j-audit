@@ -31,6 +31,9 @@
          - "remove" - Removed
     -->
     <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
+      <action issue="LOG4J2-2440" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        AuditEvents should provide some basic toString().
+      </action>
       <action issue="LOG4J2-2429" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         Setting the exceptionHandler on the AuditEvent sets it as a ThreadContext variable.
       </action>
