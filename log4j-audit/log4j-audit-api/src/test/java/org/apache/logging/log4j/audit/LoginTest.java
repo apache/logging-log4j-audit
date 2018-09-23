@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class LoginTest extends BaseEventTest {
     @Test
@@ -20,9 +19,22 @@ public class LoginTest extends BaseEventTest {
 
         event.logEvent();
 
+        AuditExceptionHandler exceptionHandler = (message, ex) -> {
+
+        };
+        event.setAuditExceptionHandler(exceptionHandler);
+        event.logEvent();
+
         List<String> msgs = app.getMessages();
         assertNotNull("No messages", msgs);
-        assertTrue("No messages", msgs.size() == 2);
+        assertEquals("No messages", 3, msgs.size());
+
+        String msg = msgs.get(1);
+        assertTrue("No completionStatus", msg.contains("completionStatus=\"Success\""));
+
+        msg = msgs.get(2);
+        assertFalse("auditExceptionHandler should not be present in the context", msg.contains("auditExceptionHandler=\""));
+        msgs.forEach(System.out::println);
     }
 
     @Test

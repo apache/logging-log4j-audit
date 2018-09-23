@@ -301,13 +301,15 @@ public class LogEventFactory {
 				}
 
                 logEvent(msg, auditExceptionHandler);
+                return null;
 			}
             if (method.getName().equals("setCompletionStatus")) {
-                String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
                 if (objects == null || objects[0] == null) {
                     throw new IllegalArgumentException("Missing completion status");
                 }
+                String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
                 msg.put(name, objects[0].toString());
+                return null;
             }
             if (method.getName().equals("setAuditExceptionHandler")) {
 			    if (objects == null || objects[0] == null) {
@@ -317,6 +319,7 @@ public class LogEventFactory {
                 } else {
 			        throw new IllegalArgumentException(objects[0] + " is not an " + AuditExceptionHandler.class.getName());
                 }
+                return null;
             }
 			if (method.getName().startsWith("set")) {
 				String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
@@ -355,6 +358,7 @@ public class LogEventFactory {
                 }
 
 				msg.put(name, result);
+				return null;
 			}
 
 			return null;
