@@ -301,7 +301,7 @@ public class LogEventFactory {
 				}
 
                 logEvent(msg, auditExceptionHandler);
-				return null;
+                return null;
 			}
             if (method.getName().equals("setCompletionStatus")) {
                 if (objects == null || objects[0] == null) {
@@ -358,7 +358,7 @@ public class LogEventFactory {
                 }
 
 				msg.put(name, result);
-                return null;
+				return null;
 			}
 
 			return null;
