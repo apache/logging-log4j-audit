@@ -10,6 +10,15 @@ import static org.junit.Assert.*;
 
 public class LoginTest extends BaseEventTest {
     @Test
+    public void testAuditClassToString() {
+        Login event = LogEventFactory.getEvent(Login.class);
+        event.setCompletionStatus("Success");
+        String string = event.toString();
+
+        assertEquals("[login completionStatus=\"Success\"]", string);
+    }
+
+    @Test
     public void testAuditClass() {
         Login event = LogEventFactory.getEvent(Login.class);
 
