@@ -263,9 +263,9 @@ public class LogEventFactory {
         @SuppressWarnings("unchecked")
 		public Object invoke(Object o, Method method, Object[] objects)
 				throws Throwable {
-            if (method.getName().equals("toString") && method.getParameterCount() == 0) {
-                return msg.toString();
-            }
+			if (method.getName().equals("toString") && method.getParameterCount() == 0) {
+				return msg.toString();
+			}
 
 			if (method.getName().equals("logEvent")) {
 
