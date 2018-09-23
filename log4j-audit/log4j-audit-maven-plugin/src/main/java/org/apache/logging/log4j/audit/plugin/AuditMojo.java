@@ -65,6 +65,12 @@ public class AuditMojo extends AbstractMojo {
     @Parameter(required = false)
     private int enterpriseId;
 
+    /**
+     * Set to <code>true</code> to show messages about what the code generator is doing.
+     */
+    @Parameter(defaultValue = "false")
+    private boolean verbose;
+
     @SuppressWarnings("unchecked")
     public void execute() throws MojoExecutionException {
         if (maxKeyLength <= 0) {
@@ -111,6 +117,7 @@ public class AuditMojo extends AbstractMojo {
         generator.setPackageName(packageName);
         generator.setMaxKeyLength(maxKeyLength);
         generator.setEnterpriseId(enterpriseId);
+        generator.setVerbose(verbose);
         try {
             generator.generateSource();
             project.addCompileSourceRoot(outputDirectory.getAbsolutePath());

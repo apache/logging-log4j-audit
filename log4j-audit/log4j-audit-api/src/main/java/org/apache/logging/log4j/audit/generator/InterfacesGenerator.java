@@ -81,6 +81,9 @@ public class InterfacesGenerator {
     @Value("${enterpriseId:18060}")
     private int enterpriseId;
 
+    @Value("${verbose:false}")
+    private boolean verbose;
+
     public CatalogReader getCatalogReader() {
         return catalogReader;
     }
@@ -111,6 +114,10 @@ public class InterfacesGenerator {
 
     public void setEnterpriseId(int enterpriseId) {
         this.enterpriseId = enterpriseId;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
     public void generateSource() throws Exception {
@@ -147,6 +154,7 @@ public class InterfacesGenerator {
                 classGenerator.setPackageName(packageName);
                 classGenerator.setParentClassName(PARENT_CLASS);
                 classGenerator.setJavadocComment(event.getDescription());
+                classGenerator.setVerbose(verbose);
                 Set<String> imports = classGenerator.getImports();
                 imports.add(PARENT_IMPORT);
                 StringBuilder annotations = new StringBuilder();

@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.util.NamingUtils;
 
 import static org.apache.logging.log4j.audit.generator.Constants.*;
@@ -37,6 +39,7 @@ import static org.apache.logging.log4j.audit.generator.Constants.*;
  * Generates the Classes and Interfaces for Audit Logging based on data in the Catalog.
  */
 public final class ClassGenerator {
+    private static final Logger LOGGER = LogManager.getLogger(ClassGenerator.class);
 
     protected List<AccessorDefinition> beanMethods = new ArrayList<AccessorDefinition>();
     private boolean isClass = true;
@@ -45,6 +48,7 @@ public final class ClassGenerator {
     private String packageName;
     private String baseFolder;
     private String javadocComment;
+    private boolean verbose;
     private List<String> implementsDeclarations = new ArrayList<>();
 
     private Set<String> importsDeclarations = new HashSet<String>();
@@ -211,7 +215,9 @@ public final class ClassGenerator {
         sb.append("/").append(NamingUtils.upperFirst(getClassName()))
                 .append(".java");
         String fullPath = sb.toString();
-        System.out.println(fullPath);
+        if (verbose) {
+            LOGGER.info(fullPath);
+        }
         File file = new File(fullPath);
         DataOutputStream out = new DataOutputStream(openOutputStream(file));
         out.writeBytes(getClassContents());
@@ -352,4 +358,7 @@ public final class ClassGenerator {
         return new FileOutputStream(file, false);
     }
 
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
 }
