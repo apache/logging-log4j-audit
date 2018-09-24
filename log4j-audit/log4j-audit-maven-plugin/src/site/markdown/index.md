@@ -35,6 +35,8 @@ be created</td><td>${project.build.directory}/generated-sources/log4j-audit</td>
 <td>32 - the maximum allowed to be compliant with RFC 5424</td></tr>
 <tr><td>enterpriseId</td><td>int</td><td>-</td><td>false</td><td>The IANA enterprise id for RFC 5424 events</td>
 <td>18060</td></tr>
+<tr><td>verbose</td><td>boolean</td><td>1.1.0</td><td>false</td><td>Set to <code>true</code> to show messages about what the code generator is doing.</td>
+<td>false</td></tr>
 </table>
 
 Below is a sample configuration.

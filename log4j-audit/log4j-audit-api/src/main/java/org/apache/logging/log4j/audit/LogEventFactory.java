@@ -20,10 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -87,18 +84,23 @@ public class LogEventFactory {
      * @return Returns an instance of the Event.
      */
     @SuppressWarnings("unchecked")
-	public static <T> T getEvent(Class<T> intrface) {
+	public static <T extends AuditEvent> T getEvent(Class<T> intrface) {
 
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int msgLength = intrface.getAnnotation(MaxLength.class).value();
+        int msgLength = getMaxLength(intrface);
         AuditMessage msg = new AuditMessage(eventId, msgLength);
 		AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
 				.getClassLoader(), interfaces, new AuditProxy(msg, intrface));
 
 		return (T) audit;
 	}
+
+    private static <T> int getMaxLength(Class<T> intrface) {
+        MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
+        return maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
+    }
 
     /**
      *
@@ -123,12 +125,16 @@ public class LogEventFactory {
         validateContextConstraints(intrface, errors);
 
         String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int maxLength = intrface.getAnnotation(MaxLength.class).value();
+        int maxLength = getMaxLength(intrface);
         AuditMessage msg = new AuditMessage(eventId, maxLength);
+
+        if (properties == null) {
+            properties = Collections.emptyMap();
+        }
         List<Property> props = getProperties(intrface);
         Map<String, Property> propertyMap = new HashMap<>();
 
-        for (Property property : props ) {
+        for (Property property : props) {
             propertyMap.put(property.name, property);
             if (property.isRequired && !properties.containsKey(property.name)) {
                 if (errors.length() > 0) {
@@ -257,6 +263,10 @@ public class LogEventFactory {
         @SuppressWarnings("unchecked")
 		public Object invoke(Object o, Method method, Object[] objects)
 				throws Throwable {
+			if (method.getName().equals("toString") && method.getParameterCount() == 0) {
+				return msg.toString();
+			}
+
 			if (method.getName().equals("logEvent")) {
 
 				StringBuilder errors = new StringBuilder();
@@ -295,13 +305,15 @@ public class LogEventFactory {
 				}
 
                 logEvent(msg, auditExceptionHandler);
+                return null;
 			}
             if (method.getName().equals("setCompletionStatus")) {
-                String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
                 if (objects == null || objects[0] == null) {
                     throw new IllegalArgumentException("Missing completion status");
                 }
+                String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
                 msg.put(name, objects[0].toString());
+                return null;
             }
             if (method.getName().equals("setAuditExceptionHandler")) {
 			    if (objects == null || objects[0] == null) {
@@ -311,6 +323,7 @@ public class LogEventFactory {
                 } else {
 			        throw new IllegalArgumentException(objects[0] + " is not an " + AuditExceptionHandler.class.getName());
                 }
+                return null;
             }
 			if (method.getName().startsWith("set")) {
 				String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
@@ -349,6 +362,7 @@ public class LogEventFactory {
                 }
 
 				msg.put(name, result);
+				return null;
 			}
 
 			return null;
@@ -382,6 +396,11 @@ public class LogEventFactory {
     }
 
     private static void validateContextConstraint(RequestContext constraint, StringBuilder errors) {
+        if (constraint == null) {
+            // the request context is not mandatory
+            return;
+        }
+
         String value = ThreadContext.get(constraint.key());
         if (value != null) {
             validateConstraints(true, constraint.constraints(), constraint.key(), value, errors);

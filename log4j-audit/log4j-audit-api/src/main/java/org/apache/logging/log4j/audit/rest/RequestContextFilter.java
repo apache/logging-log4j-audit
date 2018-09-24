@@ -79,11 +79,11 @@ public class RequestContextFilter implements Filter {
         if (servletRequest instanceof HttpServletRequest) {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            logger.info("Starting request {}" + request.getRequestURI());
+            logger.trace("Starting request {}", request.getRequestURI());
             try {
-                Enumeration headers = request.getHeaderNames();
+                Enumeration<String> headers = request.getHeaderNames();
                 while (headers.hasMoreElements()) {
-                    String name = (String) headers.nextElement();
+                    String name = headers.nextElement();
                     RequestContextMapping mapping = mappings.getMappingByHeader(name);
                     logger.debug("Got Mapping:{} for Header:{}", mapping, name);
                     if (mapping != null) {
@@ -99,12 +99,17 @@ public class RequestContextFilter implements Filter {
                         }
                     }
                 }
-                long start = System.nanoTime();
+                long start = 0;
+                if (logger.isTraceEnabled()) {
+                    start = System.nanoTime();
+                }
                 filterChain.doFilter(servletRequest, servletResponse);
-                long elapsed = System.nanoTime() - start;
-                StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
-                ElapsedUtil.addElapsed(elapsed, sb);
-                logger.info(sb.toString());
+                if (logger.isTraceEnabled()) {
+                    long elapsed = System.nanoTime() - start;
+                    StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
+                    ElapsedUtil.addElapsed(elapsed, sb);
+                    logger.trace(sb.toString());
+                }
             } catch (Throwable e) {
                 logger.error("Application cascaded error", e);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
