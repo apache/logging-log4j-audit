@@ -191,7 +191,7 @@ public abstract class AbstractEventLogger {
             }
         }
         if (errors.length() > 0) {
-            throw new AuditException("Event " + eventName +
+            throw new ConstraintValidationException("Event " + eventName +
                                              " is missing required Thread Context values for " + errors.toString());
         }
 
