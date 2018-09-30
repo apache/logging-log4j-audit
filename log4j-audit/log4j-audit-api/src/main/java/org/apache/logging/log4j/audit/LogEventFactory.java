@@ -43,7 +43,6 @@ import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
-import org.apache.logging.log4j.spi.ExtendedLogger;
 
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 
@@ -87,19 +86,23 @@ public class LogEventFactory {
 
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
-        String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int msgLength = getMaxLength(intrface);
-        AuditMessage msg = new AuditMessage(eventId, msgLength);
-		AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
+	    AuditMessage msg = buildAuditMessage(intrface);
+	    AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
 				.getClassLoader(), interfaces, new AuditProxy(msg, intrface));
 
 		return (T) audit;
 	}
 
-    private static <T> int getMaxLength(Class<T> intrface) {
+	private static <T> int getMaxLength(Class<T> intrface) {
         MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
         return maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
     }
+
+	private static AuditMessage buildAuditMessage(Class<?> intrface) {
+		String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
+		int msgLength = getMaxLength(intrface);
+		return new AuditMessage(eventId, msgLength);
+	}
 
     /**
      *
@@ -120,48 +123,50 @@ public class LogEventFactory {
      * @param handler Class that gets control when an exception occurs logging the event.
      */
     public static void logEvent(Class<?> intrface, Map<String, String> properties, AuditExceptionHandler handler) {
-        StringBuilder errors = new StringBuilder();
-        validateContextConstraints(intrface, errors);
+	    AuditMessage msg = buildAuditMessage(intrface);
 
-        String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
-        int maxLength = getMaxLength(intrface);
-        AuditMessage msg = new AuditMessage(eventId, maxLength);
+	    if (properties != null) {
+		    for (Map.Entry<String, String> entry : properties.entrySet()) {
+			    msg.put(entry.getKey(), entry.getValue());
+		    }
+	    }
 
-        if (properties == null) {
-            properties = Collections.emptyMap();
-        }
-        List<Property> props = getProperties(intrface);
-        Map<String, Property> propertyMap = new HashMap<>();
-
-        for (Property property : props) {
-            propertyMap.put(property.name, property);
-            if (property.isRequired && !properties.containsKey(property.name)) {
-                if (errors.length() > 0) {
-                    errors.append("\n");
-                }
-                errors.append("Required attribute ").append(property.name).append(" is missing from ").append(eventId);
-            }
-            if (properties.containsKey(property.name)) {
-                validateConstraints(false, property.constraints, property.name, properties, errors);
-            }
-        }
-
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            if (!propertyMap.containsKey(entry.getKey())) {
-                if (errors.length() > 0) {
-                    errors.append("Attribute ").append(entry.getKey()).append(" is not defined for ").append(eventId);
-                }
-            }
-        }
-
-        if (errors.length() > 0) {
-            throw new ConstraintValidationException(errors.toString());
-        }
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            msg.put(entry.getKey(), entry.getValue());
-        }
-        logEvent(msg, handler);
+	    validateEvent(intrface, msg);
+	    logEvent(msg, handler);
     }
+
+	private static void validateEvent(Class<?> intrface, AuditMessage msg) {
+		StringBuilder errors = new StringBuilder();
+		validateContextConstraints(intrface, errors);
+
+		List<Property> props = getProperties(intrface);
+		Map<String, Property> propertyMap = new HashMap<>();
+
+		for (Property property : props) {
+		    propertyMap.put(property.name, property);
+		    if (property.isRequired && !msg.containsKey(property.name)) {
+		        if (errors.length() > 0) {
+		            errors.append("\n");
+		        }
+		        errors.append("Required attribute ").append(property.name).append(" is missing from ").append(msg.getId().getName());
+		    }
+		    if (msg.containsKey(property.name)) {
+		        validateConstraints(false, property.constraints, property.name, msg, errors);
+		    }
+		}
+
+		msg.forEach((key, value) -> {
+			if (!propertyMap.containsKey(key)) {
+				if (errors.length() > 0) {
+					errors.append("Attribute ").append(key).append(" is not defined for ").append(msg.getId().getName());
+				}
+			}
+		});
+
+		if (errors.length() > 0) {
+		    throw new ConstraintValidationException(errors.toString());
+		}
+	}
 
     /**
      * Used to Log the actual AuditMessage.
@@ -260,50 +265,16 @@ public class LogEventFactory {
 
 		@Override
         @SuppressWarnings("unchecked")
-		public Object invoke(Object o, Method method, Object[] objects)
-				throws Throwable {
+		public Object invoke(Object o, Method method, Object[] objects) {
 			if (method.getName().equals("toString") && method.getParameterCount() == 0) {
 				return msg.toString();
 			}
 
 			if (method.getName().equals("logEvent")) {
 
-				StringBuilder errors = new StringBuilder();
-				validateContextConstraints(intrface, errors);
+				validateEvent(intrface, msg);
 
-                StringBuilder missing = new StringBuilder();
-				Method[] methods = intrface.getMethods();
-
-				for (Method _method : methods) {
-					String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(_method.getName()));
-
-					Annotation[] annotations = _method.getDeclaredAnnotations();
-					for (Annotation annotation : annotations) {
-                        if (annotation instanceof Required && msg.get(name) == null) {
-                            if (missing.length() > 0) {
-                                missing.append(", ");
-                            }
-                            missing.append(name);
-                        }
-					}
-				}
-				if (errors.length() > 0) {
-				    if (missing.length() > 0) {
-				        errors.append("\n");
-				        errors.append("Required attributes are missing: ");
-				        errors.append(missing.toString());
-                    }
-                } else if (missing.length() > 0) {
-                    errors.append("Required attributes are missing: ");
-				    errors = missing;
-                }
-
-				if (errors.length() > 0) {
-					throw new ConstraintValidationException("Event " + msg.getId().getName() +
-							" has errors :\n" + errors.toString());
-				}
-
-                logEvent(msg, auditExceptionHandler);
+				logEvent(msg, auditExceptionHandler);
                 return null;
 			}
             if (method.getName().equals("setCompletionStatus")) {
@@ -366,11 +337,11 @@ public class LogEventFactory {
 
 			return null;
 		}
-    }
+	}
 
     private static void validateConstraints(boolean isRequestContext, Constraint[] constraints, String name,
-                                            Map<String, String> properties, StringBuilder errors) {
-        String value = isRequestContext ? ThreadContext.get(name) : properties.get(name);
+                                            AuditMessage msg, StringBuilder errors) {
+        String value = isRequestContext ? ThreadContext.get(name) : msg.get(name);
         validateConstraints(isRequestContext, constraints, name, value, errors);
     }
 
