@@ -25,12 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.EventLogger;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.annotation.Constraint;
 import org.apache.logging.log4j.audit.annotation.Constraints;
@@ -184,7 +180,7 @@ public class LogEventFactory {
         }
     }
 
-    public static List<String> getPropertyNames(String className) {
+	public static List<String> getPropertyNames(String className) {
         Class<?> intrface = getClass(className);
         List<String> names;
         if (intrface != null) {
@@ -277,6 +273,7 @@ public class LogEventFactory {
 				logEvent(msg, auditExceptionHandler);
                 return null;
 			}
+
             if (method.getName().equals("setCompletionStatus")) {
                 if (objects == null || objects[0] == null) {
                     throw new IllegalArgumentException("Missing completion status");
@@ -285,6 +282,7 @@ public class LogEventFactory {
                 msg.put(name, objects[0].toString());
                 return null;
             }
+
             if (method.getName().equals("setAuditExceptionHandler")) {
 			    if (objects == null || objects[0] == null) {
                     auditExceptionHandler = NOOP_EXCEPTION_HANDLER;
@@ -295,47 +293,51 @@ public class LogEventFactory {
                 }
                 return null;
             }
+
 			if (method.getName().startsWith("set")) {
-				String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
-				if (objects == null || objects[0] == null) {
-				    throw new IllegalArgumentException("No value to be set for " + name);
-                }
-
-                Annotation[] annotations = method.getDeclaredAnnotations();
-				Class<?> returnType = method.getReturnType();
-				StringBuilder errors = new StringBuilder();
-                for (Annotation annotation : annotations) {
-
-                    if (annotation instanceof Constraints) {
-                        Constraints constraints = (Constraints) annotation;
-                        validateConstraints(false, constraints.value(), name, objects[0].toString(),
-                                errors);
-                    } else if (annotation instanceof Constraint) {
-                        Constraint constraint = (Constraint) annotation;
-                        constraintPlugins.validateConstraint(false, constraint.constraintType(),
-                                name, objects[0].toString(), constraint.constraintValue(), errors);
-                    }
-                }
-                if (errors.length() > 0) {
-                    throw new ConstraintValidationException(errors.toString());
-                }
-                String result;
-                if (objects[0] instanceof List) {
-                    result = StringUtils.join(objects, ", ");
-                } else if (objects[0] instanceof Map) {
-                    StructuredDataMessage extra = new StructuredDataMessage(name, null, null);
-                    extra.putAll((Map)objects[0]);
-                    msg.addContent(name, extra);
-                    return null;
-                } else {
-                    result = objects[0].toString();
-                }
-
-				msg.put(name, result);
+				setProperty(method, objects);
 				return null;
 			}
 
 			return null;
+		}
+
+		private void setProperty(Method method, Object[] objects) {
+			String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
+			if (objects == null || objects[0] == null) {
+				throw new IllegalArgumentException("No value to be set for " + name);
+			}
+
+			StringBuilder errors = new StringBuilder();
+			Annotation[] annotations = method.getDeclaredAnnotations();
+			for (Annotation annotation : annotations) {
+				if (annotation instanceof Constraints) {
+					Constraints constraints = (Constraints) annotation;
+					validateConstraints(false, constraints.value(), name, objects[0].toString(),
+							errors);
+				} else if (annotation instanceof Constraint) {
+					Constraint constraint = (Constraint) annotation;
+					constraintPlugins.validateConstraint(false, constraint.constraintType(),
+							name, objects[0].toString(), constraint.constraintValue(), errors);
+				}
+			}
+			if (errors.length() > 0) {
+				throw new ConstraintValidationException(errors.toString());
+			}
+
+			String result;
+			if (objects[0] instanceof List) {
+				result = StringUtils.join(objects, ", ");
+			} else if (objects[0] instanceof Map) {
+				StructuredDataMessage extra = new StructuredDataMessage(name, null, null);
+				extra.putAll((Map) objects[0]);
+				msg.addContent(name, extra);
+				return;
+			} else {
+				result = objects[0].toString();
+			}
+
+			msg.put(name, result);
 		}
 	}
 
