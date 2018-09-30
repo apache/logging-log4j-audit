@@ -71,6 +71,10 @@ public class LogEventFactory {
         defaultExceptionHandler = (exceptionHandler == null) ? NOOP_EXCEPTION_HANDLER : exceptionHandler;
     }
 
+	static void resetDefaultHandler() {
+		defaultExceptionHandler = DEFAULT_HANDLER;
+	}
+
     /**
      * Constructs an Event object from its interface.
      * @param intrface The Event interface.
@@ -83,8 +87,8 @@ public class LogEventFactory {
 		Class<?>[] interfaces = new Class<?>[] { intrface };
 
 	    AuditMessage msg = buildAuditMessage(intrface);
-	    AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface
-				.getClassLoader(), interfaces, new AuditProxy(msg, intrface));
+	    AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface.getClassLoader(), interfaces,
+			    new AuditProxy(msg, intrface, defaultExceptionHandler));
 
 		return (T) audit;
 	}
@@ -170,15 +174,19 @@ public class LogEventFactory {
      * @param handler Class that gets control when an exception occurs logging the event.
      */
     public static void logEvent(AuditMessage msg, AuditExceptionHandler handler) {
-        try {
-	        AUDIT_LOGGER.logEvent(msg);
-        } catch (Throwable ex) {
-            if (handler == null) {
-                handler = defaultExceptionHandler;
-            }
-            handler.handleException(msg, ex);
-        }
+	    runMessageAction(() -> AUDIT_LOGGER.logEvent(msg), msg, handler);
     }
+
+	private static void runMessageAction(Runnable action, AuditMessage msg, AuditExceptionHandler handler) {
+		try {
+			action.run();
+		} catch (Throwable ex) {
+		    if (handler == null) {
+		        handler = defaultExceptionHandler;
+		    }
+		    handler.handleException(msg, ex);
+		}
+	}
 
 	public static List<String> getPropertyNames(String className) {
         Class<?> intrface = getClass(className);
@@ -248,11 +256,12 @@ public class LogEventFactory {
 
 		private final AuditMessage msg;
 		private final Class<?> intrface;
-        private AuditExceptionHandler auditExceptionHandler = defaultExceptionHandler;
+        private AuditExceptionHandler auditExceptionHandler;
 
-		AuditProxy(AuditMessage msg, Class<?> intrface) {
+		AuditProxy(AuditMessage msg, Class<?> intrface, AuditExceptionHandler auditExceptionHandler) {
 			this.msg = msg;
 			this.intrface = intrface;
+			this.auditExceptionHandler = auditExceptionHandler;
 		}
 
         public AuditMessage getMessage() {
@@ -260,7 +269,6 @@ public class LogEventFactory {
         }
 
 		@Override
-        @SuppressWarnings("unchecked")
 		public Object invoke(Object o, Method method, Object[] objects) {
 			if (method.getName().equals("toString") && method.getParameterCount() == 0) {
 				return msg.toString();
@@ -268,7 +276,7 @@ public class LogEventFactory {
 
 			if (method.getName().equals("logEvent")) {
 
-				validateEvent(intrface, msg);
+				runMessageAction(() -> validateEvent(intrface, msg), msg, auditExceptionHandler);
 
 				logEvent(msg, auditExceptionHandler);
                 return null;
@@ -295,13 +303,14 @@ public class LogEventFactory {
             }
 
 			if (method.getName().startsWith("set")) {
-				setProperty(method, objects);
+				runMessageAction(() -> setProperty(method, objects), msg, auditExceptionHandler);
 				return null;
 			}
 
 			return null;
 		}
 
+		@SuppressWarnings("unchecked")
 		private void setProperty(Method method, Object[] objects) {
 			String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
 			if (objects == null || objects[0] == null) {

@@ -32,6 +32,7 @@ import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.config.AbstractConfiguration;
 import org.apache.logging.log4j.test.appender.AlwaysFailAppender;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -48,8 +49,33 @@ public class TransferTest extends BaseEventTest {
 
     private final String failingAppenderName = "failingAppenderName";
 
-    @Test(expected = ConstraintValidationException.class)
+    @After
+    public void cleanup() {
+	    LogEventFactory.resetDefaultHandler();
+    }
+
+    @Test
+    public void testValidationFailureForInvalidRequestContextAttribute() {
+        MutableBoolean exceptionHandled = new MutableBoolean(false);
+        LogEventFactory.setDefaultHandler((message, ex) -> {
+            assertThat(ex, instanceOf(ConstraintValidationException.class));
+            exceptionHandled.setTrue();
+        });
+
+        Transfer transfer = LogEventFactory.getEvent(Transfer.class);
+        transfer.setToAccount(0);
+
+        assertTrue("Should have thrown a ConstraintValidationException", exceptionHandled.isTrue());
+    }
+
+    @Test
     public void testValidationFailureForMissingRequestContextAttribute() {
+	    MutableBoolean exceptionHandled = new MutableBoolean(false);
+	    LogEventFactory.setDefaultHandler((message, ex) -> {
+		    assertThat(ex, instanceOf(ConstraintValidationException.class));
+		    exceptionHandled.setTrue();
+	    });
+
         Transfer transfer = LogEventFactory.getEvent(Transfer.class);
         ThreadContext.put("companyId", "12345");
         ThreadContext.put("ipAddress", "127.0.0.1");
@@ -61,11 +87,18 @@ public class TransferTest extends BaseEventTest {
         transfer.setFromAccount(111111);
         transfer.setAmount(new BigDecimal(111.55));
         transfer.logEvent();
-        fail("Should have thrown an AuditException");
+
+	    assertTrue("Should have thrown a ConstraintValidationException", exceptionHandled.isTrue());
     }
 
-    @Test(expected = ConstraintValidationException.class)
+    @Test
     public void testValidationFailureForMissingEventAttribute() {
+	    MutableBoolean exceptionHandled = new MutableBoolean(false);
+	    LogEventFactory.setDefaultHandler((message, ex) -> {
+		    assertThat(ex, instanceOf(ConstraintValidationException.class));
+		    exceptionHandled.setTrue();
+	    });
+
         Transfer transfer = LogEventFactory.getEvent(Transfer.class);
         ThreadContext.put("accountNumber", "12345");
         ThreadContext.put("companyId", "12345");
@@ -78,7 +111,8 @@ public class TransferTest extends BaseEventTest {
         transfer.setToAccount(123456);
         transfer.setFromAccount(111111);
         transfer.logEvent();
-        fail("Should have thrown an AuditException");
+
+	    assertTrue("Should have thrown a ConstraintValidationException", exceptionHandled.isTrue());
     }
 
     @Test
@@ -161,11 +195,10 @@ public class TransferTest extends BaseEventTest {
         AbstractConfiguration config = setUpFailingAppender();
 
         MutableBoolean exceptionHandled = new MutableBoolean(false);
-        AuditExceptionHandler exceptionHandler = (message, ex) -> {
-            assertThat(ex, instanceOf(LoggingException.class));
-            exceptionHandled.setTrue();
-        };
-        LogEventFactory.setDefaultHandler(exceptionHandler);
+	    LogEventFactory.setDefaultHandler((message, ex) -> {
+	        assertThat(ex, instanceOf(LoggingException.class));
+	        exceptionHandled.setTrue();
+	    });
 
         Transfer transfer = setUpMinimumEvent();
         transfer.logEvent();
