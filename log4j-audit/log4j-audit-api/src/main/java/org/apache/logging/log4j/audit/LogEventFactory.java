@@ -54,10 +54,9 @@ import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewlin
 public class LogEventFactory {
 
     private static final Logger logger = LogManager.getLogger(LogEventFactory.class);
-    private static final String NAME = "AuditLogger";
-    private static final String FQCN = LogEventFactory.class.getName();
-    private static Marker EVENT_MARKER = MarkerManager.getMarker("Audit").addParents(EventLogger.EVENT_MARKER);
-    private static final ExtendedLogger LOGGER = LogManager.getContext(false).getLogger(NAME);
+
+    private static final AuditLogger AUDIT_LOGGER = new AuditLogger();
+
     private static final int DEFAULT_MAX_LENGTH = 32;
 
     private static final AuditExceptionHandler DEFAULT_HANDLER = (message, ex) -> {
@@ -171,7 +170,7 @@ public class LogEventFactory {
      */
     public static void logEvent(AuditMessage msg, AuditExceptionHandler handler) {
         try {
-            LOGGER.logIfEnabled(FQCN, Level.OFF, EVENT_MARKER, msg, null);
+	        AUDIT_LOGGER.logEvent(msg);
         } catch (Throwable ex) {
             if (handler == null) {
                 handler = defaultExceptionHandler;
