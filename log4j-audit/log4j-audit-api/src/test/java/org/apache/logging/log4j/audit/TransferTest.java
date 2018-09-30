@@ -21,25 +21,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LoggingException;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.event.Transfer;
+import org.apache.logging.log4j.audit.exception.AuditException;
 import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.test.appender.ListAppender;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.config.AbstractConfiguration;
+import org.apache.logging.log4j.test.appender.AlwaysFailAppender;
+import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.rules.ExpectedException;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 /**
  *
  */
 public class TransferTest extends BaseEventTest {
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    private final String failingAppenderName = "failingAppenderName";
 
     @Test(expected = ConstraintValidationException.class)
     public void testValidationFailureForMissingRequestContextAttribute() {
@@ -103,11 +110,69 @@ public class TransferTest extends BaseEventTest {
         }
         List<String> msgs = app.getMessages();
         assertNotNull("No messages", msgs);
-        assertTrue("No messages", msgs.size() == 2);
+        assertEquals("No messages", 2, msgs.size());
         String msg = msgs.get(0);
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));
         assertTrue("No toAccount", msg.contains("toAccount=\"123456\""));
+    }
+
+    private AbstractConfiguration setUpFailingAppender() {
+        Logger auditLogger = (Logger) LogManager.getContext(false).getLogger("AuditLogger");
+        AbstractConfiguration config = (AbstractConfiguration) ctx.getConfiguration();
+
+        Appender appender = AlwaysFailAppender.createAppender(failingAppenderName);
+        appender.start();
+        config.addLoggerAppender(auditLogger, appender);
+
+        return config;
+    }
+
+    private Transfer setUpMinimumEvent() {
+        ThreadContext.put("accountNumber", "12345");
+        ThreadContext.put("userId", "JohnDoe");
+        ThreadContext.put("loginId", "TestUser");
+
+        Transfer transfer = LogEventFactory.getEvent(Transfer.class);
+        transfer.setToAccount(123456);
+        transfer.setFromAccount(111111);
+        transfer.setAmount(new BigDecimal(111.55));
+        return transfer;
+    }
+
+    @Test
+    public void testDefaultExceptionHandlerIsInvokedOnEventLogFailure() {
+        AbstractConfiguration config = setUpFailingAppender();
+
+        exception.expect(AuditException.class);
+        exception.expectCause(isA(LoggingException.class));
+        exception.expectMessage("Error logging event transfer");
+
+        Transfer transfer = setUpMinimumEvent();
+        try {
+            transfer.logEvent();
+        } finally {
+            config.removeAppender(failingAppenderName);
+        }
+    }
+
+    @Test
+    public void testCustomExceptionHandlerIsPassedToEvent() {
+        AbstractConfiguration config = setUpFailingAppender();
+
+        MutableBoolean exceptionHandled = new MutableBoolean(false);
+        AuditExceptionHandler exceptionHandler = (message, ex) -> {
+            assertThat(ex, instanceOf(LoggingException.class));
+            exceptionHandled.setTrue();
+        };
+        LogEventFactory.setDefaultHandler(exceptionHandler);
+
+        Transfer transfer = setUpMinimumEvent();
+        transfer.logEvent();
+
+        assertTrue("Exception was not handled through the custom handler", exceptionHandled.isTrue());
+
+        config.removeAppender(failingAppenderName);
     }
 
     @Test(expected = ConstraintValidationException.class)
@@ -162,7 +227,7 @@ public class TransferTest extends BaseEventTest {
         }
         List<String> msgs = app.getMessages();
         assertNotNull("No messages", msgs);
-        assertTrue("No messages", msgs.size() == 1);
+        assertEquals("No messages", 1, msgs.size());
         String msg = msgs.get(0);
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));

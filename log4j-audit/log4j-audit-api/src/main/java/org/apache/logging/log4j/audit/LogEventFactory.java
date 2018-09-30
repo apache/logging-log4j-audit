@@ -248,7 +248,7 @@ public class LogEventFactory {
 
 		private final AuditMessage msg;
 		private final Class<?> intrface;
-        private AuditExceptionHandler auditExceptionHandler = DEFAULT_HANDLER;
+        private AuditExceptionHandler auditExceptionHandler = defaultExceptionHandler;
 
 		AuditProxy(AuditMessage msg, Class<?> intrface) {
 			this.msg = msg;
