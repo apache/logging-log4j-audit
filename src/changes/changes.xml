@@ -31,6 +31,9 @@
          - "remove" - Removed
     -->
     <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
+      <action issue="LOG4J2-2428" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Use the AuditExceptionHandler for validation exceptions.
+      </action>
       <action issue="LOG4J2-2443" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         Fix inconsistencies in validation exceptions.
       </action>
