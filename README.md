@@ -21,7 +21,7 @@ Log4j Audit is not entirely usable by itself. Users of Log4j Audit must have a G
 catalog which will contain the Java Interfaces for the events defined in the catalog after a build is performed. They
 will need to modify the Audit Service provided with Log4j Audit to include the JSON catalog (by including the 
 just discussed Git project as a dependency) and configuring the Audit Service as desired. The 
-[Log4j Audit Samples](https://git-wip-us.apache.org/repos/asf?p=logging-log4j-audit-sample.git;a=tree) is a
+[Log4j Audit Samples](https://github.com/apache/logging-log4j-audit-sample) is a
 sample project that illustrates how to perform these tasks.
 
 ## Pull Requests on Github

@@ -39,7 +39,7 @@ public class ApplicationConfiguration {
     public GitCatalogDao catalogDao() {
         String tempDir = System.getProperty("java.io.tmpdir");
         gitLocalRepoPath = tempDir + "/audit/catalog";
-        gitRemoteRepoUri = "https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git";
+        gitRemoteRepoUri = "https://github.com/apache/logging-log4j-audit-sample.git";
         File file = new File(gitLocalRepoPath);
         File parent = file.getParentFile();
         parent.mkdirs();

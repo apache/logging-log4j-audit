@@ -198,7 +198,7 @@
             repository when using HTTP or HTTPS. If the credentials or pass phrase are not provided typically you
             will be able to view the catalog but not update it.
             <pre><code>
-              remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git
+              remoteRepoUrl=https://github.com/apache/logging-log4j-audit-sample.git
               remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
               branch=<![CDATA[<branchname>]]>
               gitUserName=
@@ -239,7 +239,7 @@
              repository when using HTTP or HTTPS. If the credentials or pass phrase are not provided typically you
              will be able to view the catalog but not update it.
               <pre><code>
-    remoteRepoUrl=https://git-wip-us.apache.org/repos/asf/logging-log4j-audit-sample.git  
+    remoteRepoUrl=https://github.com/apache/logging-log4j-audit-sample.git
     remoteRepoCatalogPath=audit-service-api/src/main/resources/catalog.json
     branch=<![CDATA[<branchname>]]>
     gitUserName=  
