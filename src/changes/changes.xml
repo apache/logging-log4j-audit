@@ -30,7 +30,7 @@
          - "update" - Change
          - "remove" - Removed
     -->
-    <release version="1.0.1" date="YYYY-MM-DD" description="Release 1.0.1">
+    <release version="1.0.1" date="2018-12-2" description="Release 1.0.1">
       <action issue="LOG4J2-2428" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         Use the AuditExceptionHandler for validation exceptions.
       </action>

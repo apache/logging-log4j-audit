@@ -22,17 +22,17 @@
 #macro(formatAction $item)
 ## Use replaceAll to fix up LF-only line ends on Windows.
 ## Also replace < and > with entity versions to avoid HTML being misinterpreted.
-    #set($action=$item.action.replaceAll("\n","
+#set($action=$item.action.replaceAll("\n","
 ").replaceAll("<", "&lt;").replaceAll(">", "&gt;"))
-    #if($item.issue)
-        #set($issue = $item.issue)
-        #set($url = "https://issues.apache.org/jira/browse/$issue")
-    #else
-        #set($issue = "")
-    #end
+#if($item.issue)
+#set($issue = $item.issue)
+#set($url = "https://issues.apache.org/jira/browse/$issue")
+#else
+#set($issue = "")
+#end
 * #if($issue)[$issue]($url):#end
 
-    ${action}#if($item.dueTo) Thanks to ${item.dueTo}.#end
+${action}#if($item.dueTo) Thanks to ${item.dueTo}.#end
 
 #end
 ## -----------------------------------------
@@ -40,7 +40,9 @@ $h1 Apache Log4j ${relVersion} Release Notes
 
 The ${developmentTeam} is pleased to announce the Log4j Audit ${relVersion} release!
 
-Apache Log4j Audit is a framework for performing
+Apache Log4j Audit is a framework for performing audit logging using a predefined catalog of audit events. It
+provides a tool to create and edit audit events. It also provides a REST service to perform the logging so
+that non-Java applications can use a common auditing facility.
 
 ## Hack to improve layout: replace all pairs of spaces with a single new-line
 $h2 $release.description.replaceAll("  ", "
@@ -51,33 +53,33 @@ No changes defined in this version.
 #else
 Changes in this version include:
 
-    #if ($release.getActions('add').size() !=0)
-        $h3 New Features
-        #foreach($actionItem in $release.getActions('add'))
-            #formatAction($actionItem)
-        #end
-    #end
+#if ($release.getActions('add').size() !=0)
+$h3 New Features
+#foreach($actionItem in $release.getActions('add'))
+#formatAction($actionItem)
+#end
+#end
 
-    #if ($release.getActions('fix').size() !=0)
-        $h3 Fixed Bugs
-        #foreach($actionItem in $release.getActions('fix'))
-            #formatAction($actionItem)
-        #end
-    #end
+#if ($release.getActions('fix').size() !=0)
+$h3 Fixed Bugs
+#foreach($actionItem in $release.getActions('fix'))
+#formatAction($actionItem)
+#end
+#end
 
-    #if ($release.getActions('update').size() !=0)
-        $h3 Changes
-        #foreach($actionItem in $release.getActions('update'))
-            #formatAction($actionItem)
-        #end
-    #end
+#if ($release.getActions('update').size() !=0)
+$h3 Changes
+#foreach($actionItem in $release.getActions('update'))
+#formatAction($actionItem)
+#end
+#end
 
-    #if ($release.getActions('remove').size() !=0)
-        $h3 Removed
-        #foreach($actionItem in $release.getActions('remove'))
-            #formatAction($actionItem)
-        #end
-    #end
+#if ($release.getActions('remove').size() !=0)
+$h3 Removed
+#foreach($actionItem in $release.getActions('remove'))
+#formatAction($actionItem)
+#end
+#end
 ## End of main loop
 #end
 ---
