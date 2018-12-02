@@ -95,9 +95,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:https://github.com/apache/logging-log4j-audit-sample.git</connection>
-    <developerConnection>scm:git:https://github.com/apache/logging-log4j-audit-sample.git</developerConnection>
-    <url>https://github.com/apache/logging-log4j-audit-sample</url>
+    <connection>scm:git:https://github.com/apache/logging-log4j-audit.git</connection>
+    <developerConnection>scm:git:https://github.com/apache/logging-log4j-audit.git</developerConnection>
+    <url>https://github.com/apache/logging-log4j-audit</url>
     <tag>HEAD</tag>
   </scm>
   <organization>
