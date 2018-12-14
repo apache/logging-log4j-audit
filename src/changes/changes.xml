@@ -30,6 +30,11 @@
          - "update" - Change
          - "remove" - Removed
     -->
+    <release version="1.0.2" date="TBD" description="Release 1.0.2">
+      <action issue="LOG4J2-2521" dev="mattsicker" type="update" due-to="sullis">
+        Update maven-compiler-plugin to 3.8.0.
+      </action>
+    </release>
     <release version="1.0.1" date="2018-12-2" description="Release 1.0.1">
       <action issue="LOG4J2-2428" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         Use the AuditExceptionHandler for validation exceptions.
