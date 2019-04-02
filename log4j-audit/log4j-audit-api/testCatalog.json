@@ -39,7 +39,7 @@
     "aliases" : null,
     "attributes" : null
   }, {
-    "name" : "transfer",
+    "name" : "Transfer",
     "displayName" : "Transfer",
     "description" : "Transfer between accounts",
     "aliases" : null,

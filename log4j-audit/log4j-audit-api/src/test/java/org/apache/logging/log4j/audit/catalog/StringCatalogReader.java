@@ -202,7 +202,7 @@ public class StringCatalogReader implements CatalogReader {
         events.add(event);
         bankingEvents.add(event.getName());
         event = new Event();
-        event.setName("transfer").setDisplayName("Transfer").setDescription("Transfer between accounts");
+        event.setName("Transfer").setDisplayName("Transfer").setDescription("Transfer between accounts");
         List<EventAttribute> eventAttributes = new ArrayList<>();
         eventAttributes.add(new EventAttribute(toAccount.getName(), true));
         eventAttributes.add(new EventAttribute(fromAccount.getName(), true));

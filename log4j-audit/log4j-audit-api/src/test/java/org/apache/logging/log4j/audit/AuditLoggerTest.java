@@ -119,7 +119,7 @@ public class AuditLoggerTest {
         properties.put("toAccount", "123456");
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
-        auditLogger.logEvent("transfer", properties);
+        auditLogger.logEvent("Transfer", properties);
     }
 
     @Test(expected = ConstraintValidationException.class)

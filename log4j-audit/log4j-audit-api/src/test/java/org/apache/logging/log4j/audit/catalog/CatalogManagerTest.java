@@ -29,7 +29,8 @@ public class CatalogManagerTest {
     @Test
     public void testCatalog() throws Exception {
         CatalogManager manager = new CatalogManagerImpl(new StringCatalogReader());
-        Event event = manager.getEvent("transfer");
-        assertNotNull("No transfer event", event);
+        String eventName = "Transfer";
+        Event event = manager.getEvent(eventName);
+        assertNotNull("Event not found: " + eventName, event);
     }
 }
