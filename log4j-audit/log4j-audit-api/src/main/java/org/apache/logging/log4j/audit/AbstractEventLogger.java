@@ -102,7 +102,7 @@ public abstract class AbstractEventLogger {
 
     private void logEvent(String eventName, Map<String, String> attributes, Event event,
                           AuditExceptionHandler exceptionHandler) {
-        AuditMessage msg = new AuditMessage(NamingUtils.lowerFirst(eventName), maxLength);
+        AuditMessage msg = new AuditMessage(eventName, maxLength);
 
         if (attributes == null) {
             attributes = emptyMap();

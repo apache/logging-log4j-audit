@@ -15,7 +15,7 @@ public class LoginTest extends BaseEventTest {
         event.setCompletionStatus("Success");
         String string = event.toString();
 
-        assertEquals("[login completionStatus=\"Success\"]", string);
+        assertEquals("[Login completionStatus=\"Success\"]", string);
     }
 
     @Test

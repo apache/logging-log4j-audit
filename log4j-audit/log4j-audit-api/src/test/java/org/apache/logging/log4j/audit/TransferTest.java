@@ -180,11 +180,11 @@ public class TransferTest extends BaseEventTest {
 
         exception.expect(AuditException.class);
         exception.expectCause(isA(LoggingException.class));
-        exception.expectMessage("Error logging event transfer");
+        exception.expectMessage("Error logging event " + Transfer.class.getSimpleName());
 
-        Transfer transfer = setUpMinimumEvent();
+        Transfer event = setUpMinimumEvent();
         try {
-            transfer.logEvent();
+            event.logEvent();
         } finally {
             config.removeAppender(failingAppenderName);
         }

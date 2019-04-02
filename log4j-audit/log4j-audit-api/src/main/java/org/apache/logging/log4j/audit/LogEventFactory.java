@@ -99,7 +99,7 @@ public class LogEventFactory {
     }
 
 	private static AuditMessage buildAuditMessage(Class<?> intrface) {
-		String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
+		String eventId = intrface.getSimpleName();
 		int msgLength = getMaxLength(intrface);
 		return new AuditMessage(eventId, msgLength);
 	}
