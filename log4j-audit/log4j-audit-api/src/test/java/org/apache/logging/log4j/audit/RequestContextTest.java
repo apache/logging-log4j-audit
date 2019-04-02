@@ -27,19 +27,42 @@ import static org.junit.Assert.*;
 public class RequestContextTest {
 
     @Test
-    public void testRequestContext() throws Exception {
+    public void testRequestContext() {
         RequestContext.getRequestId();
-        RequestContext.setSessionId(UuidUtil.getTimeBasedUuid().toString());
-        RequestContext.setLoginId("testuser");
-        assertEquals("Incorrect loginId", "testuser", RequestContext.getLoginId());
-        RequestContext.setHostName("myhost");
-        assertEquals("Incorrect host name", "myhost", RequestContext.getHostName());
-        RequestContext.setIpAddress("127.0.0.1");
-        assertEquals("Incorrect LoginId", "127.0.0.1", RequestContext.getIpAddress());
+
+        String sessionId = UuidUtil.getTimeBasedUuid().toString();
+        RequestContext.setSessionId(sessionId);
+
+        String loginId = "testuser";
+        RequestContext.setLoginId(loginId);
+        assertEquals("Incorrect loginId", loginId, RequestContext.getLoginId());
+
+        String hostName = "myhost";
+        RequestContext.setHostName(hostName);
+        assertEquals("Incorrect host name", hostName, RequestContext.getHostName());
+
+        String ipAddress = "127.0.0.1";
+        RequestContext.setIpAddress(ipAddress);
+        assertEquals("Incorrect LoginId", ipAddress, RequestContext.getIpAddress());
+
+        RequestContext requestContext = RequestContext.save();
+        RequestContext.clear();
+
+        assertNull(RequestContext.getSessionId());
+        assertNull(RequestContext.getLoginId());
+        assertNull(RequestContext.getHostName());
+        assertNull(RequestContext.getIpAddress());
+
+        requestContext.restore();
+
+        assertEquals(sessionId, RequestContext.getSessionId());
+        assertEquals(loginId, RequestContext.getLoginId());
+        assertEquals(hostName, RequestContext.getHostName());
+        assertEquals(ipAddress, RequestContext.getIpAddress());
     }
 
     @Test
-    public void testMappings() throws Exception {
+    public void testMappings() {
         RequestContextMappings mappings = new RequestContextMappings(RequestContext.class);
         assertEquals("Incorrect header prefix", "mycorp-context-", mappings.getHeaderPrefix());
         RequestContextMapping mapping = mappings.getMapping("hostName");
