@@ -893,6 +893,7 @@
             </goals>
             <configuration>
               <skip>true</skip>
+              <resourceBundles />
             </configuration>
           </execution>
         </executions>
