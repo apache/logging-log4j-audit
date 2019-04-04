@@ -21,7 +21,6 @@ import java.util.function.Supplier;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.annotation.Chained;
-import org.apache.logging.log4j.audit.annotation.ChainedSupplier;
 import org.apache.logging.log4j.audit.annotation.ClientServer;
 import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
 import org.apache.logging.log4j.audit.annotation.Local;
@@ -34,23 +33,30 @@ import org.apache.logging.log4j.core.util.UuidUtil;
  */
 @HeaderPrefix("mycorp-context-")
 public final class RequestContext {
-
     @ClientServer
     public static final String REQUEST_ID = "requestId";
+    public String requestId;
     @ClientServer
     public static final String SESSION_ID = "sessionId";
+    private String sessionId;
     @ClientServer
     public static final String ACCOUNT_NUMBER = "accountNumber";
+    private Long accountNumber;
     @ClientServer
     public static final String IP_ADDRESS = "ipAddress";
+    private String ipAddress;
     @ClientServer
     public static final String USER_ID = "userId";
+    private String userId;
     @ClientServer
     public static final String LOGIN_ID = "loginId";
+    private String loginId;
     @Local
     public static final String CALLING_HOST = "callingHost";
+    private String callingHost;
 
     public static final String HOST_NAME = "hostName";
+    private String hostName;
 
     private static final String LOCAL_HOST_NAME = NetUtils.getLocalHostname();
     /**
@@ -59,7 +65,11 @@ public final class RequestContext {
      */
     @Chained(fieldName = HOST_NAME, chainedFieldName = CALLING_HOST)
     public static final Supplier<String> LOCAL_HOST_SUPPLIER = () -> LOCAL_HOST_NAME;
-
+    /**
+     * The methods in this class are not required by framework components that use the RequestContext properties.
+     * They are provided as a convenience for applications. If they are not provided the properties can be accessed
+     * directly through the Log4j ThreadContext Map using the keys above.
+     */
     public static void clear() {
         ThreadContext.clearMap();
     }
@@ -144,5 +154,36 @@ public final class RequestContext {
 
     public static void setCallingHost(String hostName) {
         ThreadContext.put(CALLING_HOST, hostName);
+    }
+
+    /**
+     * Save the RequestContext data.
+     * @return A copy of the RequestContext data.
+     */
+    public static RequestContext save() {
+        RequestContext context = new RequestContext();
+        context.accountNumber = getAccountNumber();
+        context.callingHost = getCallingHost();
+        context.hostName = getHostName();
+        context.ipAddress = getIpAddress();
+        context.loginId = getLoginId();
+        context.requestId = getRequestId();
+        context.sessionId = getSessionId();
+        context.userId = getUserId();
+        return context;
+    }
+
+    /**
+     * Populate the ThreadContext from a RequestContext object.
+     */
+    public void restore() {
+        setAccountNumber(this.accountNumber);
+        setCallingHost(this.callingHost);
+        setHostName(this.hostName);
+        setIpAddress(this.ipAddress);
+        setLoginId(this.loginId);
+        ThreadContext.put(REQUEST_ID, this.requestId);
+        setSessionId(this.sessionId);
+        setUserId(this.userId);
     }
 }

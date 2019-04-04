@@ -19,18 +19,25 @@ package org.apache.logging.log4j.audit.catalog;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
  *
  */
 public class CatalogManagerTest {
-
     @Test
     public void testCatalog() throws Exception {
         CatalogManager manager = new CatalogManagerImpl(new StringCatalogReader());
         String eventName = "Transfer";
         Event event = manager.getEvent(eventName);
         assertNotNull("Event not found: " + eventName, event);
+        assertEquals("{\"name\" : \"transfer\", \"displayName\" : \"Transfer\", \"description\" : \"Transfer between accounts\", " +
+                             "\"attributes\" : [{\"name\" : \"toAccount\", \"required\" : true}, {\"name\" : \"fromAccount\", \"required\" : true}, {\"name\" : \"amount\", \"required\" : true}]}",
+                     event.toString());
+
+        Event login = manager.getEvent("login");
+        assertNotNull("No login event", login);
+        assertEquals("{\"name\" : \"login\", \"displayName\" : \"Login\", \"description\" : \"User Login\", \"attributes\" : []}", login.toString());
     }
 }
