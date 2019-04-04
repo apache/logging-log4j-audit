@@ -32,7 +32,7 @@ public class CatalogManagerTest {
         String eventName = "Transfer";
         Event event = manager.getEvent(eventName);
         assertNotNull("Event not found: " + eventName, event);
-        assertEquals("{\"name\" : \"transfer\", \"displayName\" : \"Transfer\", \"description\" : \"Transfer between accounts\", " +
+        assertEquals("{\"name\" : \"Transfer\", \"displayName\" : \"Transfer\", \"description\" : \"Transfer between accounts\", " +
                              "\"attributes\" : [{\"name\" : \"toAccount\", \"required\" : true}, {\"name\" : \"fromAccount\", \"required\" : true}, {\"name\" : \"amount\", \"required\" : true}]}",
                      event.toString());
 
