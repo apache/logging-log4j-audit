@@ -175,14 +175,16 @@ public class Event implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"name\" : \"").append(name).append("\", \"displayName\" : \"").append(displayName).append("\"");
         sb.append(", \"description\" : \"").append(description).append("\", \"attributes\" : [");
-        boolean first = true;
-        for (EventAttribute attribute : attributes) {
-            if (!first) {
-                sb.append(", ");
-            } else {
-                first = false;
+        if (attributes != null) {
+            boolean first = true;
+            for (EventAttribute attribute : attributes) {
+                if (!first) {
+                    sb.append(", ");
+                } else {
+                    first = false;
+                }
+                sb.append("{\"name\" : \"").append(attribute.getName()).append("\", \"required\" : ").append(attribute.isRequired()).append("}");
             }
-            sb.append("{\"name\" : \"").append(attribute.getName()).append("\", \"required\" : ").append(attribute.isRequired()).append("}");
         }
         sb.append("]}");
         return sb.toString();

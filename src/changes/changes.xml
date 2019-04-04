@@ -31,6 +31,15 @@
          - "remove" - Removed
     -->
     <release version="1.0.2" date="TBD" description="Release 1.0.2">
+      <action issue="LOG4J2-2580" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        Event.toString() failed with NullPointerException for events without attributes.
+      </action>
+      <action issue="LOG4J2-2582" dev="rgoers" type="fix" due-to="Eugene Chan">
+        WebMvcAppContext in the catalog editor was missing a curly brace for the gitUserName variable.
+      </action>
+      <action issue="LOG4J2-2578" dev="rgoers" type="fix" due-to="Andrei Ivanov">
+        RequestContextMappings should ignore private and instance fields.
+      </action>
       <action issue="LOG4J2-2521" dev="mattsicker" type="update" due-to="sullis">
         Update maven-compiler-plugin to 3.8.0.
       </action>

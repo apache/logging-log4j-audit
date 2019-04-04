@@ -152,7 +152,7 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
         return new MappingJackson2HttpMessageConverter(objectMapper());
     }
 
-    @Value("${gitUserName")
+    @Value("${gitUserName}")
     private String gitUserName;
 
     @Value("${gitPassword:#{null}}")

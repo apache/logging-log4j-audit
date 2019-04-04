@@ -18,6 +18,7 @@ package org.apache.logging.log4j.audit.request;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -55,8 +56,11 @@ public class RequestContextMappings {
         }
         Annotation annotation = clazz.getAnnotation(HeaderPrefix.class);
         this.headerPrefix = annotation != null ? ((HeaderPrefix) annotation).value().toLowerCase() : DEFAULT_HEADER_PREFIX;
-        Field[] fields = clazz.getDeclaredFields();
+        Field[] fields = clazz.getFields();
         for (Field field : fields) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
             if (field.getType().equals(String.class)) {
                 String fieldName;
                 try {
