@@ -51,6 +51,7 @@ public class InterfacesGenerator {
 
     private static final String REQUEST_CONTEXT_IMPORT = "org.apache.logging.log4j.audit.annotation.RequestContext";
     private static final String PARENT_IMPORT = "org.apache.logging.log4j.audit.AuditEvent";
+    private static final String EVENT_NAME_IMPORT = "org.apache.logging.log4j.audit.annotation.EventName";
     private static final String MAX_LENGTH_IMPORT = "org.apache.logging.log4j.audit.annotation.MaxLength";
     private static final String REQCTX_ANN = "@RequestContext(";
 
@@ -158,6 +159,8 @@ public class InterfacesGenerator {
                 Set<String> imports = classGenerator.getImports();
                 imports.add(PARENT_IMPORT);
                 StringBuilder annotations = new StringBuilder();
+                imports.add(EVENT_NAME_IMPORT);
+                annotations.append("@EventName(\"").append(event.getName()).append("\")\n");
                 imports.add(MAX_LENGTH_IMPORT);
                 annotations.append("@MaxLength(").append(maxKeyLength).append(")");
 

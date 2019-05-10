@@ -16,29 +16,33 @@
  */
 package org.apache.logging.log4j.audit;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.annotation.Constraint;
 import org.apache.logging.log4j.audit.annotation.Constraints;
+import org.apache.logging.log4j.audit.annotation.EventName;
 import org.apache.logging.log4j.audit.annotation.MaxLength;
 import org.apache.logging.log4j.audit.annotation.RequestContext;
 import org.apache.logging.log4j.audit.annotation.RequestContextConstraints;
 import org.apache.logging.log4j.audit.annotation.Required;
 import org.apache.logging.log4j.audit.exception.AuditException;
-import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
+import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 
@@ -93,18 +97,23 @@ public class LogEventFactory {
 		return (T) audit;
 	}
 
+	private static String getEventName(Class<?> intrface) {
+		EventName eventName = intrface.getAnnotation(EventName.class);
+		return eventName != null ? eventName.value() : NamingUtils.lowerFirst(intrface.getSimpleName());
+	}
+
 	private static <T> int getMaxLength(Class<T> intrface) {
         MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
         return maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
     }
 
 	private static AuditMessage buildAuditMessage(Class<?> intrface) {
-		String eventId = NamingUtils.lowerFirst(intrface.getSimpleName());
+		String eventName = getEventName(intrface);
 		int msgLength = getMaxLength(intrface);
-		return new AuditMessage(eventId, msgLength);
+		return new AuditMessage(eventName, msgLength);
 	}
 
-    /**
+	/**
      *
      * This method is used to construct and AuditMessage from a set of properties and the Event interface
      * that represents the event being audited using the default error handler.

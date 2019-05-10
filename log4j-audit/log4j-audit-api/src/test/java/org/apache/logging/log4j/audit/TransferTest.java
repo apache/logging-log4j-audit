@@ -146,6 +146,7 @@ public class TransferTest extends BaseEventTest {
         assertNotNull("No messages", msgs);
         assertEquals("No messages", 2, msgs.size());
         String msg = msgs.get(0);
+        assertTrue("No event name", msg.contains("[transfer"));
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));
         assertTrue("No toAccount", msg.contains("toAccount=\"123456\""));

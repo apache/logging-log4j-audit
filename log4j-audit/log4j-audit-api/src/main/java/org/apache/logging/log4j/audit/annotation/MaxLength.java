@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Recoreds the maximum length of dynamic attribute names.
+ * Records the maximum length of dynamic attribute names.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

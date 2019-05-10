@@ -17,10 +17,10 @@
 package org.apache.logging.log4j.audit;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.audit.catalog.StringCatalogReader;
 import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
@@ -38,7 +38,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *

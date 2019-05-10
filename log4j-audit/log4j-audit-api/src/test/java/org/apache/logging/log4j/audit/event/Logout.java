@@ -17,6 +17,8 @@
 package org.apache.logging.log4j.audit.event;
 
 import org.apache.logging.log4j.audit.AuditEvent;
+import org.apache.logging.log4j.audit.annotation.EventName;
 
-public interface Login extends AuditEvent {
+@EventName("Logout")
+public interface Logout extends AuditEvent {
 }
