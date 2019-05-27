@@ -31,6 +31,9 @@
          - "remove" - Removed
     -->
     <release version="1.0.2" date="TBD" description="Release 1.0.2">
+      <action issue="LOG4J2-2579" dev="shadow" type="fix">
+        Fix event names normalization
+      </action>
       <action issue="LOG4J2-2580" dev="rgoers" type="fix" due-to="Andrei Ivanov">
         Event.toString() failed with NullPointerException for events without attributes.
       </action>

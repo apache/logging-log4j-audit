@@ -91,12 +91,11 @@ public abstract class AbstractEventLogger {
     }
 
     private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        String eventId = NamingUtils.lowerFirst(eventName);
-        Event event = catalogId == null ? catalogManager.getEvent(eventId) : catalogManager.getEvent(eventId, catalogId);
+        Event event = catalogId == null ? catalogManager.getEvent(eventName) : catalogManager.getEvent(eventName, catalogId);
         if (event == null) {
-            throw new AuditException("Unable to locate definition of audit event " + eventId);
+            throw new AuditException("Unable to locate definition of audit event " + eventName);
         }
-        logEvent(eventId, attributes, event, exceptionHandler);
+        logEvent(eventName, attributes, event, exceptionHandler);
     }
 
     protected abstract void logEvent(StructuredDataMessage message);

@@ -17,10 +17,10 @@
 package org.apache.logging.log4j.audit;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.audit.catalog.StringCatalogReader;
 import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -96,16 +97,15 @@ public class AuditLoggerTest {
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
         try {
-            auditLogger.logEvent("Transfer", properties);
+            auditLogger.logEvent("transfer", properties);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail();
         }
         List<String> msgs = app.getMessages();
         assertNotNull("No messages", msgs);
-        assertTrue("No messages", msgs.size() == 1);
+        assertEquals("No messages", 1, msgs.size());
         String msg = msgs.get(0);
-        assertTrue("Normalized event name", msg.contains("transfer@"));
         assertTrue("No companyId", msg.contains("companyId=\"12345\""));
         assertTrue("No ipAddress", msg.contains("ipAddress=\"127.0.0.1\""));
         assertTrue("No toAccount", msg.contains("toAccount=\"123456\""));
@@ -135,7 +135,7 @@ public class AuditLoggerTest {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("toAccount", "123456");
         properties.put("amount", "111.55");
-        auditLogger.logEvent("Transfer", properties);
+        auditLogger.logEvent("transfer", properties);
     }
 
     @Test
