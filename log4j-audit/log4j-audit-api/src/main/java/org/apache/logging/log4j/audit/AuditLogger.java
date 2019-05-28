@@ -32,7 +32,7 @@ public class AuditLogger extends AbstractEventLogger {
     private static final String NAME = "AuditLogger";
 
     private static final String FQCN = AuditLogger.class.getName();
-    private static Marker EVENT_MARKER = MarkerManager.getMarker("Audit").addParents(EventLogger.EVENT_MARKER);
+    private static final Marker EVENT_MARKER = MarkerManager.getMarker("Audit").addParents(EventLogger.EVENT_MARKER);
     private static final ExtendedLogger LOGGER = LogManager.getContext(false).getLogger(NAME);
 
     public AuditLogger() {

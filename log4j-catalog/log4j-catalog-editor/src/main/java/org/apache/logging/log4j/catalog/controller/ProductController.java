@@ -47,7 +47,7 @@ import java.util.Map;
 @RestController
 public class ProductController {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private ProductService productService;

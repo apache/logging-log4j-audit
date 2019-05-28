@@ -29,7 +29,7 @@ public class AuditMessage extends StructuredDataMessage {
 
     private static final int MAX_LENGTH = 32;
 
-    private Map<String, StructuredDataMessage> extraContent = new HashMap<>();
+    private final Map<String, StructuredDataMessage> extraContent = new HashMap<>();
 
     public AuditMessage(String eventName) {
          this(eventName, MAX_LENGTH);

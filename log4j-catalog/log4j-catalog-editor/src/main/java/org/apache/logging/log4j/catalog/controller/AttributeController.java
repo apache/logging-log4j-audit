@@ -53,9 +53,9 @@ import java.util.Set;
 @RequestMapping(value = "/api/attributes")
 @RestController
 public class AttributeController {
-    private static ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
+    private static final ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private AttributeService attributeService;

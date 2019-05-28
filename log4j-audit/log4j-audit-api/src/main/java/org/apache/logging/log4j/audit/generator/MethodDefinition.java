@@ -42,7 +42,7 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
 
     private boolean isInterface = false;
 
-    private List<Parameter> parameters = new ArrayList<>();
+    private final List<Parameter> parameters = new ArrayList<>();
 
     private List<String> exceptions = new ArrayList<>();
 

@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AttributeConverter extends AbstractConverter<Attribute, AttributeModel> {
-    private static Logger LOGGER = LogManager.getLogger(AttributeConverter.class);
+    private static final Logger LOGGER = LogManager.getLogger(AttributeConverter.class);
 
     @Autowired
     private AttributeService attributeService;

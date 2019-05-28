@@ -20,9 +20,9 @@ import java.text.DecimalFormat;
 
 public class ElapsedUtil {
 
-    private static long NANO_PER_SECOND = 1000000000L;
-    private static long NANO_PER_MINUTE = NANO_PER_SECOND * 60;
-    private static long NANO_PER_HOUR = NANO_PER_MINUTE * 60;
+    private static final long NANO_PER_SECOND = 1000000000L;
+    private static final long NANO_PER_MINUTE = NANO_PER_SECOND * 60;
+    private static final long NANO_PER_HOUR = NANO_PER_MINUTE * 60;
 
     static void addElapsed(long elapsed, StringBuilder msg) {
         long nanoseconds = elapsed;

@@ -51,7 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuditCatalogManager extends CatalogManagerImpl implements AuditManager {
 
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     private CatalogService catalogService;

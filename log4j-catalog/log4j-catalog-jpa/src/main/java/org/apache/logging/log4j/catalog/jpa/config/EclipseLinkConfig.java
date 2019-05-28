@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Profile("eclipseLink")
 public class EclipseLinkConfig {
 
-    private static Logger LOGGER = LogManager.getLogger(EclipseLinkConfig.class);
+    private static final Logger LOGGER = LogManager.getLogger(EclipseLinkConfig.class);
 
     @Autowired
     private DataSourceConfig dataSourceConfig;

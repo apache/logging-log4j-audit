@@ -44,11 +44,11 @@ import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CA
  */
 public class CatalogManagerImpl implements CatalogManager {
 
-    private static Logger logger = LogManager.getLogger(CatalogManagerImpl.class);
+    private static final Logger logger = LogManager.getLogger(CatalogManagerImpl.class);
 
     private volatile Map<String, Map<String, CatalogInfo>> infoMap;
 
-    private Map<String, Attribute> requestContextAttributes = new HashMap<>();
+    private final Map<String, Attribute> requestContextAttributes = new HashMap<>();
 
     protected final Map<String, Map<String, Attribute>> attributeMap = new ConcurrentHashMap<>();
 

@@ -45,7 +45,7 @@ import static org.junit.Assert.*;
  */
 public class TransferTest extends BaseEventTest {
     @Rule
-    public ExpectedException exception = ExpectedException.none();
+    public final ExpectedException exception = ExpectedException.none();
 
     private final String failingAppenderName = "failingAppenderName";
 

@@ -31,7 +31,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import static org.junit.Assert.*;
 
 public class TestInterfacesGenerator {
-    private static Logger logger = LogManager.getLogger(TestInterfacesGenerator.class);
+    private static final Logger logger = LogManager.getLogger(TestInterfacesGenerator.class);
     private static ApplicationContext context;
     private static final String GENERATED_SOURCE_DIR = "target/generated-sources/log4j-audit/";
 

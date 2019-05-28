@@ -47,7 +47,7 @@ import java.util.Map;
 @RestController
 public class CategoryController {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private CategoryService categoryService;

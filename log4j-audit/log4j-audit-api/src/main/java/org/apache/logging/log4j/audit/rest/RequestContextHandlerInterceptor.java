@@ -35,8 +35,8 @@ import java.util.Enumeration;
 public class RequestContextHandlerInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LogManager.getLogger(RequestContextHandlerInterceptor.class);
-    private RequestContextMappings mappings;
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final RequestContextMappings mappings;
+    private final ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     public RequestContextHandlerInterceptor(Class<?> clazz) {
         mappings = new RequestContextMappings(clazz);

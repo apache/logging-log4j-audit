@@ -67,9 +67,9 @@ public class LogEventFactory {
 
     private static AuditExceptionHandler defaultExceptionHandler = DEFAULT_HANDLER;
 
-    private static ConcurrentMap<Class<?>, List<Property>> classMap = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Class<?>, List<Property>> classMap = new ConcurrentHashMap<>();
 
-    private static ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
+    private static final ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
 
     public static void setDefaultHandler(AuditExceptionHandler exceptionHandler) {
         defaultExceptionHandler = (exceptionHandler == null) ? NOOP_EXCEPTION_HANDLER : exceptionHandler;

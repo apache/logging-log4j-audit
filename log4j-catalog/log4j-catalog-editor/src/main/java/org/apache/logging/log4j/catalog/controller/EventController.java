@@ -16,21 +16,13 @@
  */
 package org.apache.logging.log4j.catalog.controller;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Event;
-import org.apache.logging.log4j.catalog.jpa.model.EventModel;
-import org.apache.logging.log4j.catalog.jpa.service.EventService;
 import org.apache.logging.log4j.catalog.jpa.converter.EventConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.EventModelConverter;
+import org.apache.logging.log4j.catalog.jpa.model.EventModel;
+import org.apache.logging.log4j.catalog.jpa.service.EventService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * Catalog Product controller
  */
@@ -51,7 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private EventService eventService;

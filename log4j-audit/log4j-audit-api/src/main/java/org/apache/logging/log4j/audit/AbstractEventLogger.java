@@ -42,7 +42,7 @@ public abstract class AbstractEventLogger {
 
     private static final int DEFAULT_MAX_LENGTH = 32;
 
-    private static ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
+    private static final ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
 
     public CatalogManager catalogManager;
 

@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EventConverter extends AbstractConverter<Event, EventModel> {
-    private static Logger LOGGER = LogManager.getLogger(EventConverter.class);
+    private static final Logger LOGGER = LogManager.getLogger(EventConverter.class);
 
     @Autowired
     private EventService eventService;

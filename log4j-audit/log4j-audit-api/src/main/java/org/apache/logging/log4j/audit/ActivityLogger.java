@@ -31,7 +31,7 @@ public class ActivityLogger extends AbstractEventLogger {
     private static final String NAME = "ActivityLogger";
 
     private static final String FQCN = ActivityLogger.class.getName();
-    private static Marker EVENT_MARKER = MarkerManager.getMarker("Activity").addParents(EventLogger.EVENT_MARKER);
+    private static final Marker EVENT_MARKER = MarkerManager.getMarker("Activity").addParents(EventLogger.EVENT_MARKER);
     private static final ExtendedLogger LOGGER = LogManager.getContext(false).getLogger(NAME);
 
     public ActivityLogger() {

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 
 public class WebAppInitializer {
     private static final String APPLICATION_NAME = "AuditCatalog";
-    private static Logger LOGGER = LogManager.getLogger(WebAppInitializer.class);
+    private static final Logger LOGGER = LogManager.getLogger(WebAppInitializer.class);
 
     @Bean
     public ServletContextInitializer initializer() {

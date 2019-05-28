@@ -30,7 +30,7 @@ import org.apache.logging.log4j.catalog.api.exception.NameNotFoundException;
  */
 public class ConstraintTypeDeserializer extends StdDeserializer<ConstraintType> {
 
-    ConstraintPlugins plugins = ConstraintPlugins.getInstance();
+    final ConstraintPlugins plugins = ConstraintPlugins.getInstance();
 
     public ConstraintTypeDeserializer() {
         this(null);

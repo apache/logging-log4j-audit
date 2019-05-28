@@ -35,9 +35,9 @@ import org.apache.logging.log4j.core.util.ReflectionUtil;
 
 public class ConstraintPlugins {
 
-    private static Logger LOGGER = LogManager.getLogger(ConstraintPlugins.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConstraintPlugins.class);
 
-    private static Map<String, ConstraintType> constraintMap = new HashMap<>();
+    private static final Map<String, ConstraintType> constraintMap = new HashMap<>();
 
     private static volatile ConstraintPlugins instance = null;
 

@@ -49,7 +49,7 @@ import java.util.Set;
 @RestController
 public class ConstraintController {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private ConstraintService constraintService;

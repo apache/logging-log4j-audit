@@ -39,23 +39,23 @@ import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 public final class ClassGenerator {
     private static final Logger LOGGER = LogManager.getLogger(ClassGenerator.class);
 
-    protected List<AccessorDefinition> beanMethods = new ArrayList<>();
+    protected final List<AccessorDefinition> beanMethods = new ArrayList<>();
     private boolean isClass = true;
-    private String className;
+    private final String className;
     private String parentClassName;
     private String packageName;
-    private String baseFolder;
+    private final String baseFolder;
     private String javadocComment;
     private boolean verbose;
-    private List<String> implementsDeclarations = new ArrayList<>();
+    private final List<String> implementsDeclarations = new ArrayList<>();
 
-    private Set<String> importsDeclarations = new HashSet<>();
+    private final Set<String> importsDeclarations = new HashSet<>();
 
-    private List<VariableDefinition> localVariables = new ArrayList<>();
+    private final List<VariableDefinition> localVariables = new ArrayList<>();
 
-    private List<ConstructorDefinition> constructors = new ArrayList<>();
+    private final List<ConstructorDefinition> constructors = new ArrayList<>();
 
-    private List<MethodDefinition> methods = new ArrayList<>();
+    private final List<MethodDefinition> methods = new ArrayList<>();
 
     private boolean runPrewrite = false;
 

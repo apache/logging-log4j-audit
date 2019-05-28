@@ -73,10 +73,10 @@ public class CatalogController {
 
     private static final Logger LOGGER = LogManager.getLogger(CatalogController.class);
 
-    private ModelMapper attributeModelMapper = new ModelMapper();
-    private ModelMapper eventModelMapper = new ModelMapper();
-    private ModelMapper productModelMapper = new ModelMapper();
-    private ModelMapper categoryModelMapper = new ModelMapper();
+    private final ModelMapper attributeModelMapper = new ModelMapper();
+    private final ModelMapper eventModelMapper = new ModelMapper();
+    private final ModelMapper productModelMapper = new ModelMapper();
+    private final ModelMapper categoryModelMapper = new ModelMapper();
 
     @Autowired
     private AttributeService attributeService;
