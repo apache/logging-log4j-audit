@@ -35,7 +35,7 @@ public class BaseEventTest {
     protected static ListAppender app;
 
     @BeforeClass
-    public static void setupClass() throws Exception {
+    public static void setupClass() {
         ctx = (LoggerContext) LogManager.getContext(false);
         Configuration config = ctx.getConfiguration();
         for (Map.Entry<String, Appender> entry : config.getAppenders().entrySet()) {

@@ -31,7 +31,7 @@ public class EnumConstraint implements ConstraintType {
     @Override
     public void validate(boolean isRequestContext, String name, String value, String enums, StringBuilder error) {
         if (!isBlank(enums) && !isBlank(value)) {
-            boolean result = Arrays.stream(enums.trim().split("\\s*,\\s*")).anyMatch(value::equals);
+            boolean result = Arrays.asList(enums.trim().split("\\s*,\\s*")).contains(value);
             if (!result) {
                 appendNewline(error);
                 if (isRequestContext) {

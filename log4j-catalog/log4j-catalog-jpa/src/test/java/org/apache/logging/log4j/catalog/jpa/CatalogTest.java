@@ -15,12 +15,8 @@
  */
 package org.apache.logging.log4j.catalog.jpa;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.DataType;
-import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
 import org.apache.logging.log4j.catalog.jpa.config.ApplicationConfiguration;
 import org.apache.logging.log4j.catalog.jpa.dao.AttributeRepository;
 import org.apache.logging.log4j.catalog.jpa.dao.CategoryRepository;
@@ -28,6 +24,7 @@ import org.apache.logging.log4j.catalog.jpa.dao.EventRepository;
 import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
 import org.apache.logging.log4j.catalog.jpa.model.EventAttributeModel;
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
+import org.apache.logging.log4j.catalog.jpa.service.CatalogService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +35,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,14 +61,10 @@ public class CatalogTest {
 
     @BeforeClass
     public static void initTest() {
-        try {
-            System.setProperty("environment", "lab");
-            System.setProperty("site", "dev1");
-            System.setProperty("applicationName", "CatalogService");
-            System.setProperty("spring.profiles.active", "eclipseLink");
-        } catch (RuntimeException ex) {
-            throw ex;
-        }
+        System.setProperty("environment", "lab");
+        System.setProperty("site", "dev1");
+        System.setProperty("applicationName", "CatalogService");
+        System.setProperty("spring.profiles.active", "eclipseLink");
     }
 
     @Test
@@ -128,7 +125,7 @@ public class CatalogTest {
         }
         assertNotNull(persisted);
         assertNotNull(persisted.getId());
-        assertTrue(event.equals(persisted));
+        assertEquals(event, persisted);
         assertNotNull(persisted.getAttributes());
         assertFalse(persisted.getAttributes().isEmpty());
         assertEquals(event.getAttributes().size(), persisted.getAttributes().size());
@@ -146,7 +143,7 @@ public class CatalogTest {
         }
         assertNotNull(persisted);
         assertNotNull(persisted.getId());
-        assertTrue(persisted.getId().equals(id));
+        assertEquals(persisted.getId(), id);
         assertNotNull(persisted.getAttributes());
         assertFalse(persisted.getAttributes().isEmpty());
         assertEquals(event.getAttributes().size(), persisted.getAttributes().size());

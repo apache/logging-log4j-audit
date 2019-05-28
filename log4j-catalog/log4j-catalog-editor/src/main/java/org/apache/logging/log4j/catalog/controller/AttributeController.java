@@ -16,17 +16,6 @@
  */
 package org.apache.logging.log4j.catalog.controller;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.ListResponse;
@@ -48,6 +37,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 /**
  * Catalog Product controller
  */
@@ -55,7 +53,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/attributes")
 @RestController
 public class AttributeController {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static ConstraintPlugins constraintPlugins = ConstraintPlugins.getInstance();
 
     private ModelMapper modelMapper = new ModelMapper();
@@ -81,7 +78,7 @@ public class AttributeController {
         Type listType = new TypeToken<List<Attribute>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Attribute> attributes = null;
+            List<Attribute> attributes;
             if (startIndex == null || pageSize == null) {
                 attributes = modelMapper.map(attributeService.getAttributes(), listType);
             } else {

@@ -32,8 +32,8 @@ import org.apache.logging.log4j.audit.exception.AuditException;
 import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
-import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
+import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
 
 import static java.util.Collections.emptyList;
@@ -142,11 +142,7 @@ public class CatalogManagerImpl implements CatalogManager {
                 if (attr.isRequestContext()) {
                     requestContextAttributes.put(attr.getName(), attr);
                 }
-                Map<String, Attribute> attrMap = attributeMap.get(attr.getCatalogId());
-                if (attrMap == null) {
-                    attrMap = new HashMap<>();
-                    attributeMap.put(attr.getCatalogId(), attrMap);
-                }
+                Map<String, Attribute> attrMap = attributeMap.computeIfAbsent(attr.getCatalogId(), k -> new HashMap<>());
                 attrMap.put(attr.getName(), attr);
             }
         }

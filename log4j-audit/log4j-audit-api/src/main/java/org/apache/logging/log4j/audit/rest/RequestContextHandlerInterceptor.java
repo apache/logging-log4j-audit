@@ -16,10 +16,6 @@
  */
 package org.apache.logging.log4j.audit.rest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -28,6 +24,10 @@ import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 /**
  * May be used instead of the RequestContextFilter to convert RequestContext headers to ThreadContext variables.
@@ -43,7 +43,7 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) {
         logger.trace("Starting request {}", request.getRequestURI());
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
@@ -70,7 +70,7 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) {
         if (logger.isTraceEnabled()) {
             long elapsed = System.nanoTime() - startTime.get();
             StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
@@ -81,7 +81,7 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
         ThreadContext.clearMap();
     }
 }

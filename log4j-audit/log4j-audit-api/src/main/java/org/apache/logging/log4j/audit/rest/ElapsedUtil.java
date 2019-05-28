@@ -46,8 +46,7 @@ public class ElapsedUtil {
             msg.append(minutes).append(" minutes ");
         }
 
-        DecimalFormat numFormat = null;
-        numFormat = new DecimalFormat("#0");
+        DecimalFormat numFormat = new DecimalFormat("#0");
         msg.append(numFormat.format(seconds)).append('.');
         numFormat = new DecimalFormat("000000000");
         msg.append(numFormat.format(nanoseconds)).append(" seconds");

@@ -37,7 +37,7 @@ public class JdbcUrlCondition implements Condition {
         if (map != null && map.containsKey("value")) {
             String value = map.get("value").toString();
             String jdbcUrl = env.getProperty("jdbcUrl");
-            Boolean isEmbedded = Boolean.parseBoolean(env.getProperty("isEmbedded"));
+            boolean isEmbedded = Boolean.parseBoolean(env.getProperty("isEmbedded"));
             boolean result;
             if (value.equals("hsqldb")) {
                 result = jdbcUrl == null || isEmbedded;

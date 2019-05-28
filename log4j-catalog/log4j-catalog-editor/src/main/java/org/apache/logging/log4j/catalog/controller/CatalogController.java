@@ -16,16 +16,12 @@
  */
 package org.apache.logging.log4j.catalog.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.api.Attribute;
+import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.Category;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.Product;
+import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.jpa.converter.AttributeModelConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryModelConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.EventModelConverter;
@@ -42,18 +38,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class CatalogController.
  */
 @RestController
 public class CatalogController {
-
-	/** The logger. */
-	private static Logger logger = LogManager.getLogger(CatalogController.class);
 
 	@Autowired
 	private EventService eventService;

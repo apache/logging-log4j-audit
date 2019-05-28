@@ -16,6 +16,10 @@
  */
 package org.apache.logging.log4j.audit.generator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.audit.util.NamingUtils;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,11 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.audit.util.NamingUtils;
-
-import static org.apache.logging.log4j.audit.generator.Constants.*;
+import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 
 /**
  * Generates the Classes and Interfaces for Audit Logging based on data in the Catalog.
@@ -39,7 +39,7 @@ import static org.apache.logging.log4j.audit.generator.Constants.*;
 public final class ClassGenerator {
     private static final Logger LOGGER = LogManager.getLogger(ClassGenerator.class);
 
-    protected List<AccessorDefinition> beanMethods = new ArrayList<AccessorDefinition>();
+    protected List<AccessorDefinition> beanMethods = new ArrayList<>();
     private boolean isClass = true;
     private String className;
     private String parentClassName;
@@ -49,7 +49,7 @@ public final class ClassGenerator {
     private boolean verbose;
     private List<String> implementsDeclarations = new ArrayList<>();
 
-    private Set<String> importsDeclarations = new HashSet<String>();
+    private Set<String> importsDeclarations = new HashSet<>();
 
     private List<VariableDefinition> localVariables = new ArrayList<>();
 
@@ -236,7 +236,7 @@ public final class ClassGenerator {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(getPackageName()).append(";\n\n");
         if (getImports() != null) {
-            List<String> list = new ArrayList<String>(getImports());
+            List<String> list = new ArrayList<>(getImports());
             Collections.sort(list);
             for (String element : list) {
                 sb.append("import ").append(element).append(";\n");

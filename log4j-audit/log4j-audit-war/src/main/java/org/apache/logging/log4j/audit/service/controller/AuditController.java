@@ -16,12 +16,9 @@
  */
 package org.apache.logging.log4j.audit.service.controller;
 
-import java.util.Map;
-
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.AuditLogger;
 import org.apache.logging.log4j.audit.dto.AuditDto;
@@ -33,12 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
+import java.util.Map;
 
 @RestController
 public class AuditController {
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private AuditLogger auditLogger;

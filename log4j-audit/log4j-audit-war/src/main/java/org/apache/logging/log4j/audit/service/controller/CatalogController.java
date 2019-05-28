@@ -135,7 +135,7 @@ public class CatalogController {
                                                          @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Attribute>>() {
         }.getType();
-        List<Attribute> attributes = null;
+        List<Attribute> attributes;
         if (startIndex == null || pageSize == null) {
             attributes = attributeModelMapper.map(attributeService.getAttributes(catalogId), listType);
         } else {
@@ -236,7 +236,7 @@ public class CatalogController {
                                                          @RequestParam(value = "sortCol", required= false) String sortColumn,
                                                          @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Event>>() {}.getType();
-        List<Event> events = null;
+        List<Event> events;
         if (startIndex == null || pageSize == null) {
             events = eventModelMapper.map(eventService.getEvents(catalogId), listType);
         } else {
@@ -314,7 +314,7 @@ public class CatalogController {
                                                  @RequestParam(value = "sortCol", required= false) String sortColumn,
                                                  @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Product>>() {}.getType();
-        List<Product> products = null;
+        List<Product> products;
         if (startIndex == null || pageSize == null) {
             products = productModelMapper.map(productService.getProducts(catalogId), listType);
         } else {
@@ -387,7 +387,7 @@ public class CatalogController {
                                                      @RequestParam(value = "sortCol", required= false) String sortColumn,
                                                      @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Category>>() {}.getType();
-        List<Category> categories = null;
+        List<Category> categories;
         if (startIndex == null || pageSize == null) {
             categories = categoryModelMapper.map(categoryService.getCategories(catalogId), listType);
         } else {

@@ -37,7 +37,7 @@ import org.springframework.http.client.ClientHttpResponse;
  */
 public class RequestContextHeaderInterceptor implements ClientHttpRequestInterceptor {
 
-    private RequestContextMappings mappings = null;
+    private RequestContextMappings mappings;
 
     public RequestContextHeaderInterceptor(RequestContextMappings mappings) {
         this.mappings = mappings;

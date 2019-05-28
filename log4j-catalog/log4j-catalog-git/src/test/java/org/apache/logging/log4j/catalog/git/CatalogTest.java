@@ -40,13 +40,9 @@ public class CatalogTest {
 
     @BeforeClass
     public static void initTest() {
-        try {
-            System.setProperty("environment", "lab");
-            System.setProperty("site", "dev1");
-            System.setProperty("applicationName", "CatalogService");
-        } catch (RuntimeException ex) {
-            throw ex;
-        }
+        System.setProperty("environment", "lab");
+        System.setProperty("site", "dev1");
+        System.setProperty("applicationName", "CatalogService");
     }
 
     @Test

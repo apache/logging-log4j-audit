@@ -16,12 +16,6 @@
  */
 package org.apache.logging.log4j.catalog.jpa.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.catalog.jpa.dao.ConstraintRepository;
 import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
@@ -30,11 +24,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 @Service
 @Repository
 @Transactional
 public class ConstraintServiceImpl implements ConstraintService {
-    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private ConstraintRepository constraintRepository;

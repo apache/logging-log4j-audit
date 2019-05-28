@@ -17,10 +17,9 @@
 package org.apache.logging.log4j.audit.generator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import static org.apache.logging.log4j.audit.generator.Constants.*;
+import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 
 public class ConstructorDefinition implements Comparable<ConstructorDefinition> {
     private String visability = PUBLIC;
@@ -84,9 +83,7 @@ public class ConstructorDefinition implements Comparable<ConstructorDefinition> 
         sb.append(getName()).append("(");
         if (getParameters() != null) {
             boolean first = true;
-            for (Iterator<Parameter> iter = getParameters().iterator(); iter
-                    .hasNext(); ) {
-                Parameter element = iter.next();
+            for (Parameter element : getParameters()) {
                 if (!first) {
                     sb.append(", ");
                 }
@@ -98,9 +95,7 @@ public class ConstructorDefinition implements Comparable<ConstructorDefinition> 
         if (getExceptions() != null && getExceptions().size() > 0) {
             sb.append(" throws ");
             boolean first = true;
-            for (Iterator<String> iter = getExceptions().iterator(); iter
-                    .hasNext(); ) {
-                String element = iter.next();
+            for (String element : getExceptions()) {
                 if (!first) {
                     sb.append(", ");
                 }

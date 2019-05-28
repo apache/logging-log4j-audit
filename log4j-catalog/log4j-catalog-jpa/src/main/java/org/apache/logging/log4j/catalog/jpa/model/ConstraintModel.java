@@ -77,7 +77,7 @@ public class ConstraintModel implements Serializable {
 
     public void setAttribute(AttributeModel attribute) {
         this.attribute = attribute;
-        if (attribute.getConstraints() != null && !attribute.getConstraints().contains(this)) {
+        if (attribute.getConstraints() != null) {
             attribute.getConstraints().add(this);
         }
 

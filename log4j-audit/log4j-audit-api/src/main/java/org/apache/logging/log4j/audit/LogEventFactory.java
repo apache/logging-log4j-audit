@@ -411,7 +411,7 @@ public class LogEventFactory {
 
         public Property(String name, boolean isRequired, List<Constraint> constraints) {
             this.name = name;
-            this.constraints = constraints.toArray(new Constraint[constraints.size()]);
+            this.constraints = constraints.toArray(new Constraint[0]);
             this.isRequired = isRequired;
         }
     }

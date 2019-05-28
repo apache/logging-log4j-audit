@@ -22,33 +22,26 @@ import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
 public class WebAppInitializer {
     private static final String APPLICATION_NAME = "AuditCatalog";
     private static Logger LOGGER = LogManager.getLogger(WebAppInitializer.class);
 
     @Bean
     public ServletContextInitializer initializer() {
-        return new ServletContextInitializer() {
+        return servletContext -> {
+            LOGGER.info("Starting Audit Catalog Editor");
+            servletContext.setInitParameter("applicationName", APPLICATION_NAME);
+            ProfileUtil.setActiveProfile(servletContext);
+            servletContext.setInitParameter("isEmbedded", "true");
+            System.setProperty("applicationName", APPLICATION_NAME);
+            //AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+            //rootContext.setDisplayName(APPLICATION_NAME);
+            //rootContext.register(WebMvcAppContext.class);
+            //servletContext.addListener(new ContextLoaderListener(rootContext));
 
-            @Override
-            public void onStartup(ServletContext servletContext) throws ServletException {
-                LOGGER.info("Starting Audit Catalog Editor");
-                servletContext.setInitParameter("applicationName", APPLICATION_NAME);
-                ProfileUtil.setActiveProfile(servletContext);
-                servletContext.setInitParameter("isEmbedded", "true");
-                System.setProperty("applicationName", APPLICATION_NAME);
-                //AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-                //rootContext.setDisplayName(APPLICATION_NAME);
-                //rootContext.register(WebMvcAppContext.class);
-                //servletContext.addListener(new ContextLoaderListener(rootContext));
-
-                //ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(rootContext));
-                //restServlet.setLoadOnStartup(1);
-                //restServlet.addMapping("/*");
-            }
+            //ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(rootContext));
+            //restServlet.setLoadOnStartup(1);
+            //restServlet.addMapping("/*");
         };
     }
 }

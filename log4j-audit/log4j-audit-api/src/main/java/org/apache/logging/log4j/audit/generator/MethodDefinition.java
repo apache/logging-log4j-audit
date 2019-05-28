@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit.generator;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.audit.util.NamingUtils;
@@ -67,8 +66,7 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
                     .append("(");
             boolean first = true;
             if (parameters != null) {
-                for (Iterator<String> iter = parameters.iterator(); iter.hasNext(); ) {
-                    String element = iter.next();
+                for (String element : parameters) {
                     if (!first) {
                         sb.append(", ");
                     }
@@ -116,8 +114,6 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
                 setContent(content + "return 0.0;");
             } else if (returnType.equals("long")) {
                 setContent(content + "return 0;");
-            } else if (returnType.equals("float")) {
-                setContent(content + "return 0.0;");
             } else if (returnType.equals("float")) {
                 setContent(content + "return 0.0;");
             } else if (returnType.equals("char")) {

@@ -242,9 +242,7 @@ public class InterfacesGenerator {
                     }
                 }
                 if (importedTypes.size() > 0) {
-                    for (String className : importedTypes.values()) {
-                        imports.add(className);
-                    }
+                    imports.addAll(importedTypes.values());
                 }
                 if (anyRequired) {
                     imports.add(REQUIRED_IMPORT);

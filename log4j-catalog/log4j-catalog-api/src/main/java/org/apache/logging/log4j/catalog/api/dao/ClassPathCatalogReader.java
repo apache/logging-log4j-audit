@@ -41,7 +41,6 @@ import org.apache.logging.log4j.util.LoaderUtil;
 public class ClassPathCatalogReader extends AbstractCatalogReader {
 
     private static final Logger LOGGER = LogManager.getLogger(ClassPathCatalogReader.class);
-    private static final String BASEDIR = "baseDir";
 
     private static final String CATALOG_ATTRIBUTE_NAME = "catalogFile";
     private static final String DEFAULT_CATALOG_FILE = "catalog.json";

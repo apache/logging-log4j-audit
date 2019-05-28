@@ -63,6 +63,6 @@ public class TestInterfacesGenerator {
         List<String> fileNames = new ArrayList<>();
         Files.find(p, maxDepth, (path, basicFileAttributes) -> String.valueOf(path).endsWith(".java"))
                 .map(path -> path.getFileName().toString()).forEach(fileNames::add);
-        assertTrue("Incorrect number of files generated. Expected 4 was " + fileNames.size(), fileNames.size() == 4);
+        assertEquals("Incorrect number of files generated. Expected 4 was " + fileNames.size(), 4, fileNames.size());
     }
 }

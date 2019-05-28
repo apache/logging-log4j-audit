@@ -16,12 +16,7 @@
  */
 package org.apache.logging.log4j.audit.service.config;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +48,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 
 @Configuration
@@ -140,7 +139,7 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     @Bean
     public List<ClientHttpRequestInterceptor> restInterceptors() {
-        return Arrays.asList(new ClientHttpRequestInterceptor[] {});
+        return Collections.emptyList();
     }
 
     @Bean

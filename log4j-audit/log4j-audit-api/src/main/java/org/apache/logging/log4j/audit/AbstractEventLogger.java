@@ -16,29 +16,29 @@
  */
 package org.apache.logging.log4j.audit;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.exception.AuditException;
+import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
-import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 
 /**
  * This class is used to log events generated remotely.
  */
 public abstract class AbstractEventLogger {
-
-    private static final Logger logger = LogManager.getLogger(AbstractEventLogger.class);
 
     private static final int DEFAULT_MAX_LENGTH = 32;
 

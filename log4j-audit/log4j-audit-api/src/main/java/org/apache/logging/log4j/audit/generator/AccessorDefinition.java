@@ -28,9 +28,7 @@ public class AccessorDefinition {
 			if (getterContent != null) {
 				setContent("\t" + StringUtil.filterContent(getterContent, name, type));
 			} else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("\treturn ").append(beanDefinition.getName()).append(";");
-				setContent(sb.toString());
+				setContent("\treturn " + beanDefinition.getName() + ";");
 			}
 		}
 	}
@@ -44,10 +42,9 @@ public class AccessorDefinition {
 				setContent("\t"
 						+ StringUtil.filterContent(setterContent, name, type));
 			} else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("\tthis.").append(beanDefinition.getName())
-						.append(" = ").append(beanDefinition.getName()).append(";");
-				setContent(sb.toString());
+				String sb = "\tthis." + beanDefinition.getName() +
+						" = " + beanDefinition.getName() + ";";
+				setContent(sb);
 			}
 			getParameters().add(new Parameter(beanDefinition.getName(), beanDefinition.getType(), ""));
 		}

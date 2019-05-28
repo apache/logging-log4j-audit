@@ -16,24 +16,21 @@
  */
 package org.apache.logging.log4j.audit.rest;
 
-import java.io.IOException;
-import java.util.Enumeration;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.request.ChainedMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 /**
  * Filter to initialize and clear the RequestContext.
@@ -54,10 +51,9 @@ public class RequestContextFilter implements Filter {
 
     /**
      * @param filterConfig
-     * @throws ServletException
      */
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         if (requestContextClass != null) {
             mappings = new RequestContextMappings(requestContextClass);
         } else {
@@ -73,8 +69,7 @@ public class RequestContextFilter implements Filter {
     /**
      * Manages the initialization and clearing of the RequestContext.
      */
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
         if (servletRequest instanceof HttpServletRequest) {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;

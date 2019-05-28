@@ -74,7 +74,7 @@ public class EventController {
         Type listType = new TypeToken<List<Event>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Event> events = null;
+            List<Event> events;
             if (startIndex == null || pageSize == null) {
                 events = modelMapper.map(eventService.getEvents(), listType);
             } else {

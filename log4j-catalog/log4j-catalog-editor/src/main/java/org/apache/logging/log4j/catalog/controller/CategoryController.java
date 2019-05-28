@@ -16,20 +16,11 @@
  */
 package org.apache.logging.log4j.catalog.controller;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Category;
-import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
-import org.apache.logging.log4j.catalog.jpa.service.CategoryService;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryModelConverter;
+import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
+import org.apache.logging.log4j.catalog.jpa.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Catalog Category controller
  */
@@ -48,7 +46,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/categories")
 @RestController
 public class CategoryController {
-    private static final Logger LOGGER = LogManager.getLogger();
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -74,7 +71,7 @@ public class CategoryController {
         Type listType = new TypeToken<List<Category>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Category> categories = null;
+            List<Category> categories;
             if (startIndex == null || pageSize == null) {
                 categories = modelMapper.map(categoryService.getCategories(), listType);
             } else {

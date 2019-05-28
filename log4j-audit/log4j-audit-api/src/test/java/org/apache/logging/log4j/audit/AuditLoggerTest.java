@@ -92,7 +92,7 @@ public class AuditLoggerTest {
         ThreadContext.put("product", "TestProduct");
         ThreadContext.put("timeZone", "America/Phoenix");
         ThreadContext.put("loginId", "TestUser");
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("toAccount", "123456");
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
@@ -115,7 +115,7 @@ public class AuditLoggerTest {
     public void testMissingRequestContextAttribute() {
         auditLogger = buildAuditLogger(catalogReader);
 
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("toAccount", "123456");
         properties.put("fromAccount", "111111");
         properties.put("amount", "111.55");
@@ -132,7 +132,7 @@ public class AuditLoggerTest {
         ThreadContext.put("product", "TestProduct");
         ThreadContext.put("timeZone", "America/Phoenix");
         ThreadContext.put("loginId", "TestUser");
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("toAccount", "123456");
         properties.put("amount", "111.55");
         auditLogger.logEvent("transfer", properties);
