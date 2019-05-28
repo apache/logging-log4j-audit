@@ -22,11 +22,11 @@ public final class NamingUtils {
     }
 
     public static String getPackageName(String className) {
-        return className.substring(0, className.lastIndexOf("."));
+        return className.substring(0, className.lastIndexOf('.'));
     }
 
     public static String getSimpleName(String className) {
-        return className.substring(className.lastIndexOf(".") + 1);
+        return className.substring(className.lastIndexOf('.') + 1);
     }
 
     public static String getMethodShortName(String name) {

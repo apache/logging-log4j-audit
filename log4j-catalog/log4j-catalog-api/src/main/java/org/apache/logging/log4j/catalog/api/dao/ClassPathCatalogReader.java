@@ -52,15 +52,14 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
         String catalogFile = attributes != null ?
             attributes.getOrDefault(CATALOG_ATTRIBUTE_NAME, DEFAULT_CATALOG_FILE) : DEFAULT_CATALOG_FILE;
         Collection<URL> catalogs = LoaderUtil.findResources(catalogFile);
-        URL catalogURL;
-        if (catalogs.size() == 0) {
+        if (catalogs.isEmpty()) {
             LOGGER.error("No catalog named {} could be found on the class path", catalogFile);
             throw new FileNotFoundException("No catalog named " + catalogFile + " could be found");
-        } else if (catalogs.size() > 1) {
-            catalogURL = catalogs.stream().findFirst().get();
+        }
+
+        URL catalogURL = catalogs.iterator().next();
+        if (catalogs.size() > 1) {
             LOGGER.warn("Multiple catalogs named {} were found. Using {}", catalogFile, catalogURL.toString());
-        } else {
-            catalogURL = catalogs.stream().findFirst().get();
         }
 
         catalog = readCatalog(catalogURL);

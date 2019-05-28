@@ -16,10 +16,9 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.logging.log4j.catalog.api.ConstraintType;
+
+import java.io.Serializable;
 
 /**
  *

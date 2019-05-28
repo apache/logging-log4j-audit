@@ -156,15 +156,11 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             throw new CatalogModificationException("Catalog is not writable: " + localRepoFile.getAbsolutePath());
         }
 
-        FileWriter writer = null;
-        try {
+        try (FileWriter writer = new FileWriter(catalogFile)){
             String text = mapper.writeValueAsString(data);
-            writer = new FileWriter(catalogFile);
             writer.write(text);
         } catch (IOException ioException) {
             throw new CatalogModificationException("Unable to write catalog file.", ioException);
-        } finally {
-            try { if (writer != null) writer.close(); } catch(Exception exception) { }
         }
 
         try (Git git = Git.open(localRepoFile)) {

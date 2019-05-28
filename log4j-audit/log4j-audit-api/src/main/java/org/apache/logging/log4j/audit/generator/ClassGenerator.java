@@ -217,10 +217,9 @@ public final class ClassGenerator {
             LOGGER.info(fullPath);
         }
         File file = new File(fullPath);
-        DataOutputStream out = new DataOutputStream(openOutputStream(file));
-        out.writeBytes(getClassContents());
-        out.close();
-
+        try (DataOutputStream out = new DataOutputStream(openOutputStream(file))) {
+            out.writeBytes(getClassContents());
+        }
     }
 
     public String getClassContents() throws Exception {
@@ -235,7 +234,7 @@ public final class ClassGenerator {
 
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(getPackageName()).append(";\n\n");
-        if (getImports() != null) {
+        if (!getImports().isEmpty()) {
             List<String> list = new ArrayList<>(getImports());
             Collections.sort(list);
             for (String element : list) {
@@ -270,7 +269,7 @@ public final class ClassGenerator {
         if (getParentClassName() != null && getParentClassName().length() > 0) {
             sb.append(" extends ").append(getParentClassName());
         }
-        if (getImplements() != null && getImplements().size() > 0) {
+        if (!getImplements().isEmpty()) {
             sb.append(" implements ");
             boolean first = true;
             for (String element : getImplements()) {
@@ -282,14 +281,14 @@ public final class ClassGenerator {
             }
         }
         sb.append(" {\n\n");
-        if (localVariables != null) {
+        if (!localVariables.isEmpty()) {
             Collections.sort(localVariables);
             for (VariableDefinition element : localVariables) {
                 sb.append(element).append("\n");
             }
         }
 
-        if (constructors != null) {
+        if (!constructors.isEmpty()) {
             Collections.sort(constructors);
             for (ConstructorDefinition element : constructors) {
                 sb.append(element).append("\n\n");

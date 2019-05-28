@@ -130,7 +130,6 @@ public class AuditCatalogManager extends CatalogManagerImpl implements AuditMana
             attributeModels.add(model);
             attributeMap.put(attribute.getName(), attribute);
         }
-        attributeModels.stream().filter(m->!attributeMap.containsKey(m.getName()));
         for (AttributeModel attributeModel : attributeModels) {
             if (!attributeMap.containsKey(attributeModel.getName())) {
                 attributeService.deleteAttribute(attributeModel.getId());
