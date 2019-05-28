@@ -302,6 +302,8 @@ public class Attribute implements Serializable {
             for (Constraint constraint : constraints) {
                 if (!first) {
                     sb.append(" ");
+                } else {
+                    first = false;
                 }
                 sb.append("name=\"").append(constraint.getConstraintType().getName()).append("\"");
                 sb.append("value=\"").append(constraint.getValue()).append("\"");

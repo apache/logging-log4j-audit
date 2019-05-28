@@ -454,7 +454,7 @@ public class CatalogController {
     private String validateSortDirection(String sortDirection) {
         if (sortDirection == null) {
             sortDirection = "ASC";
-        } else if (sortDirection != "ASC" && sortDirection != "DESC") {
+        } else if (!sortDirection.equals("ASC") && !sortDirection.equals("DESC")) {
             LOGGER.warn("Invalid sort direction {}, defaulting to ascending", sortDirection);
             sortDirection = "ASC";
         }

@@ -91,7 +91,7 @@ public class AttributeController {
                 if (sorting != null) {
                     String[] sortInfo = sorting.split(" ");
                     sortColumn = sortInfo[0];
-                    if (sortInfo.length > 0) {
+                    if (sortInfo.length > 1) {
                         sortDirection = sortInfo[1];
                     }
                 }

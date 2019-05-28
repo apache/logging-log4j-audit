@@ -16,13 +16,6 @@
  */
 package org.apache.logging.log4j.catalog.git.dao;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,8 +27,8 @@ import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.dao.AbstractCatalogReader;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.api.exception.CatalogModificationException;
-import org.apache.logging.log4j.catalog.api.exception.CatalogReadException;
 import org.apache.logging.log4j.catalog.api.exception.CatalogNotFoundException;
+import org.apache.logging.log4j.catalog.api.exception.CatalogReadException;
 import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -46,6 +39,13 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.CredentialsProvider;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -133,8 +133,12 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
     @Override
     public synchronized CatalogData read() {
         updateRepo();
-        if (catalogFile == null || !catalogFile.exists() || !catalogFile.canRead()) {
-            throw new IllegalStateException("Catalog " + catalogFile.getAbsolutePath() + " is not readable.");
+        if (catalogFile == null) {
+            throw new CatalogNotFoundException();
+        }
+
+        if (!catalogFile.exists() || !catalogFile.canRead()) {
+            throw new CatalogReadException("Catalog " + catalogFile.getAbsolutePath() + " is not readable.");
         }
 
         try {
@@ -149,7 +153,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
     public void write(CatalogData data) {
         File localRepoFile = new File(localRepoPath);
         if (!localRepoFile.exists() || !localRepoFile.canWrite()) {
-            throw new IllegalStateException("Catalog is not writable.");
+            throw new CatalogModificationException("Catalog is not writable: " + localRepoFile.getAbsolutePath());
         }
 
         FileWriter writer = null;
