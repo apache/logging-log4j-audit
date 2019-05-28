@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.audit.rest;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Enumeration;
 
 import javax.servlet.Filter;

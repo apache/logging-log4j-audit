@@ -16,7 +16,6 @@
  */
 package org.apache.logging.log4j.catalog.jpa.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,8 +29,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.List;
-
-import org.apache.logging.log4j.catalog.api.Product;
 
 /**
  * Definition of a ProductDto.

@@ -21,15 +21,9 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer {
     private static final String APPLICATION_NAME = "AuditCatalog";

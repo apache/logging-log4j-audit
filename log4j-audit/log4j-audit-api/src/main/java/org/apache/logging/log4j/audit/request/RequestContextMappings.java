@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.apache.logging.log4j.audit.annotation.Chained;
-import org.apache.logging.log4j.audit.annotation.ChainedSupplier;
 import org.apache.logging.log4j.audit.annotation.ClientServer;
 import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
 import org.apache.logging.log4j.audit.annotation.Local;

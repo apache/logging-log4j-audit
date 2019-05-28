@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

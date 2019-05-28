@@ -20,8 +20,6 @@ import javax.annotation.PreDestroy;
 import java.io.File;
 
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
