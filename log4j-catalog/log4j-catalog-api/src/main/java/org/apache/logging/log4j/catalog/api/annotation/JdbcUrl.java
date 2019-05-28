@@ -15,12 +15,12 @@
  */
 package org.apache.logging.log4j.catalog.api.annotation;
 
+import org.springframework.context.annotation.Conditional;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.springframework.context.annotation.Conditional;
 
 /**
  * Loads a DataSource based on the JDBC URL.
@@ -33,5 +33,5 @@ public @interface JdbcUrl {
      * The name of the property to test for existence.
      * @return The property name.
      */
-    public String value();
+    String value();
 }

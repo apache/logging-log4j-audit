@@ -16,12 +16,13 @@
  */
 package org.apache.logging.log4j.audit.event;
 
-import java.math.BigDecimal;
 import org.apache.logging.log4j.audit.AuditEvent;
 import org.apache.logging.log4j.audit.annotation.Constraint;
 import org.apache.logging.log4j.audit.annotation.MaxLength;
 import org.apache.logging.log4j.audit.annotation.RequestContext;
 import org.apache.logging.log4j.audit.annotation.Required;
+
+import java.math.BigDecimal;
 
 /**
  * Transfer between accounts
@@ -40,14 +41,14 @@ public interface Transfer extends AuditEvent {
      * @param amount Amount to transfer
      */
     @Required
-    public void setAmount(BigDecimal amount);
+    void setAmount(BigDecimal amount);
 
     /**
      * From Account Number : Source of funds
      * @param fromAccount Source of funds
      */
     @Required
-    public void setFromAccount(int fromAccount);
+    void setFromAccount(int fromAccount);
 
     /**
      * To Account Number : Destination account
@@ -55,6 +56,6 @@ public interface Transfer extends AuditEvent {
      */
     @Required
     @Constraint(constraintType="minValue", constraintValue="1")
-    public void setToAccount(int toAccount);
+    void setToAccount(int toAccount);
 
 }

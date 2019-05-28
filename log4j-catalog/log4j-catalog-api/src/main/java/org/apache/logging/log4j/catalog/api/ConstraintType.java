@@ -29,7 +29,7 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 @JsonSerialize(using = ConstraintTypeSerializer.class)
 public interface ConstraintType {
 
-    public static final String CATEGORY = "Constraint";
+    String CATEGORY = "Constraint";
 
     default String getName() {
         Plugin annotation = this.getClass().getAnnotation(Plugin.class);
