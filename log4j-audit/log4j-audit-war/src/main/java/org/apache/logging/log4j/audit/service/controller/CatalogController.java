@@ -174,7 +174,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Create a catalog Attribute", notes = "Creates a catalog attribute", tags = {"Catalog"})
-    @PostMapping(value = "/attribute", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PostMapping(value = "/attribute", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Attribute> createAttribute(@ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
         if (attribute.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required.");
@@ -197,7 +197,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Update a catalog Attribute", notes = "Updates a catalog attribute", tags = {"Catalog"})
-    @PutMapping(value = "/attribute", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PutMapping(value = "/attribute", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Attribute> updateAttribute(@ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
         if (attribute.getId() == null) {
             throw new IllegalArgumentException("An Attribute must have an id to be updated.");
@@ -259,7 +259,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Create a catalog Event", notes = "Creates a catalog event", tags = {"Catalog"})
-    @PostMapping(value = "/event", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PostMapping(value = "/event", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Event> createEvent(@ApiParam(value = "event", required = true) @RequestBody Event event) {
         if (event.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create an event.");
@@ -281,7 +281,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Update a catalog Event", notes = "Updates a catalog event", tags = {"Catalog"})
-    @PutMapping(value = "/event", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PutMapping(value = "/event", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Event> updateEvent(@ApiParam(value = "event", required = true) @RequestBody Event event) {
         if (event.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to update an event.");
@@ -337,7 +337,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Create a catalog Product", notes = "Creates a catalog product", tags = {"Catalog"})
-    @PostMapping(value = "/product", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PostMapping(value = "/product", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Product> createProduct(@ApiParam(value = "product", required = true) @RequestBody Product product) {
         if (product.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a product.");
@@ -357,7 +357,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Update a catalog Product", notes = "Updates a catalog event", tags = {"Catalog"})
-    @PutMapping(value = "/product", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PutMapping(value = "/product", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Product> updateProduct(@ApiParam(value = "product", required = true) @RequestBody Product product) {
         if (product.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to update a product.");
@@ -410,7 +410,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Create a catalog Category", notes = "Creates a catalog category", tags = {"Catalog"})
-    @PostMapping(value = "/category", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PostMapping(value = "/category", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Category> createCategory(@ApiParam(value = "category", required = true) @RequestBody Category category) {
         if (category.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a category.");
@@ -430,7 +430,7 @@ public class CatalogController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Update a catalog Category", notes = "Updates a catalog category", tags = {"Catalog"})
-    @PutMapping(value = "/category", consumes=Versions.V1_0_VALUE, produces=Versions.V1_0_VALUE)
+    @PutMapping(value = "/category", consumes=Versions.V1_0, produces=Versions.V1_0)
     public ResponseEntity<Category> updateCategory(@ApiParam(value = "category", required = true) @RequestBody Category category) {
         if (category.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a category.");

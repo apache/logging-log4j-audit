@@ -40,7 +40,7 @@ public class AuditController {
 
     @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
     @ApiOperation(value = "Generate an Audit event", notes = "Causes an Audit event to be logged", tags = {"Audit"})
-    @PostMapping(value = "/event/log", produces = Versions.V1_0_VALUE)
+    @PostMapping(value = "/event/log", produces = Versions.V1_0)
     @ResponseStatus(value = HttpStatus.OK)
     public void logEvent(@RequestBody AuditDto auditDto) {
         try {
