@@ -31,6 +31,9 @@
          - "remove" - Removed
     -->
     <release version="1.0.2" date="TBD" description="Release 1.0.2">
+        <action issue="LOG4J2-2448" dev="shadow" type="fix">
+            Allow usage of Versions in non-Spring environments
+        </action>
       <action issue="LOG4J2-2579" dev="shadow" type="fix">
         Fix event names normalization
       </action>
