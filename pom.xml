@@ -132,7 +132,7 @@
     <eclipselink.version>2.7.0</eclipselink.version>
     <httpclient.version>4.5.3</httpclient.version>
     <hsqldb.version>2.3.4</hsqldb.version>
-    <jackson.version>2.8.5</jackson.version>
+    <jackson.version>2.12.7.1</jackson.version>
     <javadoc.plugin.version>2.10.3</javadoc.plugin.version>
     <javaee.api.version>7.0</javaee.api.version>
     <javax.cache.api.version>1.0.0</javax.cache.api.version>
