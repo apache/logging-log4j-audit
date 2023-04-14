@@ -138,7 +138,7 @@
     <javax.cache.api.version>1.0.0</javax.cache.api.version>
     <jaxb.version>2.2.7</jaxb.version>
     <jboss.logging.version>3.3.0.Final</jboss.logging.version>
-    <json.version>20090211</json.version>
+    <json.version>20230227</json.version>
     <junit.version>4.12</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
     <log4j.version>2.10.0</log4j.version>
