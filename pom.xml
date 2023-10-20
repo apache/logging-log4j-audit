@@ -141,7 +141,7 @@
     <json.version>20090211</json.version>
     <junit.version>4.12</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
-    <log4j.version>2.10.0</log4j.version>
+    <log4j.version>2.21.0</log4j.version>
     <mockito.version>2.0.31-beta</mockito.version>
     <pdf.plugin.version>1.2</pdf.plugin.version>
     <pmd.plugin.version>3.8</pmd.plugin.version>
