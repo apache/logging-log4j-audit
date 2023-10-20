@@ -102,7 +102,7 @@
   </scm>
   <organization>
     <name>Apache Software Foundation</name>
-    <url>http://www.apache.org</url>
+    <url>https://www.apache.org</url>
   </organization>
   <properties>
     <log4jParentDir>${basedir}</log4jParentDir>
