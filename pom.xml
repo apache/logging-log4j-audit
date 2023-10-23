@@ -23,9 +23,9 @@
   <name>Apache Log4j Audit</name>
   <version>1.0.2-SNAPSHOT</version>
   <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>30</version>
+    <groupId>org.apache.logging</groupId>
+    <artifactId>logging-parent</artifactId>
+    <version>10.2.0</version>
   </parent>
   <description>Apache Log4j Audit</description>
   <url>http://logging.apache.org/log4j-audit</url>
