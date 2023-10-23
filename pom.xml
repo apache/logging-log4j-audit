@@ -129,7 +129,7 @@
     <failsafe.plugin.version>2.19.1</failsafe.plugin.version>
     <findbugs.plugin.version>3.0.5</findbugs.plugin.version>
     <hibernate.version>5.6.15.Final</hibernate.version>
-    <eclipselink.version>2.7.0</eclipselink.version>
+    <eclipselink.version>4.0.2</eclipselink.version>
     <httpclient.version>4.5.3</httpclient.version>
     <hsqldb.version>2.3.4</hsqldb.version>
     <javadoc.plugin.version>2.10.3</javadoc.plugin.version>
