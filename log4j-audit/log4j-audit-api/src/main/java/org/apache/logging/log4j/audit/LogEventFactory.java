@@ -1,20 +1,31 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements. See the NOTICE file distributed with
+ * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache license, Version 2.0
+ * The ASF licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the license for the specific language governing permissions and
- * limitations under the license.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.logging.log4j.audit;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -32,17 +43,6 @@ import org.apache.logging.log4j.audit.exception.ConstraintValidationException;
 import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 
@@ -75,9 +75,9 @@ public class LogEventFactory {
         defaultExceptionHandler = (exceptionHandler == null) ? NOOP_EXCEPTION_HANDLER : exceptionHandler;
     }
 
-	static void resetDefaultHandler() {
-		defaultExceptionHandler = DEFAULT_HANDLER;
-	}
+    static void resetDefaultHandler() {
+        defaultExceptionHandler = DEFAULT_HANDLER;
+    }
 
     /**
      * Constructs an Event object from its interface.
@@ -86,34 +86,34 @@ public class LogEventFactory {
      * @return Returns an instance of the Event.
      */
     @SuppressWarnings("unchecked")
-	public static <T extends AuditEvent> T getEvent(Class<T> intrface) {
+    public static <T extends AuditEvent> T getEvent(Class<T> intrface) {
 
-		Class<?>[] interfaces = new Class<?>[] { intrface };
+        Class<?>[] interfaces = new Class<?>[] { intrface };
 
-	    AuditMessage msg = buildAuditMessage(intrface);
-	    AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface.getClassLoader(), interfaces,
-			    new AuditProxy(msg, intrface, defaultExceptionHandler));
+        AuditMessage msg = buildAuditMessage(intrface);
+        AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface.getClassLoader(), interfaces,
+                new AuditProxy(msg, intrface, defaultExceptionHandler));
 
-		return (T) audit;
-	}
+        return (T) audit;
+    }
 
-	private static String getEventName(Class<?> intrface) {
-		EventName eventName = intrface.getAnnotation(EventName.class);
-		return eventName != null ? eventName.value() : NamingUtils.lowerFirst(intrface.getSimpleName());
-	}
+    private static String getEventName(Class<?> intrface) {
+        EventName eventName = intrface.getAnnotation(EventName.class);
+        return eventName != null ? eventName.value() : NamingUtils.lowerFirst(intrface.getSimpleName());
+    }
 
-	private static <T> int getMaxLength(Class<T> intrface) {
+    private static <T> int getMaxLength(Class<T> intrface) {
         MaxLength maxLength = intrface.getAnnotation(MaxLength.class);
         return maxLength == null ? DEFAULT_MAX_LENGTH : maxLength.value();
     }
 
-	private static AuditMessage buildAuditMessage(Class<?> intrface) {
-		String eventName = getEventName(intrface);
-		int msgLength = getMaxLength(intrface);
-		return new AuditMessage(eventName, msgLength);
-	}
+    private static AuditMessage buildAuditMessage(Class<?> intrface) {
+        String eventName = getEventName(intrface);
+        int msgLength = getMaxLength(intrface);
+        return new AuditMessage(eventName, msgLength);
+    }
 
-	/**
+    /**
      *
      * This method is used to construct and AuditMessage from a set of properties and the Event interface
      * that represents the event being audited using the default error handler.
@@ -121,7 +121,7 @@ public class LogEventFactory {
      * @param properties The properties to be included in the event.
      */
     public static void logEvent(Class<?> intrface, Map<String, String> properties) {
-	    logEvent(intrface, properties, DEFAULT_HANDLER);
+        logEvent(intrface, properties, DEFAULT_HANDLER);
     }
 
     /**
@@ -132,50 +132,50 @@ public class LogEventFactory {
      * @param handler Class that gets control when an exception occurs logging the event.
      */
     public static void logEvent(Class<?> intrface, Map<String, String> properties, AuditExceptionHandler handler) {
-	    AuditMessage msg = buildAuditMessage(intrface);
+        AuditMessage msg = buildAuditMessage(intrface);
 
-	    if (properties != null) {
-		    for (Map.Entry<String, String> entry : properties.entrySet()) {
-			    msg.put(entry.getKey(), entry.getValue());
-		    }
-	    }
+        if (properties != null) {
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                msg.put(entry.getKey(), entry.getValue());
+            }
+        }
 
-	    validateEvent(intrface, msg);
-	    logEvent(msg, handler);
+        validateEvent(intrface, msg);
+        logEvent(msg, handler);
     }
 
-	private static void validateEvent(Class<?> intrface, AuditMessage msg) {
-		StringBuilder errors = new StringBuilder();
-		validateContextConstraints(intrface, errors);
+    private static void validateEvent(Class<?> intrface, AuditMessage msg) {
+        StringBuilder errors = new StringBuilder();
+        validateContextConstraints(intrface, errors);
 
-		List<Property> props = getProperties(intrface);
-		Map<String, Property> propertyMap = new HashMap<>();
+        List<Property> props = getProperties(intrface);
+        Map<String, Property> propertyMap = new HashMap<>();
 
-		for (Property property : props) {
-		    propertyMap.put(property.name, property);
-		    if (property.isRequired && !msg.containsKey(property.name)) {
-		        if (errors.length() > 0) {
-		            errors.append("\n");
-		        }
-		        errors.append("Required attribute ").append(property.name).append(" is missing from ").append(msg.getId().getName());
-		    }
-		    if (msg.containsKey(property.name)) {
-		        validateConstraints(false, property.constraints, property.name, msg, errors);
-		    }
-		}
+        for (Property property : props) {
+            propertyMap.put(property.name, property);
+            if (property.isRequired && !msg.containsKey(property.name)) {
+                if (errors.length() > 0) {
+                    errors.append("\n");
+                }
+                errors.append("Required attribute ").append(property.name).append(" is missing from ").append(msg.getId().getName());
+            }
+            if (msg.containsKey(property.name)) {
+                validateConstraints(false, property.constraints, property.name, msg, errors);
+            }
+        }
 
-		msg.forEach((key, value) -> {
-			if (!propertyMap.containsKey(key)) {
-				if (errors.length() > 0) {
-					errors.append("Attribute ").append(key).append(" is not defined for ").append(msg.getId().getName());
-				}
-			}
-		});
+        msg.forEach((key, value) -> {
+            if (!propertyMap.containsKey(key)) {
+                if (errors.length() > 0) {
+                    errors.append("Attribute ").append(key).append(" is not defined for ").append(msg.getId().getName());
+                }
+            }
+        });
 
-		if (errors.length() > 0) {
-		    throw new ConstraintValidationException(errors.toString());
-		}
-	}
+        if (errors.length() > 0) {
+            throw new ConstraintValidationException(errors.toString());
+        }
+    }
 
     /**
      * Used to Log the actual AuditMessage.
@@ -183,21 +183,21 @@ public class LogEventFactory {
      * @param handler Class that gets control when an exception occurs logging the event.
      */
     public static void logEvent(AuditMessage msg, AuditExceptionHandler handler) {
-	    runMessageAction(() -> AUDIT_LOGGER.logEvent(msg), msg, handler);
+        runMessageAction(() -> AUDIT_LOGGER.logEvent(msg), msg, handler);
     }
 
-	private static void runMessageAction(Runnable action, AuditMessage msg, AuditExceptionHandler handler) {
-		try {
-			action.run();
-		} catch (Throwable ex) {
-		    if (handler == null) {
-		        handler = defaultExceptionHandler;
-		    }
-		    handler.handleException(msg, ex);
-		}
-	}
+    private static void runMessageAction(Runnable action, AuditMessage msg, AuditExceptionHandler handler) {
+        try {
+            action.run();
+        } catch (Throwable ex) {
+            if (handler == null) {
+                handler = defaultExceptionHandler;
+            }
+            handler.handleException(msg, ex);
+        }
+    }
 
-	public static List<String> getPropertyNames(String className) {
+    public static List<String> getPropertyNames(String className) {
         Class<?> intrface = getClass(className);
         List<String> names;
         if (intrface != null) {
@@ -261,35 +261,35 @@ public class LogEventFactory {
         return null;
     }
 
-	private static class AuditProxy implements InvocationHandler {
+    private static class AuditProxy implements InvocationHandler {
 
-		private final AuditMessage msg;
-		private final Class<?> intrface;
+        private final AuditMessage msg;
+        private final Class<?> intrface;
         private AuditExceptionHandler auditExceptionHandler;
 
-		AuditProxy(AuditMessage msg, Class<?> intrface, AuditExceptionHandler auditExceptionHandler) {
-			this.msg = msg;
-			this.intrface = intrface;
-			this.auditExceptionHandler = auditExceptionHandler;
-		}
+        AuditProxy(AuditMessage msg, Class<?> intrface, AuditExceptionHandler auditExceptionHandler) {
+            this.msg = msg;
+            this.intrface = intrface;
+            this.auditExceptionHandler = auditExceptionHandler;
+        }
 
         public AuditMessage getMessage() {
             return msg;
         }
 
-		@Override
-		public Object invoke(Object o, Method method, Object[] objects) {
-			if (method.getName().equals("toString") && method.getParameterCount() == 0) {
-				return msg.toString();
-			}
+        @Override
+        public Object invoke(Object o, Method method, Object[] objects) {
+            if (method.getName().equals("toString") && method.getParameterCount() == 0) {
+                return msg.toString();
+            }
 
-			if (method.getName().equals("logEvent")) {
+            if (method.getName().equals("logEvent")) {
 
-				runMessageAction(() -> validateEvent(intrface, msg), msg, auditExceptionHandler);
+                runMessageAction(() -> validateEvent(intrface, msg), msg, auditExceptionHandler);
 
-				logEvent(msg, auditExceptionHandler);
+                logEvent(msg, auditExceptionHandler);
                 return null;
-			}
+            }
 
             if (method.getName().equals("setCompletionStatus")) {
                 if (objects == null || objects[0] == null) {
@@ -301,63 +301,63 @@ public class LogEventFactory {
             }
 
             if (method.getName().equals("setAuditExceptionHandler")) {
-			    if (objects == null || objects[0] == null) {
+                if (objects == null || objects[0] == null) {
                     auditExceptionHandler = NOOP_EXCEPTION_HANDLER;
                 } else if (objects[0] instanceof AuditExceptionHandler) {
-			        auditExceptionHandler = (AuditExceptionHandler) objects[0];
+                    auditExceptionHandler = (AuditExceptionHandler) objects[0];
                 } else {
-			        throw new IllegalArgumentException(objects[0] + " is not an " + AuditExceptionHandler.class.getName());
+                    throw new IllegalArgumentException(objects[0] + " is not an " + AuditExceptionHandler.class.getName());
                 }
                 return null;
             }
 
-			if (method.getName().startsWith("set")) {
-				runMessageAction(() -> setProperty(method, objects), msg, auditExceptionHandler);
-				return null;
-			}
+            if (method.getName().startsWith("set")) {
+                runMessageAction(() -> setProperty(method, objects), msg, auditExceptionHandler);
+                return null;
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		@SuppressWarnings("unchecked")
-		private void setProperty(Method method, Object[] objects) {
-			String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
-			if (objects == null || objects[0] == null) {
-				throw new IllegalArgumentException("No value to be set for " + name);
-			}
+        @SuppressWarnings("unchecked")
+        private void setProperty(Method method, Object[] objects) {
+            String name = NamingUtils.lowerFirst(NamingUtils.getMethodShortName(method.getName()));
+            if (objects == null || objects[0] == null) {
+                throw new IllegalArgumentException("No value to be set for " + name);
+            }
 
-			StringBuilder errors = new StringBuilder();
-			Annotation[] annotations = method.getDeclaredAnnotations();
-			for (Annotation annotation : annotations) {
-				if (annotation instanceof Constraints) {
-					Constraints constraints = (Constraints) annotation;
-					validateConstraints(false, constraints.value(), name, objects[0].toString(),
-							errors);
-				} else if (annotation instanceof Constraint) {
-					Constraint constraint = (Constraint) annotation;
-					constraintPlugins.validateConstraint(false, constraint.constraintType(),
-							name, objects[0].toString(), constraint.constraintValue(), errors);
-				}
-			}
-			if (errors.length() > 0) {
-				throw new ConstraintValidationException(errors.toString());
-			}
+            StringBuilder errors = new StringBuilder();
+            Annotation[] annotations = method.getDeclaredAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation instanceof Constraints) {
+                    Constraints constraints = (Constraints) annotation;
+                    validateConstraints(false, constraints.value(), name, objects[0].toString(),
+                            errors);
+                } else if (annotation instanceof Constraint) {
+                    Constraint constraint = (Constraint) annotation;
+                    constraintPlugins.validateConstraint(false, constraint.constraintType(),
+                            name, objects[0].toString(), constraint.constraintValue(), errors);
+                }
+            }
+            if (errors.length() > 0) {
+                throw new ConstraintValidationException(errors.toString());
+            }
 
-			String result;
-			if (objects[0] instanceof List) {
-				result = StringUtils.join(objects, ", ");
-			} else if (objects[0] instanceof Map) {
-				StructuredDataMessage extra = new StructuredDataMessage(name, null, null);
-				extra.putAll((Map) objects[0]);
-				msg.addContent(name, extra);
-				return;
-			} else {
-				result = objects[0].toString();
-			}
+            String result;
+            if (objects[0] instanceof List) {
+                result = StringUtils.join(objects, ", ");
+            } else if (objects[0] instanceof Map) {
+                StructuredDataMessage extra = new StructuredDataMessage(name, null, null);
+                extra.putAll((Map) objects[0]);
+                msg.addContent(name, extra);
+                return;
+            } else {
+                result = objects[0].toString();
+            }
 
-			msg.put(name, result);
-		}
-	}
+            msg.put(name, result);
+        }
+    }
 
     private static void validateConstraints(boolean isRequestContext, Constraint[] constraints, String name,
                                             AuditMessage msg, StringBuilder errors) {

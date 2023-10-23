@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
-  ~ contributor license agreements. See the NOTICE file distributed with
+  ~ contributor license agreements.  See the NOTICE file distributed with
   ~ this work for additional information regarding copyright ownership.
-  ~ The ASF licenses this file to You under the Apache license, Version 2.0
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
   ~ (the "License"); you may not use this file except in compliance with
-  ~ the License. You may obtain a copy of the License at
+  ~ the License.  You may obtain a copy of the License at
   ~
   ~      http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the license for the specific language governing permissions and
-  ~ limitations under the license.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.logging.log4j</groupId>
-  <artifactId>log4j-audit-parent</artifactId>
-  <packaging>pom</packaging>
-  <name>Apache Log4j Audit</name>
-  <version>1.0.2-SNAPSHOT</version>
   <parent>
     <groupId>org.apache.logging</groupId>
     <artifactId>logging-parent</artifactId>
     <version>10.2.0</version>
   </parent>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-audit-parent</artifactId>
+  <version>1.0.2-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Apache Log4j Audit</name>
   <description>Apache Log4j Audit</description>
   <url>http://logging.apache.org/log4j-audit</url>
-  <issueManagement>
-    <system>JIRA</system>
-    <url>https://issues.apache.org/jira/browse/LOG4J2</url>
-  </issueManagement>
-  <ciManagement>
-    <system>Jenkins</system>
-    <url>https://builds.apache.org/job/Log4j-Audit/</url>
-  </ciManagement>
   <inceptionYear>2016</inceptionYear>
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>https://www.apache.org</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <developers>
     <developer>
       <id>rgoers</id>
@@ -61,8 +64,7 @@
     </developer>
   </developers>
   <!-- Contributors -->
-  <contributors>
-   </contributors>
+  <contributors />
   <mailingLists>
     <mailingList>
       <name>log4j-user</name>
@@ -87,23 +89,40 @@
       </otherArchives>
     </mailingList>
   </mailingLists>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+  <modules>
+    <module>log4j-catalog</module>
+    <module>log4j-audit</module>
+  </modules>
   <scm>
     <connection>scm:git:https://github.com/apache/logging-log4j-audit.git</connection>
     <developerConnection>scm:git:https://github.com/apache/logging-log4j-audit.git</developerConnection>
-    <url>https://github.com/apache/logging-log4j-audit</url>
     <tag>HEAD</tag>
+    <url>https://github.com/apache/logging-log4j-audit</url>
   </scm>
-  <organization>
-    <name>Apache Software Foundation</name>
-    <url>https://www.apache.org</url>
-  </organization>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://issues.apache.org/jira/browse/LOG4J2</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/job/Log4j-Audit/</url>
+  </ciManagement>
+  <distributionManagement>
+    <repository>
+      <id>apache.releases.https</id>
+      <name>Apache Release Distribution Repository</name>
+      <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>apache.snapshots.https</id>
+      <name>Apache Development Snapshot Repository</name>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit</url>
+    </site>
+  </distributionManagement>
   <properties>
     <log4jParentDir>${basedir}</log4jParentDir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -178,20 +197,6 @@
     <!-- Allow Clirr severity to be overriden by the command-line option -DminSeverity=level -->
     <minSeverity>info</minSeverity>
   </properties>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>apache</id>
-      <url>https://repository.apache.org/content/repositories/releases/</url>
-    </pluginRepository>
-<!--     <pluginRepository> -->
-<!--       <id>apache.snapshots</id> -->
-<!--       <name>Apache snapshots repository</name> -->
-<!--       <url>http://repository.apache.org/content/groups/snapshots</url> -->
-<!--       <snapshots> -->
-<!--         <enabled>true</enabled> -->
-<!--       </snapshots> -->
-<!--     </pluginRepository>     -->
-  </pluginRepositories>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -274,9 +279,9 @@
         <version>${jaxb.version}</version>
       </dependency>
       <dependency>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-          <version>${javax.annotation.version}</version>
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>${javax.annotation.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -542,14 +547,28 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache</id>
+      <url>https://repository.apache.org/content/repositories/releases/</url>
+    </pluginRepository>
+    <!--     <pluginRepository> -->
+    <!--       <id>apache.snapshots</id> -->
+    <!--       <name>Apache snapshots repository</name> -->
+    <!--       <url>http://repository.apache.org/content/groups/snapshots</url> -->
+    <!--       <snapshots> -->
+    <!--         <enabled>true</enabled> -->
+    <!--       </snapshots> -->
+    <!--     </pluginRepository>     -->
+  </pluginRepositories>
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <inherited>true</inherited>
           <extensions>true</extensions>
+          <inherited>true</inherited>
           <executions>
             <execution>
               <goals>
@@ -631,6 +650,9 @@
         <executions>
           <execution>
             <id>enforce</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
             <configuration>
               <rules>
                 <requireJavaVersion>
@@ -638,9 +660,6 @@
                 </requireJavaVersion>
               </rules>
             </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
@@ -687,11 +706,11 @@
         <executions>
           <execution>
             <id>copy-sitecss</id>
-            <!-- fetch site.xml before creating site documentation -->
-            <phase>pre-site</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
+            <!-- fetch site.xml before creating site documentation -->
+            <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/site</outputDirectory>
               <resources>
@@ -709,14 +728,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-test</id>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <argLine>-Xms256m -Xmx1024m</argLine>
           <forkCount>2C</forkCount>
@@ -734,10 +745,27 @@
             <java.awt.headless>true</java.awt.headless>
           </systemPropertyVariables>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-test</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <java.awt.headless>true</java.awt.headless>
+          </systemPropertyVariables>
+          <argLine>-Xms256m -Xmx1024m</argLine>
+          <forkCount>1</forkCount>
+          <reuseForks>false</reuseForks>
+          <encoding>UTF-8</encoding>
+        </configuration>
         <executions>
           <execution>
             <id>integration-tests</id>
@@ -752,26 +780,10 @@
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <systemPropertyVariables>
-            <java.awt.headless>true</java.awt.headless>
-          </systemPropertyVariables>
-          <argLine>-Xms256m -Xmx1024m</argLine>
-          <forkCount>1</forkCount>
-          <reuseForks>false</reuseForks>
-          <encoding>UTF-8</encoding>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-ssh</artifactId>
-            <version>2.9</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <!-- only build English site even on other language OS -->
           <locales>en</locales>
@@ -784,6 +796,13 @@
           <templateDirectory>${log4jParentDir}/src/site</templateDirectory>
           <template>site.vm</template>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>2.9</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <!-- <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -844,6 +863,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
+        <configuration>
+          <statusIds>Resolved, Closed</statusIds>
+          <columnNames>Type,Key,Summary,Assignee,Status,Resolution,Fix Version</columnNames>
+          <component>Log4j-Audit</component>
+          <useJql>true</useJql>
+        </configuration>
         <reportSets>
           <reportSet>
             <reports>
@@ -852,16 +877,18 @@
             </reports>
           </reportSet>
         </reportSets>
-        <configuration>
-          <statusIds>Resolved, Closed</statusIds>
-          <columnNames>Type,Key,Summary,Assignee,Status,Resolution,Fix Version</columnNames>
-          <component>Log4j-Audit</component>
-          <useJql>true</useJql>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
+        <configuration>
+          <!-- you'd think these would be the defaults, right? -->
+          <customBundle>${project.basedir}/src/site/custom/project-info-report.properties</customBundle>
+          <webAccessUrl>${project.scm.url}</webAccessUrl>
+          <anonymousConnection>${project.scm.connection}</anonymousConnection>
+          <developerConnection>${project.scm.developerConnection}</developerConnection>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
         <reportSets>
           <reportSet>
             <reports>
@@ -879,14 +906,6 @@
             </reports>
           </reportSet>
         </reportSets>
-        <configuration>
-          <!-- you'd think these would be the defaults, right? -->
-            <customBundle>${project.basedir}/src/site/custom/project-info-report.properties</customBundle>
-          <webAccessUrl>${project.scm.url}</webAccessUrl>
-          <anonymousConnection>${project.scm.connection}</anonymousConnection>
-          <developerConnection>${project.scm.developerConnection}</developerConnection>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -956,51 +975,31 @@
       </plugin>
     </plugins>
   </reporting>
-  <distributionManagement>
-    <repository>
-      <id>apache.releases.https</id>
-      <name>Apache Release Distribution Repository</name>
-      <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>apache.snapshots.https</id>
-      <name>Apache Development Snapshot Repository</name>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <site>
-      <id>apache.website</id>
-      <url>scp://people.apache.org/www/logging.apache.org/log4j-audit</url>
-    </site>
-  </distributionManagement>
-  <modules>
-    <module>log4j-catalog</module>
-    <module>log4j-audit</module>
-  </modules>
   <profiles>
     <profile>
-        <id>Windows</id>
-        <activation>
-            <os>
-                <family>Windows</family>
-            </os>
-        </activation>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <argLine>-server</argLine>
-                    </configuration>
-                </plugin>
-              <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                  <argLine>-server</argLine>
-                </configuration>
-              </plugin>
-            </plugins>
-        </build>
+      <id>Windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>-server</argLine>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <argLine>-server</argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>integration-tests</id>
@@ -1009,6 +1008,12 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <reuseForks>false</reuseForks>
+              <includes>
+                <include>**/*FuncTest.java</include>
+              </includes>
+            </configuration>
             <executions>
               <execution>
                 <id>integration-tests</id>
@@ -1017,12 +1022,6 @@
                 </goals>
               </execution>
             </executions>
-            <configuration>
-              <reuseForks>false</reuseForks>
-              <includes>
-                <include>**/*FuncTest.java</include>
-              </includes>
-            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -1053,10 +1052,10 @@
             <executions>
               <execution>
                 <id>create-release-notes</id>
-                <phase>generate-resources</phase>
                 <goals>
                   <goal>announcement-generate</goal>
                 </goals>
+                <phase>generate-resources</phase>
               </execution>
             </executions>
           </plugin>
@@ -1065,6 +1064,9 @@
     </profile>
     <profile>
       <id>apache-release</id>
+      <modules>
+        <module>log4j-audit-distribution</module>
+      </modules>
       <build>
         <plugins>
           <plugin>
@@ -1080,9 +1082,6 @@
           </plugin>
         </plugins>
       </build>
-      <modules>
-        <module>log4j-audit-distribution</module>
-      </modules>
     </profile>
     <profile>
       <id>rat</id>
@@ -1113,10 +1112,10 @@
             </configuration>
             <executions>
               <execution>
-                <phase>verify</phase>
                 <goals>
                   <goal>check</goal>
                 </goals>
+                <phase>verify</phase>
               </execution>
             </executions>
           </plugin>

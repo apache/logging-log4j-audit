@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -14,6 +15,9 @@
  * limitations under the License.
  */
 package org.apache.logging.log4j.catalog.jpa;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.DataType;
@@ -35,9 +39,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
