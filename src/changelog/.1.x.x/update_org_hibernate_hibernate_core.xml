@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://logging.apache.org/log4j/changelog"
+       xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
+       type="changed">
+  <issue id="33" link="https://github.com/apache/logging-log4j-audit/pull/33"/>
+  <author id="github:dependabot"/>
+  <description format="asciidoc">Update `org.hibernate:hibernate-core` to version `5.6.15.Final`</description>
+</entry>
