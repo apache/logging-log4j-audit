@@ -41,7 +41,6 @@ jobs:
     uses: apache/logging-parent/.github/workflows/build-reusable.yaml@main
     with:
       java-version: 11
-      site-enabled: true
 
   deploy-snapshot:
     needs: build
