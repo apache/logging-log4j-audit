@@ -139,7 +139,7 @@
     <jaxb.version>2.2.7</jaxb.version>
     <jboss.logging.version>3.3.0.Final</jboss.logging.version>
     <json.version>20231013</json.version>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.2</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
     <log4j.version>2.21.0</log4j.version>
     <mockito.version>2.0.31-beta</mockito.version>
