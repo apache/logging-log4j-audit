@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
-    <version>21</version>
+    <version>30</version>
   </parent>
   <description>Apache Log4j Audit</description>
   <url>http://logging.apache.org/log4j-audit</url>
@@ -132,9 +132,9 @@
     <eclipselink.version>2.7.0</eclipselink.version>
     <httpclient.version>4.5.3</httpclient.version>
     <hsqldb.version>2.3.4</hsqldb.version>
-    <jackson.version>2.8.5</jackson.version>
     <javadoc.plugin.version>2.10.3</javadoc.plugin.version>
     <javaee.api.version>7.0</javaee.api.version>
+    <javax.annotation.version>1.3.2</javax.annotation.version>
     <javax.cache.api.version>1.0.0</javax.cache.api.version>
     <jaxb.version>2.2.7</jaxb.version>
     <jboss.logging.version>3.3.0.Final</jboss.logging.version>
@@ -150,9 +150,8 @@
     <release.plugin.version>2.5.3</release.plugin.version>
     <scm.plugin.version>1.9.4</scm.plugin.version>
     <site.plugin.version>3.4</site.plugin.version>
-    <spring.boot.version>1.5.10.RELEASE</spring.boot.version>
+    <spring.boot.version>2.7.17</spring.boot.version>
     <slf4j.version>1.8.0-alpha2</slf4j.version>
-    <spring.version>4.3.11.RELEASE</spring.version>
     <spring.agent.version>2.5.6</spring.agent.version>
     <spring.data.jpa.version>1.11.1.RELEASE</spring.data.jpa.version>
     <spring.data.redis.version>1.8.3.RELEASE</spring.data.redis.version>
@@ -196,6 +195,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-bom</artifactId>
+        <version>${log4j.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring.boot.version}</version>
@@ -233,26 +239,6 @@
         <version>${antlr.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-jsr310</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.fasterxml</groupId>
         <artifactId>classmate</artifactId>
         <version>${classmate.version}</version>
@@ -286,6 +272,11 @@
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-xjc</artifactId>
         <version>${jaxb.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+          <version>${javax.annotation.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -375,38 +366,6 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>${commons.lang.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-core</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-core</artifactId>
-        <version>${log4j.version}</version>
-        <type>test-jar</type>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-jcl</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-slf4j-impl</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-web</artifactId>
-        <version>${log4j.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.openjpa</groupId>
@@ -710,7 +669,6 @@
             <id>enforce</id>
             <configuration>
               <rules>
-                <dependencyConvergence />
                 <requireJavaVersion>
                   <version>[1.8,)</version>
                 </requireJavaVersion>

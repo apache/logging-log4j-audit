@@ -20,24 +20,22 @@ import java.util.Locale;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 public class AbstractPagingAndSortingService {
 
     protected Pageable createPageRequest(int startPage, int itemsPerPage, String sortColumn, String direction) {
         PageRequest pageRequest;
         if (sortColumn == null || sortColumn.length() == 0) {
-            pageRequest = new PageRequest(startPage, itemsPerPage);
+            pageRequest = PageRequest.of(startPage, itemsPerPage);
         } else {
             Sort.Direction sortDirection;
             if (direction == null) {
                 sortDirection = Sort.Direction.ASC;
             } else {
-                sortDirection = Sort.Direction.fromStringOrNull(direction.toUpperCase(Locale.US));
-                if (sortDirection == null) {
-                    sortDirection = Sort.Direction.ASC;
-                }
+                sortDirection = Sort.Direction.fromOptionalString(direction).orElse(Direction.ASC);
             }
-            pageRequest = new PageRequest(startPage, itemsPerPage, new Sort(sortDirection, sortColumn));
+            pageRequest = PageRequest.of(startPage, itemsPerPage, Sort.by(sortDirection, sortColumn));
         }
         return pageRequest;
     }

@@ -28,7 +28,13 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface BaseRepository <T, ID extends Serializable> extends Repository<T, ID>, JpaSpecificationExecutor<T> {
-    Optional<T> findOne(ID id);
+
+    Optional<T> findById(ID id);
+
+    default Optional<T> findOne(ID id) {
+        return findById(id);
+    }
+
     List<T> findAll();
     List<T> findAll(Specification<T> spec);
     @Modifying
