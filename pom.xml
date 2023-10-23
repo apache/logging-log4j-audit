@@ -145,7 +145,7 @@
     <mockito.version>2.0.31-beta</mockito.version>
     <pdf.plugin.version>1.2</pdf.plugin.version>
     <pmd.plugin.version>3.8</pmd.plugin.version>
-    <postgresql.version>42.2.0</postgresql.version>
+    <postgresql.version>42.6.0</postgresql.version>
     <rat.plugin.version>0.12</rat.plugin.version>
     <release.plugin.version>2.5.3</release.plugin.version>
     <scm.plugin.version>1.9.4</scm.plugin.version>
