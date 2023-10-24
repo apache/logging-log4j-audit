@@ -124,6 +124,11 @@
     </site>
   </distributionManagement>
   <properties>
+    <spotbugs.skip>true</spotbugs.skip>
+    <!-- `minimalJavaBuildVersion` is employed by `org.apache:apache`, which is the parent of us.
+         `minimalJavaBuildVersion` is used for enforcing the compiler version. -->
+    <minimalJavaBuildVersion>[11,12)</minimalJavaBuildVersion>
+
     <log4jParentDir>${basedir}</log4jParentDir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
