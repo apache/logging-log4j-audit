@@ -654,15 +654,9 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
-          <excludes>
-            <exclude>**/*.asc</exclude>
-            <exclude>.idea/**/*</exclude>
+          <excludes combine.children="append">
             <exclude>src/site/resources/js/jquery.js</exclude>
             <exclude>src/site/resources/js/jquery.min.js</exclude>
-            <!-- Generated files -->
-            <exclude>log4j-audit-distribution/target/**/*</exclude>
-            <exclude>log4j-audit-distribution/.project</exclude>
-            <exclude>log4j-audit-distribution/.settings/**</exclude>
             <exclude>RELEASE-NOTES.md</exclude>
           </excludes>
         </configuration>
