@@ -145,7 +145,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             catalogData = mapper.readValue(catalogFile, CatalogData.class);
             return catalogData;
         } catch (IOException ioe) {
-            throw new CatalogReadException("Error reading catalog from " + catalogFile.getAbsolutePath());
+            throw new CatalogReadException("Error reading catalog from " + catalogFile.getAbsolutePath(), ioe);
         }
     }
 

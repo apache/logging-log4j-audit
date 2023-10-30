@@ -17,7 +17,8 @@
 package org.apache.logging.log4j.catalog.security;
 
 
-import org.apache.http.HttpStatus;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -41,7 +42,7 @@ public class LocalAuthorizationInterceptor extends HandlerInterceptorAdapter {
             String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.equals(token)) {
                 LOGGER.error("Authorization value of " + authHeader + " does not match expected value of " + token);
-                response.sendError(HttpStatus.SC_UNAUTHORIZED);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
             }
 
