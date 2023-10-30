@@ -21,6 +21,13 @@ updates:
   schedule:
     interval: "daily"
   target-branch: "master"
+  ignore:
+    # EclipseLink 3.x is Jakarta EE 9
+    - dependency-name: "org.eclipse.persistence:*"
+      versions: "[3, )"
+    # Spring Boot 3.x is Jakarta EE 9
+    - dependency-name: "org.springframework.boot:*"
+      versions: "[3, )"
 
 - package-ecosystem: github-actions
   directory: "/"
