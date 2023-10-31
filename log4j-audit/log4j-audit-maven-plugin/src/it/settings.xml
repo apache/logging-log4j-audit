@@ -25,7 +25,7 @@
       <repositories>
         <repository>
           <id>local.central</id>
-          <url>http://repository.apache.org/content/groups/public</url>
+          <url>https://repository.apache.org/content/groups/public</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -37,7 +37,7 @@
       <pluginRepositories>
         <pluginRepository>
           <id>local.central</id>
-          <url>http://repository.apache.org/content/groups/public</url>
+          <url>https://repository.apache.org/content/groups/public</url>
           <releases>
             <enabled>true</enabled>
           </releases>
