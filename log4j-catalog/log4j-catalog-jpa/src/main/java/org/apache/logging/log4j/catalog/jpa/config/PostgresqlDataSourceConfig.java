@@ -18,7 +18,7 @@ package org.apache.logging.log4j.catalog.jpa.config;
 
 import javax.sql.DataSource;
 
-import com.mchange.v2.c3p0.DriverManagerDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.annotation.JdbcUrl;
@@ -47,11 +47,11 @@ public class PostgresqlDataSourceConfig implements DataSourceConfig {
     @Bean
     public DataSource dataSource() {
         LOGGER.debug("Creating PostgresQL data source for {}", url);
-        DriverManagerDataSource driver = new DriverManagerDataSource();
-        driver.setDriverClass("org.postgresql.Driver");
-        driver.setJdbcUrl(url);
-        driver.setUser(userName);
-        driver.setPassword(password);
-        return driver;
+        final BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl(url);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+        return dataSource;
     }
 }

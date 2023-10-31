@@ -186,7 +186,6 @@
     <swagger.annotations.version>1.5.8</swagger.annotations.version>
     <thymeleaf-extras-java8time.version>3.0.0.RELEASE</thymeleaf-extras-java8time.version>
     <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
-    <c3p0.version>0.9.5.2</c3p0.version>
     <serp.version>1.15.1</serp.version>
     <!-- make sure to update these for each release! -->
 
@@ -261,11 +260,6 @@
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
         <version>1.8.9</version>
-      </dependency>
-      <dependency>
-        <groupId>com.mchange</groupId>
-        <artifactId>c3p0</artifactId>
-        <version>0.9.5.2</version>
       </dependency>
       <dependency>
         <groupId>javax.cache</groupId>
@@ -396,11 +390,6 @@
         <groupId>org.apache.maven.plugin-tools</groupId>
         <artifactId>maven-plugin-tools-api</artifactId>
         <version>3.5</version>
-      </dependency>
-      <dependency>
-        <groupId>com.mchange</groupId>
-        <artifactId>mchange-commons-java</artifactId>
-        <version>0.2.11</version>
       </dependency>
       <dependency>
         <groupId>org.modelmapper</groupId>
