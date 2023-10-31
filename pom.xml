@@ -183,7 +183,7 @@
     <surefire.plugin.version>2.19.1</surefire.plugin.version>
     <swagger.version>2.2.2</swagger.version>
     <swagger.ui.version>2.2.2</swagger.ui.version>
-    <swagger.annotations.version>1.5.8</swagger.annotations.version>
+    <swagger.annotations.version>1.6.12</swagger.annotations.version>
     <thymeleaf-extras-java8time.version>3.0.0.RELEASE</thymeleaf-extras-java8time.version>
     <thymeleaf-layout-dialect.version>3.3.0</thymeleaf-layout-dialect.version>
     <serp.version>1.15.1</serp.version>
