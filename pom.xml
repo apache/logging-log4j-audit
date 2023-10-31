@@ -152,7 +152,7 @@
     <findbugs.plugin.version>3.0.5</findbugs.plugin.version>
     <hibernate.version>5.6.15.Final</hibernate.version>
     <eclipselink.version>2.7.0</eclipselink.version>
-    <httpclient.version>4.5.3</httpclient.version>
+    <httpclient.version>4.5.13</httpclient.version>
     <hsqldb.version>2.7.1</hsqldb.version>
     <javadoc.plugin.version>2.10.3</javadoc.plugin.version>
     <javaee.api.version>7.0</javaee.api.version>
