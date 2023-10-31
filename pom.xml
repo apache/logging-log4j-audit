@@ -184,8 +184,7 @@
     <spring.security.version>3.2.7.RELEASE</spring.security.version>
     <spring.ws.version>2.2.2.RELEASE</spring.ws.version>
     <spring.hateoas.version>0.23.0.RELEASE</spring.hateoas.version>
-    <swagger.version>2.10.5</swagger.version>
-    <swagger.ui.version>2.2.2</swagger.ui.version>
+    <springfox.version>2.10.5</springfox.version>
     <swagger.annotations.version>1.6.12</swagger.annotations.version>
     <thymeleaf-extras-java8time.version>3.0.0.RELEASE</thymeleaf-extras-java8time.version>
     <thymeleaf-layout-dialect.version>3.3.0</thymeleaf-layout-dialect.version>
@@ -458,12 +457,17 @@
       <dependency>
         <groupId>io.springfox</groupId>
         <artifactId>springfox-swagger2</artifactId>
-        <version>${swagger.version}</version>
+        <version>${springfox.version}</version>
       </dependency>
       <dependency>
         <groupId>io.springfox</groupId>
         <artifactId>springfox-swagger-ui</artifactId>
-        <version>${swagger.ui.version}</version>
+        <version>${springfox.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-spring-webmvc</artifactId>
+        <version>${springfox.version}</version>
       </dependency>
       <dependency>
         <groupId>io.swagger</groupId>
