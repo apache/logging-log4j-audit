@@ -35,6 +35,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <log4jParentDir>${basedir}/../..</log4jParentDir>
+    <bnd.skip>true</bnd.skip>
   </properties>
   <dependencies>
     <dependency>
@@ -182,25 +183,20 @@
   </dependencies>
   <build>
     <plugins>
-      <!-- Disable `maven-bnd-plugin` -->
-      <plugin>
-        <groupId>biz.aQute.bnd</groupId>
-        <artifactId>bnd-maven-plugin</artifactId>
-        <extensions>false</extensions>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
+        <executions>
+          <execution>
+            <id>make-war</id>
+            <goals>
+              <goal>war</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
