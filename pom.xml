@@ -160,7 +160,7 @@
     <commons.lang.version>3.13.0</commons.lang.version>
     <commons.logging.version>1.2</commons.logging.version>
     <commons.pool.version>1.6</commons.pool.version>
-    <commons.validator.version>1.5.0</commons.validator.version>
+    <commons.validator.version>1.7</commons.validator.version>
     <hibernate.version>5.6.15.Final</hibernate.version>
     <eclipselink.version>2.7.0</eclipselink.version>
     <httpclient.version>4.5.14</httpclient.version>
