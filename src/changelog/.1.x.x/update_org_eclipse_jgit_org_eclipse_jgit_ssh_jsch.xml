@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://logging.apache.org/log4j/changelog"
+       xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
+       type="changed">
+  <issue id="54" link="https://github.com/apache/logging-log4j-audit/pull/54"/>
+  <description format="asciidoc">Update `org.eclipse.jgit:org.eclipse.jgit.ssh.jsch` to version `6.7.0.202309050840-r`</description>
+</entry>
