@@ -206,26 +206,13 @@
         </dependency>
       </dependencies>
 
-      <repositories>
-        <repository>
-          <id>com.ethlo.eclipselink.tools</id>
-          <url>https://ethlo.com/maven</url>
-        </repository>
-      </repositories>
-
-      <pluginRepositories>
-        <pluginRepository>
-          <id>com.ethlo.eclipselink.tools</id>
-          <url>https://ethlo.com/maven</url>
-        </pluginRepository>
-      </pluginRepositories>
       <build>
         <plugins>
           <!-- Static weaver for EclipseLink -->
           <plugin>
             <groupId>com.ethlo.persistence.tools</groupId>
             <artifactId>eclipselink-maven-plugin</artifactId>
-            <version>3.0.0</version>
+            <version>2.7.9.1</version>
             <dependencies>
               <dependency>
                 <groupId>org.eclipse.persistence</groupId>

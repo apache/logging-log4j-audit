@@ -28,6 +28,9 @@ updates:
     # Spring Boot 3.x is Jakarta EE 9
     - dependency-name: "org.springframework.boot:*"
       versions: "[3, )"
+    # The EclipseLink Maven plugin version 3.x requires Java 17
+    - dependency-name: "com.ethlo.persistence.tools:*"
+      versions: "[3, )"
 
 - package-ecosystem: github-actions
   directory: "/"
