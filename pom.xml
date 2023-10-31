@@ -394,7 +394,7 @@
       <dependency>
         <groupId>org.modelmapper</groupId>
         <artifactId>modelmapper</artifactId>
-        <version>0.7.5</version>
+        <version>3.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.modelmapper.extensions</groupId>
