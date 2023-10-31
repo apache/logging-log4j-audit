@@ -31,6 +31,9 @@ updates:
     # The EclipseLink Maven plugin version 3.x requires Java 17
     - dependency-name: "com.ethlo.persistence.tools:*"
       versions: "[3, )"
+    # SpringFox 3.x needs a code update
+    - dependency-name: "io.springfox:*"
+      versions: "[3, )"
 
 - package-ecosystem: github-actions
   directory: "/"
