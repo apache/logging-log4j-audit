@@ -184,7 +184,7 @@
     <spring.security.version>3.2.7.RELEASE</spring.security.version>
     <spring.ws.version>2.2.2.RELEASE</spring.ws.version>
     <spring.hateoas.version>0.23.0.RELEASE</spring.hateoas.version>
-    <swagger.version>2.2.2</swagger.version>
+    <swagger.version>2.10.5</swagger.version>
     <swagger.ui.version>2.2.2</swagger.ui.version>
     <swagger.annotations.version>1.6.12</swagger.annotations.version>
     <thymeleaf-extras-java8time.version>3.0.0.RELEASE</thymeleaf-extras-java8time.version>
