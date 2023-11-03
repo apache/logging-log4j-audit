@@ -173,7 +173,7 @@
     <junit.version>4.13.2</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
     <log4j2.version>2.21.1</log4j2.version>
-    <mockito.version>5.6.0</mockito.version>
+    <mockito.version>5.7.0</mockito.version>
     <plexus-utils.version>3.0.24</plexus-utils.version>
     <postgresql.version>42.6.0</postgresql.version>
     <spring.boot.version>2.7.17</spring.boot.version>
