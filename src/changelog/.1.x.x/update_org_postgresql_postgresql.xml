@@ -3,7 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="36" link="https://github.com/apache/logging-log4j-audit/pull/36"/>
-  <author id="github:dependabot"/>
-  <description format="asciidoc">Update `org.postgresql:postgresql` to version `42.6.0`</description>
+  <issue id="92" link="https://github.com/apache/logging-log4j-audit/pull/92"/>
+  <description format="asciidoc">Update `org.postgresql:postgresql` to version `42.7.0`</description>
 </entry>
