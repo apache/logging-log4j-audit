@@ -157,7 +157,7 @@
     <commons.codec.version>1.16.0</commons.codec.version>
     <commons.collections.version>3.2.2</commons.collections.version>
     <commons.io.version>2.15.0</commons.io.version>
-    <commons.lang.version>3.13.0</commons.lang.version>
+    <commons.lang.version>3.14.0</commons.lang.version>
     <commons.logging.version>1.2</commons.logging.version>
     <commons.pool.version>1.6</commons.pool.version>
     <commons.validator.version>1.7</commons.validator.version>
