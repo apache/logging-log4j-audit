@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="52" link="https://github.com/apache/logging-log4j-audit/pull/52"/>
-  <description format="asciidoc">Update `org.apache.maven.plugin-tools:maven-plugin-annotations` to version `3.10.1`</description>
+  <issue id="88" link="https://github.com/apache/logging-log4j-audit/pull/88"/>
+  <description format="asciidoc">Update `org.apache.maven.plugin-tools:maven-plugin-annotations` to version `3.10.2`</description>
 </entry>
