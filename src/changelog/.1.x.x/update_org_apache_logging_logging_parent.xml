@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="89" link="https://github.com/apache/logging-log4j-audit/pull/89"/>
-  <description format="asciidoc">Update `org.apache.logging:logging-parent` to version `10.3.0`</description>
+  <issue id="90" link="https://github.com/apache/logging-log4j-audit/pull/90"/>
+  <description format="asciidoc">Update `org.apache.logging:logging-parent` to version `10.4.0`</description>
 </entry>
