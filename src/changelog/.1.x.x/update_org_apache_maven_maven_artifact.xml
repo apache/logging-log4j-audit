@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="69" link="https://github.com/apache/logging-log4j-audit/pull/69"/>
-  <description format="asciidoc">Update `org.apache.maven:maven-artifact` to version `3.9.5`</description>
+  <issue id="98" link="https://github.com/apache/logging-log4j-audit/pull/98"/>
+  <description format="asciidoc">Update `org.apache.maven:maven-artifact` to version `3.9.6`</description>
 </entry>
