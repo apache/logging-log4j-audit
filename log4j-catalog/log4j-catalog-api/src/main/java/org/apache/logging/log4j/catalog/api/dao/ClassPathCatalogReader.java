@@ -16,6 +16,9 @@
  */
 package org.apache.logging.log4j.catalog.api.dao;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,10 +30,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Map;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.CatalogData;
@@ -50,8 +49,9 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
     private final LocalDateTime lastUpdated;
 
     public ClassPathCatalogReader(Map<String, String> attributes) throws IOException {
-        String catalogFile = attributes != null ?
-            attributes.getOrDefault(CATALOG_ATTRIBUTE_NAME, DEFAULT_CATALOG_FILE) : DEFAULT_CATALOG_FILE;
+        String catalogFile = attributes != null
+                ? attributes.getOrDefault(CATALOG_ATTRIBUTE_NAME, DEFAULT_CATALOG_FILE)
+                : DEFAULT_CATALOG_FILE;
         Collection<URL> catalogs = LoaderUtil.findResources(catalogFile);
         if (catalogs.isEmpty()) {
             LOGGER.error("No catalog named {} could be found on the class path", catalogFile);
@@ -67,8 +67,8 @@ public class ClassPathCatalogReader extends AbstractCatalogReader {
         LocalDateTime localDateTime = null;
         try {
             URLConnection connection = catalogURL.openConnection();
-            localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(connection.getLastModified()),
-                    ZoneId.systemDefault());
+            localDateTime =
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(connection.getLastModified()), ZoneId.systemDefault());
         } catch (IOException ioe) {
             LOGGER.warn("Unable to open connection to {}", catalogURL.toString());
         }

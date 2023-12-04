@@ -23,7 +23,7 @@ public final class Versions {
     private static final String VERSION_KEY = "version";
     private static final String VERSION_1 = "1.0";
 
-    public static final String V1_0 = TYPE + "/" + SUB_TYPE + "; " + VERSION_KEY + "=\"" + VERSION_1 +"\"";
+    public static final String V1_0 = TYPE + "/" + SUB_TYPE + "; " + VERSION_KEY + "=\"" + VERSION_1 + "\"";
 
-    private Versions() { }
+    private Versions() {}
 }

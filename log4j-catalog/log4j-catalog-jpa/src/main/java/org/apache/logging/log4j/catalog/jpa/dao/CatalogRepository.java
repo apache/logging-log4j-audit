@@ -18,5 +18,4 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 
 import org.apache.logging.log4j.catalog.jpa.model.CatalogModel;
 
-public interface CatalogRepository extends BaseRepository<CatalogModel, Long> {
-}
+public interface CatalogRepository extends BaseRepository<CatalogModel, Long> {}

@@ -16,6 +16,8 @@
  */
 package org.apache.logging.log4j.audit;
 
+import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -26,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,8 +45,6 @@ import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
-import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
-
 /**
  * Handles logging generated Events. Every Event extends the AuditProxy, which handles construction of the
  * Event and logging of the Event.
@@ -62,8 +61,7 @@ public class LogEventFactory {
         throw new AuditException("Error logging event " + message.getId().getName(), ex);
     };
 
-    private static final AuditExceptionHandler NOOP_EXCEPTION_HANDLER = (message, ex) -> {
-    };
+    private static final AuditExceptionHandler NOOP_EXCEPTION_HANDLER = (message, ex) -> {};
 
     private static AuditExceptionHandler defaultExceptionHandler = DEFAULT_HANDLER;
 
@@ -88,11 +86,11 @@ public class LogEventFactory {
     @SuppressWarnings("unchecked")
     public static <T extends AuditEvent> T getEvent(Class<T> intrface) {
 
-        Class<?>[] interfaces = new Class<?>[] { intrface };
+        Class<?>[] interfaces = new Class<?>[] {intrface};
 
         AuditMessage msg = buildAuditMessage(intrface);
-        AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(intrface.getClassLoader(), interfaces,
-                new AuditProxy(msg, intrface, defaultExceptionHandler));
+        AuditEvent audit = (AuditEvent) Proxy.newProxyInstance(
+                intrface.getClassLoader(), interfaces, new AuditProxy(msg, intrface, defaultExceptionHandler));
 
         return (T) audit;
     }
@@ -157,7 +155,10 @@ public class LogEventFactory {
                 if (errors.length() > 0) {
                     errors.append("\n");
                 }
-                errors.append("Required attribute ").append(property.name).append(" is missing from ").append(msg.getId().getName());
+                errors.append("Required attribute ")
+                        .append(property.name)
+                        .append(" is missing from ")
+                        .append(msg.getId().getName());
             }
             if (msg.containsKey(property.name)) {
                 validateConstraints(false, property.constraints, property.name, msg, errors);
@@ -167,7 +168,10 @@ public class LogEventFactory {
         msg.forEach((key, value) -> {
             if (!propertyMap.containsKey(key)) {
                 if (errors.length() > 0) {
-                    errors.append("Attribute ").append(key).append(" is not defined for ").append(msg.getId().getName());
+                    errors.append("Attribute ")
+                            .append(key)
+                            .append(" is not defined for ")
+                            .append(msg.getId().getName());
                 }
             }
         });
@@ -306,7 +310,8 @@ public class LogEventFactory {
                 } else if (objects[0] instanceof AuditExceptionHandler) {
                     auditExceptionHandler = (AuditExceptionHandler) objects[0];
                 } else {
-                    throw new IllegalArgumentException(objects[0] + " is not an " + AuditExceptionHandler.class.getName());
+                    throw new IllegalArgumentException(
+                            objects[0] + " is not an " + AuditExceptionHandler.class.getName());
                 }
                 return null;
             }
@@ -331,12 +336,16 @@ public class LogEventFactory {
             for (Annotation annotation : annotations) {
                 if (annotation instanceof Constraints) {
                     Constraints constraints = (Constraints) annotation;
-                    validateConstraints(false, constraints.value(), name, objects[0].toString(),
-                            errors);
+                    validateConstraints(false, constraints.value(), name, objects[0].toString(), errors);
                 } else if (annotation instanceof Constraint) {
                     Constraint constraint = (Constraint) annotation;
-                    constraintPlugins.validateConstraint(false, constraint.constraintType(),
-                            name, objects[0].toString(), constraint.constraintValue(), errors);
+                    constraintPlugins.validateConstraint(
+                            false,
+                            constraint.constraintType(),
+                            name,
+                            objects[0].toString(),
+                            constraint.constraintValue(),
+                            errors);
                 }
             }
             if (errors.length() > 0) {
@@ -359,17 +368,17 @@ public class LogEventFactory {
         }
     }
 
-    private static void validateConstraints(boolean isRequestContext, Constraint[] constraints, String name,
-                                            AuditMessage msg, StringBuilder errors) {
+    private static void validateConstraints(
+            boolean isRequestContext, Constraint[] constraints, String name, AuditMessage msg, StringBuilder errors) {
         String value = isRequestContext ? ThreadContext.get(name) : msg.get(name);
         validateConstraints(isRequestContext, constraints, name, value, errors);
     }
 
-    private static void validateConstraints(boolean isRequestContext, Constraint[] constraints, String name,
-                                            String value, StringBuilder errors) {
+    private static void validateConstraints(
+            boolean isRequestContext, Constraint[] constraints, String name, String value, StringBuilder errors) {
         for (Constraint constraint : constraints) {
-            constraintPlugins.validateConstraint(isRequestContext, constraint.constraintType(), name, value,
-                    constraint.constraintValue(), errors);
+            constraintPlugins.validateConstraint(
+                    isRequestContext, constraint.constraintType(), name, value, constraint.constraintValue(), errors);
         }
     }
 
@@ -415,5 +424,4 @@ public class LogEventFactory {
             this.isRequired = isRequired;
         }
     }
-
 }

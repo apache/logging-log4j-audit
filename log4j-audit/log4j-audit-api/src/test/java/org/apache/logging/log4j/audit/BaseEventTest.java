@@ -16,8 +16,9 @@
  */
 package org.apache.logging.log4j.audit;
 
-import java.util.Map;
+import static org.junit.Assert.assertNotNull;
 
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Appender;
@@ -26,8 +27,6 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.test.appender.ListAppender;
 import org.junit.Before;
 import org.junit.BeforeClass;
-
-import static org.junit.Assert.assertNotNull;
 
 public class BaseEventTest {
 

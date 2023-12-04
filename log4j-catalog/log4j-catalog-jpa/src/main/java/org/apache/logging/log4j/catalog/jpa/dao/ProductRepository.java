@@ -18,5 +18,4 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 
 import org.apache.logging.log4j.catalog.jpa.model.ProductModel;
 
-public interface ProductRepository extends PagingAndSortingRepository<ProductModel, Long> {
-}
+public interface ProductRepository extends PagingAndSortingRepository<ProductModel, Long> {}

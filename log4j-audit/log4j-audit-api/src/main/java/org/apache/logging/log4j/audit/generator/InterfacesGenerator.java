@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.util.NamingUtils;
@@ -149,8 +148,8 @@ public class InterfacesGenerator {
                     errors = true;
                     continue;
                 }
-                ClassGenerator classGenerator = new ClassGenerator(
-                        NamingUtils.getClassName(event.getName()), outputDirectory);
+                ClassGenerator classGenerator =
+                        new ClassGenerator(NamingUtils.getClassName(event.getName()), outputDirectory);
                 classGenerator.setClass(false);
                 classGenerator.setPackageName(packageName);
                 classGenerator.setParentClassName(PARENT_CLASS);
@@ -203,18 +202,20 @@ public class InterfacesGenerator {
 
                         String type = attribute.getDataType().getTypeName();
 
-                        MethodDefinition definition = new MethodDefinition("void",
-                                NamingUtils.getMutatorName(name));
-                        if (!attribute.isRequestContext() && attribute.getDataType().getImportClass() != null) {
-                            if (!importedTypes.containsKey(attribute.getDataType().getTypeName())) {
-                                importedTypes.put(attribute.getDataType().getTypeName(), attribute.getDataType().getImportClass());
+                        MethodDefinition definition = new MethodDefinition("void", NamingUtils.getMutatorName(name));
+                        if (!attribute.isRequestContext()
+                                && attribute.getDataType().getImportClass() != null) {
+                            if (!importedTypes.containsKey(
+                                    attribute.getDataType().getTypeName())) {
+                                importedTypes.put(
+                                        attribute.getDataType().getTypeName(),
+                                        attribute.getDataType().getImportClass());
                             }
                         }
                         definition.addParameter(new Parameter(name, type, attribute.getDescription()));
                         definition.setInterface(true);
                         definition.setVisability("public");
-                        definition.setJavadocComments(attribute.getDisplayName()
-                                + " : " + attribute.getDescription());
+                        definition.setJavadocComments(attribute.getDisplayName() + " : " + attribute.getDescription());
 
                         StringBuilder buffer = new StringBuilder();
                         Set<Constraint> constraints = attribute.getConstraints();
@@ -238,7 +239,6 @@ public class InterfacesGenerator {
                             definition.setAnnotation(buffer.toString());
                         }
                         classGenerator.addMethod(definition);
-
                     }
                 }
                 if (importedTypes.size() > 0) {
@@ -266,16 +266,18 @@ public class InterfacesGenerator {
                         Boolean isRequired = null;
                         final String attrName = name;
                         if (event.getAttributes() != null) {
-                            Optional<EventAttribute> optional = event.getAttributes().stream().filter(a -> attrName.equals(a.getName())).findFirst();
+                            Optional<EventAttribute> optional = event.getAttributes().stream()
+                                    .filter(a -> attrName.equals(a.getName()))
+                                    .findFirst();
                             if (optional.isPresent()) {
                                 isRequired = optional.get().isRequired();
                             }
                         }
-                        if ((isRequired != null && isRequired) ||
-                                (isRequired == null && requestContextIsRequired.get(name))) {
+                        if ((isRequired != null && isRequired)
+                                || (isRequired == null && requestContextIsRequired.get(name))) {
                             reqCtx.append(", ").append(REQUIRED_ATTR);
                         }
-                        Set<Constraint> constraints =  entry.getValue().getConstraints();
+                        Set<Constraint> constraints = entry.getValue().getConstraints();
                         if (constraints != null && constraints.size() > 0) {
                             anyConstraints = true;
                             reqCtx.append(CONSTRAINTS_ATTR);
@@ -288,7 +290,6 @@ public class InterfacesGenerator {
                                 appendConstraint(constraint, reqCtx);
                             }
                             reqCtx.append("}");
-
                         }
                     }
                     reqCtx.append(")");
@@ -313,8 +314,10 @@ public class InterfacesGenerator {
 
     void appendConstraint(Constraint constraint, StringBuilder buffer) {
         ConstraintType type = constraint.getConstraintType();
-        // Add the escapes since they have been removed when converting the original data to a Java Strinng. They need to
+        // Add the escapes since they have been removed when converting the original data to a Java Strinng. They need
+        // to
         // be added back for use in the Constraint declaration.
-        buffer.append(String.format(CONSTRAINT, type.getName(), constraint.getValue().replace("\\", "\\\\")));
+        buffer.append(
+                String.format(CONSTRAINT, type.getName(), constraint.getValue().replace("\\", "\\\\")));
     }
 }

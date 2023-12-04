@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Attribute;
@@ -43,7 +42,7 @@ public class AttributeConverter extends AbstractConverter<Attribute, AttributeMo
     @Autowired
     private AttributeService attributeService;
 
-    public  AttributeModel convert(Attribute attribute) {
+    public AttributeModel convert(Attribute attribute) {
         LOGGER.traceEntry(attribute.getName());
         AttributeModel model;
         if (attribute.getId() != null) {
@@ -63,21 +62,24 @@ public class AttributeConverter extends AbstractConverter<Attribute, AttributeMo
         model.setRequired(attribute.isRequired());
         model.setSortable(attribute.isSortable());
         model.setExamples(attribute.getExamples());
-        Set<ConstraintModel> constraintModels = model.getConstraints() != null ? model.getConstraints() :
-                new HashSet<>();
+        Set<ConstraintModel> constraintModels =
+                model.getConstraints() != null ? model.getConstraints() : new HashSet<>();
         Map<Long, ConstraintModel> constraintMap =
-            constraintModels.stream().collect(Collectors.toMap(ConstraintModel::getId, Function.identity()));
+                constraintModels.stream().collect(Collectors.toMap(ConstraintModel::getId, Function.identity()));
         if (attribute.getConstraints() != null) {
-            constraintModels.removeIf(a -> attribute.getConstraints().stream().noneMatch(b -> b.getId().equals(a.getId())));
+            constraintModels.removeIf(a ->
+                    attribute.getConstraints().stream().noneMatch(b -> b.getId().equals(a.getId())));
             for (Constraint constraint : attribute.getConstraints()) {
                 ConstraintModel constraintModel;
                 if (constraint.getId() != null) {
                     constraintModel = constraintMap.get(constraint.getId());
-                    constraintModel.setConstraintType(constraint.getConstraintType().getName());
+                    constraintModel.setConstraintType(
+                            constraint.getConstraintType().getName());
                     constraintModel.setValue(constraint.getValue());
                 } else {
                     constraintModel = new ConstraintModel();
-                    constraintModel.setConstraintType(constraint.getConstraintType().getName());
+                    constraintModel.setConstraintType(
+                            constraint.getConstraintType().getName());
                     constraintModel.setValue(constraint.getValue());
                     constraintModels.add(constraintModel);
                 }

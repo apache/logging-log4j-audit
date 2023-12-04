@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -50,7 +49,7 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
     @Autowired
     private AttributeService attributeService;
 
-    public  EventModel convert(Event event) {
+    public EventModel convert(Event event) {
         LOGGER.traceEntry(event.getName());
         EventModel model;
         if (event.getId() != null) {
@@ -66,9 +65,10 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
         if (model.getAttributes() == null) {
             model.setAttributes(new HashSet<>());
         }
-        Set<EventAttributeModel> eventAttributeModels = model.getAttributes() != null ? model.getAttributes() :
-                new HashSet<>();
-        List<EventAttribute> eventAttributes = event.getAttributes() != null ? event.getAttributes() : new ArrayList<>();
+        Set<EventAttributeModel> eventAttributeModels =
+                model.getAttributes() != null ? model.getAttributes() : new HashSet<>();
+        List<EventAttribute> eventAttributes =
+                event.getAttributes() != null ? event.getAttributes() : new ArrayList<>();
         if (!eventAttributes.isEmpty()) {
             for (EventAttribute eventAttribute : eventAttributes) {
                 EventAttributeModel eventAttributeModel = model.getAttribute(eventAttribute.getName());
@@ -88,7 +88,8 @@ public class EventConverter extends AbstractConverter<Event, EventModel> {
                 }
             }
         }
-        eventAttributeModels.removeIf(a -> eventAttributes.stream().noneMatch(b -> b.getName().equals(a.getAttribute().getName())));
+        eventAttributeModels.removeIf(a -> eventAttributes.stream()
+                .noneMatch(b -> b.getName().equals(a.getAttribute().getName())));
         model.setAttributes(eventAttributeModels);
         return LOGGER.traceExit(model);
     }

@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
 
 /**
@@ -27,8 +26,12 @@ import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
  */
 public interface ConstraintService {
     Set<String> getConstraintTypes();
+
     List<ConstraintModel> getConstraints();
+
     Optional<ConstraintModel> getConstraint(Long constraintId);
+
     ConstraintModel saveConstraint(ConstraintModel constraint);
+
     void deleteConstraint(Long constraintId);
 }

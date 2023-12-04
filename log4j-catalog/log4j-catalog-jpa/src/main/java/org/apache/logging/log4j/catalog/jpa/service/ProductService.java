@@ -18,17 +18,23 @@ package org.apache.logging.log4j.catalog.jpa.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.model.ProductModel;
 
 public interface ProductService {
     List<ProductModel> getProducts(int startPage, int itemsPerPage, String sortColumn, String direction);
-    List<ProductModel> getProducts(String catalogId, int startPage, int itemsPerPage, String sortColumn,
-                                   String direction);
+
+    List<ProductModel> getProducts(
+            String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction);
+
     List<ProductModel> getProducts();
+
     List<ProductModel> getProducts(String catalogId);
+
     Optional<ProductModel> getProduct(Long productId);
+
     Optional<ProductModel> getProduct(String catalogId, String name);
+
     ProductModel saveProduct(ProductModel product);
+
     void deleteProduct(Long productId);
 }

@@ -16,14 +16,13 @@
  */
 package org.apache.logging.log4j.audit.generator;
 
+import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.audit.util.NamingUtils;
 import org.apache.logging.log4j.audit.util.StringUtil;
-
-import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 
 public class MethodDefinition implements Comparable<MethodDefinition> {
 
@@ -59,12 +58,10 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
             super(returnType, name);
             setStatic(true);
             String prefix = "get";
-            setName(prefix + name.substring(0, 1).toUpperCase()
-                    + name.substring(1));
+            setName(prefix + name.substring(0, 1).toUpperCase() + name.substring(1));
             StringBuilder sb = new StringBuilder();
             sb.append("\tif (").append(name).append(" == null) {\n");
-            sb.append("\t\t").append(name).append(" = new ").append(returnType)
-                    .append("(");
+            sb.append("\t\t").append(name).append(" = new ").append(returnType).append("(");
             boolean first = true;
             if (parameters != null) {
                 for (String element : parameters) {
@@ -80,11 +77,9 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
         }
     }
 
-    private static MethodDefinition definition = new MethodDefinition("dumb",
-            "dumb");
+    private static MethodDefinition definition = new MethodDefinition("dumb", "dumb");
 
-    public static MethodDefinition getStandardSingleton(String returnType,
-                                                        String name, List<String> parameters) {
+    public static MethodDefinition getStandardSingleton(String returnType, String name, List<String> parameters) {
         return definition.new StandardSingleton(returnType, name, parameters);
     }
 
@@ -125,7 +120,6 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
                 setContent(content + "return null;");
             }
         }
-
     }
 
     public MethodDefinition(Method method) {
@@ -143,8 +137,7 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
         }
         int pName = 'a';
         for (Class<?> param : method.getParameterTypes()) {
-            addParameter(new Parameter(Character.toString((char) pName++),
-                    param.getName(), ""));
+            addParameter(new Parameter(Character.toString((char) pName++), param.getName(), ""));
         }
 
         for (Class<?> param : method.getExceptionTypes()) {
@@ -251,8 +244,10 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
 
         if (getParameters() != null) {
             for (Parameter param : getParameters()) {
-                sb.append("\n     * @param ").append(param.getName())
-                        .append(" ").append(param.getDescription());
+                sb.append("\n     * @param ")
+                        .append(param.getName())
+                        .append(" ")
+                        .append(param.getDescription());
             }
         }
 
@@ -312,8 +307,7 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
 
     @Override
     public int compareTo(MethodDefinition arg0) {
-        int res = NamingUtils.getMethodShortName(getName()).compareTo(
-                NamingUtils.getMethodShortName(arg0.getName()));
+        int res = NamingUtils.getMethodShortName(getName()).compareTo(NamingUtils.getMethodShortName(arg0.getName()));
         if (res == 0) {
             return getName().compareTo(arg0.getName());
         }
@@ -327,5 +321,4 @@ public class MethodDefinition implements Comparable<MethodDefinition> {
     public void setJavadocComments(String javadocComments) {
         this.javadocComments = javadocComments;
     }
-
 }

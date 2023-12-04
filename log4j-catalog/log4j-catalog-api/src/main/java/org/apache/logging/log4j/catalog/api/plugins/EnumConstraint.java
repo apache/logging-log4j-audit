@@ -16,13 +16,12 @@
  */
 package org.apache.logging.log4j.catalog.api.plugins;
 
-import java.util.Arrays;
-
-import org.apache.logging.log4j.catalog.api.ConstraintType;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
-
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.isBlank;
+
+import java.util.Arrays;
+import org.apache.logging.log4j.catalog.api.ConstraintType;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
 
 /**
  * Performs a comparison to verify the value is in the list of acceptable values.

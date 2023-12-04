@@ -16,6 +16,8 @@
  */
 package org.apache.logging.log4j.catalog.git;
 
+import static org.junit.Assert.*;
+
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
 import org.apache.logging.log4j.catalog.git.config.ApplicationConfiguration;
@@ -28,10 +30,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {ApplicationConfiguration.class})
+@ContextConfiguration(
+        loader = AnnotationConfigContextLoader.class,
+        classes = {ApplicationConfiguration.class})
 @ActiveProfiles("lab")
 public class CatalogTest {
 
@@ -55,50 +57,33 @@ public class CatalogTest {
         assertEquals("Incorrect number of categories", 2, data.getCategories().size());
     }
 
+    @Test
+    public void testRetrieveEvents() {}
 
     @Test
-    public void testRetrieveEvents() {
-
-    }
+    public void testRetrieveEvent() {}
 
     @Test
-    public void testRetrieveEvent() {
-
-    }
+    public void testAddEvent() {}
 
     @Test
-    public void testAddEvent() {
-
-    }
+    public void testModifyEvent() {}
 
     @Test
-    public void testModifyEvent() {
-
-    }
+    public void testDeleteEvent() {}
 
     @Test
-    public void testDeleteEvent() {
-
-    }
+    public void testRetrieveAttributes() {}
 
     @Test
-    public void testRetrieveAttributes() {
-    }
+    public void testRetrieveAttribute() {}
 
     @Test
-    public void testRetrieveAttribute() {
-    }
+    public void testAddAttribute() {}
 
     @Test
-    public void testAddAttribute() {
-
-    }
+    public void testModifyAttribute() {}
 
     @Test
-    public void testModifyAttribute() {
-    }
-
-    @Test
-    public void testDeleteAttribute() {
-    }
+    public void testDeleteAttribute() {}
 }

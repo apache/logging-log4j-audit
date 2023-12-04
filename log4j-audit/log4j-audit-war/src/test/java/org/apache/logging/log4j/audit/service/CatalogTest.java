@@ -16,13 +16,17 @@
  */
 package org.apache.logging.log4j.audit.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.logging.log4j.audit.service.config.WebMvcAppContext;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -43,13 +47,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebMvcAppContext.class}, loader=AnnotationConfigWebContextLoader.class)
+@ContextConfiguration(
+        classes = {WebMvcAppContext.class},
+        loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
 public class CatalogTest {
 
@@ -71,11 +72,11 @@ public class CatalogTest {
     @Test
     public void testCatalogAPI() throws Exception {
 
-        String result = mockMvc.perform(
-                get("/catalog/TEST/attributes")
-                        .accept(Versions.V1_0))
+        String result = mockMvc.perform(get("/catalog/TEST/attributes").accept(Versions.V1_0))
                 .andExpect(status().is(HttpStatus.OK.value()))
-                .andReturn().getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         assertNotNull("No result returned for TEST catalog", result);
         ObjectMapper objectMapper = new ObjectMapper();
         CollectionType typeReference =
@@ -83,19 +84,21 @@ public class CatalogTest {
         List<Attribute> attributes = objectMapper.readValue(result, typeReference);
         assertNotNull("Result is not a list", attributes);
         assertEquals("Incorrect number of attributes in list", 0, attributes.size());
-        result = mockMvc.perform(
-                get("/catalog/DEFAULT/attributes")
-                .accept(Versions.V1_0))
+        result = mockMvc.perform(get("/catalog/DEFAULT/attributes").accept(Versions.V1_0))
                 .andExpect(status().is(HttpStatus.OK.value()))
-                .andReturn().getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         assertNotNull("No result returned for DEFAULT catalog", result);
 
         attributes = objectMapper.readValue(result, typeReference);
         assertNotNull("Result is not a list", attributes);
         assertEquals("Incorrect number of attributes in list", 10, attributes.size());
-        result = mockMvc.perform( get("/catalog/DEFAULT/events").accept(Versions.V1_0))
+        result = mockMvc.perform(get("/catalog/DEFAULT/events").accept(Versions.V1_0))
                 .andExpect(status().is(HttpStatus.OK.value()))
-                .andReturn().getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         assertNotNull("No result returned for DEFAULT catalog", result);
         typeReference = TypeFactory.defaultInstance().constructCollectionType(List.class, Event.class);
         List<Event> events = objectMapper.readValue(result, typeReference);
@@ -121,9 +124,14 @@ public class CatalogTest {
         filterProvider.addFilter("catalogEvent", new CatalogEventFilter());
         mapper.setFilterProvider(filterProvider);
         String json = mapper.writeValueAsString(event);
-        result = mockMvc.perform(post("/catalog/event").content(json).accept(Versions.V1_0).contentType(Versions.V1_0))
+        result = mockMvc.perform(post("/catalog/event")
+                        .content(json)
+                        .accept(Versions.V1_0)
+                        .contentType(Versions.V1_0))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
-                .andReturn().getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         assertNotNull("No content returned from create user", result);
         assertTrue("Missing catalog id", result.contains("\"catalogId\":\"TEST\""));
     }

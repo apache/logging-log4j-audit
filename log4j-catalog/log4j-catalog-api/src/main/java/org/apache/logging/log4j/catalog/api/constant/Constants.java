@@ -21,8 +21,7 @@ package org.apache.logging.log4j.catalog.api.constant;
  */
 public final class Constants {
 
-    private Constants() {
-    }
+    private Constants() {}
 
     public static final String DEFAULT_CATALOG = "DEFAULT";
 }

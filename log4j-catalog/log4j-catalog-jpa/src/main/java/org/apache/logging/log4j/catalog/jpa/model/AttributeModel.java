@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.model;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -34,7 +33,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.logging.log4j.catalog.api.DataType;
@@ -42,53 +40,65 @@ import org.apache.logging.log4j.catalog.jpa.converter.BooleanToStringConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.DataTypeConverter;
 
 @Entity
-@Table(name = "EVENT_ATTRIBUTE",
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" })})
+@Table(
+        name = "EVENT_ATTRIBUTE",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME"})})
 public class AttributeModel implements Serializable {
     private static final long serialVersionUID = -756109102178482698L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
+
     @Column(name = "NAME")
     private String name;
+
     @Column(name = "DISPLAY_NAME")
     private String displayName;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
     @Column(name = "CATALOG_ID")
     private String catalogId;
+
     @Column(name = "DATATYPE")
-    @Convert(converter=DataTypeConverter.class)
+    @Convert(converter = DataTypeConverter.class)
     private DataType dataType;
+
     @Column(name = "INDEXED")
-    @Convert(converter=BooleanToStringConverter.class)
+    @Convert(converter = BooleanToStringConverter.class)
     private boolean indexed;
+
     @Column(name = "SORTABLE")
-    @Convert(converter=BooleanToStringConverter.class)
+    @Convert(converter = BooleanToStringConverter.class)
     private boolean sortable;
+
     @Column(name = "REQUIRED")
-    @Convert(converter=BooleanToStringConverter.class)
+    @Convert(converter = BooleanToStringConverter.class)
     private boolean required;
+
     @Column(name = "REQUEST_CONTEXT")
-    @Convert(converter=BooleanToStringConverter.class)
+    @Convert(converter = BooleanToStringConverter.class)
     private boolean requestContext;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "attribute_examples", joinColumns = @JoinColumn(name = "attribute_id"))
     @Column(name = "example")
     private Set<String> examples = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "attribute_aliases", joinColumns = @JoinColumn(name = "attribute_id"))
     @Column(name = "alias")
     private Set<String> aliases = new HashSet<>();
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "attribute", cascade = CascadeType.ALL)
     private Set<ConstraintModel> constraints;
 
     public AttributeModel() {
         catalogId = "DEFAULT";
     }
-
 
     /**
      * Returns the id of the AttributeDto.
@@ -318,7 +328,10 @@ public class AttributeModel implements Serializable {
         if (o == null) return false;
         if (!(o instanceof AttributeModel)) return false;
 
-        AttributeModel other = (AttributeModel)o;
-        return new EqualsBuilder().append(name, other.name).append(catalogId, other.catalogId).isEquals();
+        AttributeModel other = (AttributeModel) o;
+        return new EqualsBuilder()
+                .append(name, other.name)
+                .append(catalogId, other.catalogId)
+                .isEquals();
     }
 }

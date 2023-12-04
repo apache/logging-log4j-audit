@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

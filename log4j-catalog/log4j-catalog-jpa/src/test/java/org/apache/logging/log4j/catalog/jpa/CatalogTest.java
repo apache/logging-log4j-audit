@@ -16,9 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.jpa;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.DataType;
 import org.apache.logging.log4j.catalog.jpa.config.ApplicationConfiguration;
@@ -40,23 +41,26 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {ApplicationConfiguration.class})
+@ContextConfiguration(
+        loader = AnnotationConfigContextLoader.class,
+        classes = {ApplicationConfiguration.class})
 @SqlGroup({
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/hsql/beforeTestRun.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/hsql/afterTestRun.sql")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/hsql/beforeTestRun.sql"),
+    @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql/hsql/afterTestRun.sql")
 })
 @Repository
 public class CatalogTest {
 
     @Autowired
     AttributeRepository attributeRepository;
+
     @Autowired
     CategoryRepository categoryRepository;
+
     @Autowired
     EventRepository eventRepository;
+
     @Autowired
     private CatalogService catalogService;
 
@@ -151,14 +155,10 @@ public class CatalogTest {
     }
 
     @Test
-    public void testModifyEvent() {
-
-    }
+    public void testModifyEvent() {}
 
     @Test
-    public void testDeleteEvent() {
-
-    }
+    public void testDeleteEvent() {}
 
     @Test
     public void testRetrieveAttributes() {
@@ -178,17 +178,13 @@ public class CatalogTest {
     }
 
     @Test
-    public void testAddAttribute() {
-
-    }
+    public void testAddAttribute() {}
 
     @Test
-    public void testModifyAttribute() {
-    }
+    public void testModifyAttribute() {}
 
     @Test
-    public void testDeleteAttribute() {
-    }
+    public void testDeleteAttribute() {}
 
     @Test
     public void testRetrieveCatalog() {

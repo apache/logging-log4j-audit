@@ -16,9 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.security;
 
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -32,7 +30,11 @@ public class LocalAuthorizationInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public boolean preHandle(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response,
+            Object handler)
+            throws Exception {
         LOGGER.traceEntry();
         try {
             if (request.getServletPath().startsWith("/swagger")) {
@@ -50,6 +52,5 @@ public class LocalAuthorizationInterceptor extends HandlerInterceptorAdapter {
         } finally {
             LOGGER.traceExit();
         }
-
     }
 }

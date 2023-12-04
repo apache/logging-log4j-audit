@@ -16,7 +16,6 @@
  */
 package org.apache.logging.log4j.audit.util;
 
-
 import static org.apache.logging.log4j.audit.util.NamingUtils.*;
 
 /**

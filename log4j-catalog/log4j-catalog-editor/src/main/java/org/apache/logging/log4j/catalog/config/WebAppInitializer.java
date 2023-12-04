@@ -34,14 +34,15 @@ public class WebAppInitializer {
             ProfileUtil.setActiveProfile(servletContext);
             servletContext.setInitParameter("isEmbedded", "true");
             System.setProperty("applicationName", APPLICATION_NAME);
-            //AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-            //rootContext.setDisplayName(APPLICATION_NAME);
-            //rootContext.register(WebMvcAppContext.class);
-            //servletContext.addListener(new ContextLoaderListener(rootContext));
+            // AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+            // rootContext.setDisplayName(APPLICATION_NAME);
+            // rootContext.register(WebMvcAppContext.class);
+            // servletContext.addListener(new ContextLoaderListener(rootContext));
 
-            //ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(rootContext));
-            //restServlet.setLoadOnStartup(1);
-            //restServlet.addMapping("/*");
+            // ServletRegistration.Dynamic restServlet = servletContext.addServlet("dispatcherServlet", new
+            // DispatcherServlet(rootContext));
+            // restServlet.setLoadOnStartup(1);
+            // restServlet.addMapping("/*");
         };
     }
 }

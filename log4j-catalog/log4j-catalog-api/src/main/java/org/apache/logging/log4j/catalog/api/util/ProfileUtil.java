@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.api.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
 import javax.servlet.ServletContext;
 
 /**
@@ -29,8 +28,7 @@ public final class ProfileUtil {
 
     private static final String SPRING_PROFILE = "spring.profiles.active";
 
-    private ProfileUtil() {
-    }
+    private ProfileUtil() {}
 
     /**
      * Set the active profile if none has been specified.

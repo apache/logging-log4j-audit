@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.catalog.api.Product;
 import org.apache.logging.log4j.catalog.jpa.converter.ProductConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.ProductModelConverter;
@@ -43,7 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Catalog Product controller
  */
-
 @RequestMapping(value = "/api/products")
 @RestController
 public class ProductController {
@@ -65,9 +62,10 @@ public class ProductController {
     }
 
     @PostMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> productList(@RequestParam(value="jtStartIndex", required=false) Integer startIndex,
-                                                           @RequestParam(value="jtPageSize", required=false) Integer pageSize,
-                                                           @RequestParam(value="jtSorting", required=false) String sorting) {
+    public ResponseEntity<Map<String, Object>> productList(
+            @RequestParam(value = "jtStartIndex", required = false) Integer startIndex,
+            @RequestParam(value = "jtPageSize", required = false) Integer pageSize,
+            @RequestParam(value = "jtSorting", required = false) String sorting) {
         Type listType = new TypeToken<List<Product>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
@@ -88,7 +86,8 @@ public class ProductController {
                         sortDirection = sortInfo[1];
                     }
                 }
-                products = modelMapper.map(productService.getProducts(startPage, pageSize, sortColumn, sortDirection), listType);
+                products = modelMapper.map(
+                        productService.getProducts(startPage, pageSize, sortColumn, sortDirection), listType);
             }
             if (products == null) {
                 products = new ArrayList<>();

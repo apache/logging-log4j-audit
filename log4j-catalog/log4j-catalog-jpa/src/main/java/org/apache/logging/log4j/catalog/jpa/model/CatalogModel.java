@@ -16,9 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.jpa.model;
 
-
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,9 +28,10 @@ import javax.persistence.Table;
 @Table(name = "CATALOG")
 public class CatalogModel {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
+
     @Column(name = "LAST_UPDATE")
     private Timestamp lastUpdate;
 

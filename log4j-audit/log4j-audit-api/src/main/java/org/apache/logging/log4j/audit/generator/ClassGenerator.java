@@ -16,6 +16,8 @@
  */
 package org.apache.logging.log4j.audit.generator;
 
+import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,12 +28,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.util.NamingUtils;
-
-import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 
 /**
  * Generates the Classes and Interfaces for Audit Logging based on data in the Catalog.
@@ -88,7 +87,6 @@ public final class ClassGenerator {
      *
      * @return
      */
-
     public String getCode() {
         return code;
     }
@@ -118,8 +116,7 @@ public final class ClassGenerator {
             name = name.substring(0, 1).toLowerCase() + name.substring(1);
         }
 
-        VariableDefinition definition = new VariableDefinition("private",
-                getClassName(), name, null);
+        VariableDefinition definition = new VariableDefinition("private", getClassName(), name, null);
         definition.setMakeStatic(true);
         addLocalVariable(definition);
         addMethod(MethodDefinition.getStandardSingleton(getClassName(), name, parameters));
@@ -201,17 +198,14 @@ public final class ClassGenerator {
      * Override this method it gets called once before toString do if toString
      * gets called 5 time this will only be called on the first
      */
-    public void preWrite() {
-
-    }
+    public void preWrite() {}
 
     public void generate() throws Exception {
         StringBuilder sb = new StringBuilder(baseFolder);
         if (getPackageName() != null) {
             sb.append("/").append(getPackageName().replaceAll("\\.", "/"));
         }
-        sb.append("/").append(NamingUtils.upperFirst(getClassName()))
-                .append(".java");
+        sb.append("/").append(NamingUtils.upperFirst(getClassName())).append(".java");
         String fullPath = sb.toString();
         if (verbose) {
             LOGGER.info(fullPath);
@@ -296,8 +290,7 @@ public final class ClassGenerator {
         }
 
         if (beanMethods.size() > 0 && isClass()) {
-            MethodDefinition definition = new MethodDefinition("String",
-                    "toString");
+            MethodDefinition definition = new MethodDefinition("String", "toString");
             StringBuilder buffer = new StringBuilder();
             buffer.append("\tStringBuilder sb = new StringBuilder();");
             buffer.append("\n\tsb.append(super.toString());");
@@ -305,8 +298,8 @@ public final class ClassGenerator {
                 buffer.append("\n\tsb.append(\", ");
                 buffer.append(element.getName())
                         .append("=\").append(")
-                        .append(NamingUtils.getAccessorName(element.getName(),
-                                element.getType())).append("());");
+                        .append(NamingUtils.getAccessorName(element.getName(), element.getType()))
+                        .append("());");
             }
             buffer.append("\n\treturn sb.toString();");
             definition.setContent(buffer.toString());

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -35,31 +34,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
-@Table(name = "CATALOG_EVENT",
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" })})
+@Table(
+        name = "CATALOG_EVENT",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME"})})
 public class EventModel implements Serializable {
     private static final long serialVersionUID = 1512172827909901054L;
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
+
     @Column(name = "NAME")
     private String name;
+
     @Column(name = "DISPLAY_NAME")
     private String displayName;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
     @Column(name = "CATALOG_ID")
     private String catalogId;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "event_aliases", joinColumns = @JoinColumn(name = "event_id"))
     @Column(name = "alias")
     private Set<String> aliases;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EventAttributeModel> attributes = new HashSet<>();
 
@@ -209,14 +215,18 @@ public class EventModel implements Serializable {
         if (o == null) return false;
         if (!(o instanceof EventModel)) return false;
 
-        EventModel other = (EventModel)o;
+        EventModel other = (EventModel) o;
         return new EqualsBuilder().append(name, other.name).isEquals();
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"id\" : \"").append(id).append("\"");
-        sb.append(", \"name\" : \"").append(name).append("\", \"displayName\" : \"").append(displayName).append("\"");
+        sb.append(", \"name\" : \"")
+                .append(name)
+                .append("\", \"displayName\" : \"")
+                .append(displayName)
+                .append("\"");
         sb.append(", \"description\" : ").append(description).append("\", \"attributes\" : [");
         boolean first = true;
         for (EventAttributeModel attribute : attributes) {
@@ -225,7 +235,11 @@ public class EventModel implements Serializable {
             } else {
                 first = false;
             }
-            sb.append("{\"name\" : \"").append(attribute.getAttribute().getName()).append("\", \"required\" : ").append(attribute.isRequired()).append("}");
+            sb.append("{\"name\" : \"")
+                    .append(attribute.getAttribute().getName())
+                    .append("\", \"required\" : ")
+                    .append(attribute.isRequired())
+                    .append("}");
         }
         sb.append("]}");
         return sb.toString();

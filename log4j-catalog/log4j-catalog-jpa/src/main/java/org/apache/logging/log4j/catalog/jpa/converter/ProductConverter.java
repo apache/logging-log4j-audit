@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.converter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.catalog.api.Product;
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 import org.apache.logging.log4j.catalog.jpa.model.ProductModel;

@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.api.dao;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
@@ -44,25 +43,32 @@ public abstract class AbstractCatalogReader implements CatalogReader {
     @Override
     public Category getCategory(String name) {
         if (catalogData.getCategories() != null) {
-            return catalogData.getCategories().stream().filter(c -> c.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getCategories().stream()
+                    .filter(c -> c.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
-
 
     @Override
     public Event getEvent(String name) {
         if (catalogData.getEvents() != null) {
-            return catalogData.getEvents().stream().filter(e -> e.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getEvents().stream()
+                    .filter(e -> e.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
 
-
     @Override
     public Product getProduct(String name) {
         if (catalogData.getProducts() != null) {
-            return catalogData.getProducts().stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getProducts().stream()
+                    .filter(p -> p.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }

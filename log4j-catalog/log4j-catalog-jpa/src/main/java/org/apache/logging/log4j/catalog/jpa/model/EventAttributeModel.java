@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.jpa.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -27,7 +26,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.apache.logging.log4j.catalog.jpa.converter.BooleanToStringConverter;
 
 /**
@@ -38,7 +36,7 @@ import org.apache.logging.log4j.catalog.jpa.converter.BooleanToStringConverter;
 public class EventAttributeModel implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
 
@@ -51,7 +49,7 @@ public class EventAttributeModel implements Serializable {
     private AttributeModel attribute;
 
     @Column(name = "is_required")
-    @Convert(converter=BooleanToStringConverter.class)
+    @Convert(converter = BooleanToStringConverter.class)
     private Boolean isRequired;
 
     /**

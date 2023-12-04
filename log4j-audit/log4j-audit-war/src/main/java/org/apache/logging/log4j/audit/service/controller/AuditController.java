@@ -16,11 +16,10 @@
  */
 package org.apache.logging.log4j.audit.service.controller;
 
-import java.util.Map;
-
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import java.util.Map;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.AuditLogger;
 import org.apache.logging.log4j.audit.dto.AuditDto;
@@ -38,8 +37,11 @@ public class AuditController {
     @Autowired
     private AuditLogger auditLogger;
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Generate an Audit event", notes = "Causes an Audit event to be logged", tags = {"Audit"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Generate an Audit event",
+            notes = "Causes an Audit event to be logged",
+            tags = {"Audit"})
     @PostMapping(value = "/event/log", produces = Versions.V1_0)
     @ResponseStatus(value = HttpStatus.OK)
     public void logEvent(@RequestBody AuditDto auditDto) {

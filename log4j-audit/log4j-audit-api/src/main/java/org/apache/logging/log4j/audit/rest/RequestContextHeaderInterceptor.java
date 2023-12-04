@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit.rest;
 
 import java.io.IOException;
 import java.util.Map;
-
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;
@@ -44,8 +43,9 @@ public class RequestContextHeaderInterceptor implements ClientHttpRequestInterce
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] body,
-                                        ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
+    public ClientHttpResponse intercept(
+            HttpRequest httpRequest, byte[] body, ClientHttpRequestExecution clientHttpRequestExecution)
+            throws IOException {
         Map<String, String> map = ThreadContext.getImmutableContext();
         HttpHeaders headers = httpRequest.getHeaders();
         for (Map.Entry<String, String> entry : map.entrySet()) {

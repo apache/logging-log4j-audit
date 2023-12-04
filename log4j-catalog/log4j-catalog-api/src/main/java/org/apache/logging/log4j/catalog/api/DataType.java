@@ -20,7 +20,6 @@ package org.apache.logging.log4j.catalog.api;
  * Mapping of attribute data types.
  */
 public enum DataType {
-
     STRING("String", null),
     BIG_DECIMAL("BigDecimal", "java.math.BigDecimal"),
     DOUBLE("double", null),
@@ -49,12 +48,11 @@ public enum DataType {
     }
 
     public static DataType fromName(String typeName) {
-        for (DataType dataType: DataType.values()) {
+        for (DataType dataType : DataType.values()) {
             if (dataType.typeName.equalsIgnoreCase(typeName)) {
                 return dataType;
             }
         }
         throw new IllegalArgumentException("Unknown data type: " + typeName);
     }
-
 }

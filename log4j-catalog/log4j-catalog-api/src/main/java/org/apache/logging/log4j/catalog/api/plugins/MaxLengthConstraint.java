@@ -16,11 +16,11 @@
  */
 package org.apache.logging.log4j.catalog.api.plugins;
 
-import org.apache.logging.log4j.catalog.api.ConstraintType;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
-
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.isBlank;
+
+import org.apache.logging.log4j.catalog.api.ConstraintType;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
 
 /**
  *
@@ -53,7 +53,9 @@ public class MaxLengthConstraint implements ConstraintType {
                 if (isRequestContext) {
                     error.append("ThreadContext key ");
                 }
-                error.append(name).append(" encountered an error trying to determine the maximum length value: ").append(ex.getMessage());
+                error.append(name)
+                        .append(" encountered an error trying to determine the maximum length value: ")
+                        .append(ex.getMessage());
             }
         }
     }

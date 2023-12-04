@@ -16,11 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.api.plugins;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import java.io.IOException;
 import org.apache.logging.log4j.catalog.api.ConstraintType;
 
 /**
@@ -37,8 +36,9 @@ public class ConstraintTypeSerializer extends StdSerializer<ConstraintType> {
     }
 
     @Override
-    public void serialize(ConstraintType constraintType, JsonGenerator jsonGenerator,
-                          SerializerProvider serializerProvider) throws IOException {
+    public void serialize(
+            ConstraintType constraintType, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+            throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("name", constraintType.getName());
         jsonGenerator.writeEndObject();

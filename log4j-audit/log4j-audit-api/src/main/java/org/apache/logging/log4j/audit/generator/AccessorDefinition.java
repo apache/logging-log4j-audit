@@ -23,8 +23,9 @@ public class AccessorDefinition {
 
     public class StandardGetter extends MethodDefinition {
         public StandardGetter(AccessorDefinition beanDefinition) {
-            super(beanDefinition.getType(), NamingUtils.getAccessorName(
-                    beanDefinition.getType(), beanDefinition.getName()));
+            super(
+                    beanDefinition.getType(),
+                    NamingUtils.getAccessorName(beanDefinition.getType(), beanDefinition.getName()));
             if (getterContent != null) {
                 setContent("\t" + StringUtil.filterContent(getterContent, name, type));
             } else {
@@ -35,15 +36,12 @@ public class AccessorDefinition {
 
     public class StandardSetter extends MethodDefinition {
         public StandardSetter(AccessorDefinition beanDefinition) {
-            super(beanDefinition.getType(), NamingUtils
-                    .getMutatorName(beanDefinition.getName()));
+            super(beanDefinition.getType(), NamingUtils.getMutatorName(beanDefinition.getName()));
             setReturnType("void");
             if (setterContent != null) {
-                setContent("\t"
-                        + StringUtil.filterContent(setterContent, name, type));
+                setContent("\t" + StringUtil.filterContent(setterContent, name, type));
             } else {
-                String sb = "\tthis." + beanDefinition.getName() +
-                        " = " + beanDefinition.getName() + ";";
+                String sb = "\tthis." + beanDefinition.getName() + " = " + beanDefinition.getName() + ";";
                 setContent(sb);
             }
             getParameters().add(new Parameter(beanDefinition.getName(), beanDefinition.getType(), ""));
@@ -90,8 +88,7 @@ public class AccessorDefinition {
     public void addBean(ClassGenerator generator, boolean addLocalVariable, boolean addGetter, boolean addSetter) {
 
         if (generator.isClass() && addLocalVariable) {
-            generator.addLocalVariable(new VariableDefinition("private",
-                    getType(), getName(), null, getAnnotation()));
+            generator.addLocalVariable(new VariableDefinition("private", getType(), getName(), null, getAnnotation()));
         }
 
         if (packageName != null) {
@@ -146,5 +143,4 @@ public class AccessorDefinition {
             this.type = type.substring(lastDot + 1);
         }
     }
-
 }

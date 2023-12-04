@@ -22,6 +22,4 @@ package org.apache.logging.log4j.catalog.api;
 public class Type {
 
     private String typeName;
-
-
 }

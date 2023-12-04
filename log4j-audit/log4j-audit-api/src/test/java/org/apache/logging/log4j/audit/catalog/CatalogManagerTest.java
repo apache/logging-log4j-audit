@@ -16,11 +16,11 @@
  */
 package org.apache.logging.log4j.audit.catalog;
 
-import org.apache.logging.log4j.catalog.api.Event;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import org.apache.logging.log4j.catalog.api.Event;
+import org.junit.Test;
 
 /**
  *
@@ -31,12 +31,15 @@ public class CatalogManagerTest {
         CatalogManager manager = new CatalogManagerImpl(new StringCatalogReader());
         Event event = manager.getEvent("transfer");
         assertNotNull("No transfer event", event);
-        assertEquals("{\"name\" : \"transfer\", \"displayName\" : \"Transfer\", \"description\" : \"Transfer between accounts\", " +
-                             "\"attributes\" : [{\"name\" : \"toAccount\", \"required\" : true}, {\"name\" : \"fromAccount\", \"required\" : true}, {\"name\" : \"amount\", \"required\" : true}]}",
-                     event.toString());
+        assertEquals(
+                "{\"name\" : \"transfer\", \"displayName\" : \"Transfer\", \"description\" : \"Transfer between accounts\", "
+                        + "\"attributes\" : [{\"name\" : \"toAccount\", \"required\" : true}, {\"name\" : \"fromAccount\", \"required\" : true}, {\"name\" : \"amount\", \"required\" : true}]}",
+                event.toString());
 
         Event login = manager.getEvent("login");
         assertNotNull("No login event", login);
-        assertEquals("{\"name\" : \"login\", \"displayName\" : \"Login\", \"description\" : \"User Login\", \"attributes\" : []}", login.toString());
+        assertEquals(
+                "{\"name\" : \"login\", \"displayName\" : \"Login\", \"description\" : \"User Login\", \"attributes\" : []}",
+                login.toString());
     }
 }

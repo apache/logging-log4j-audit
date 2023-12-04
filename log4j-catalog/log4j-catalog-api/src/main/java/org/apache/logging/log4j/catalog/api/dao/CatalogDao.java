@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.api.dao;
 
 import java.util.Map;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.CatalogWriter;
@@ -51,10 +50,7 @@ public interface CatalogDao extends CatalogReader, CatalogWriter {
      */
     Category getCategory(String name);
 
-
     Event getEvent(String name);
 
-
     Product getProduct(String name);
-
 }

@@ -16,5 +16,4 @@
  */
 package org.apache.logging.log4j.audit.layout;
 
-public class AuditLayout {
-}
+public class AuditLayout {}

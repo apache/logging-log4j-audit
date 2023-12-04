@@ -16,11 +16,13 @@
  */
 package org.apache.logging.log4j.audit;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
 import org.apache.logging.log4j.audit.exception.AuditException;
@@ -31,9 +33,6 @@ import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.message.StructuredDataMessage;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 /**
  * This class is used to log events generated remotely.
@@ -50,8 +49,7 @@ public abstract class AbstractEventLogger {
         throw new AuditException("Error logging event " + message.getId().getName(), ex);
     };
 
-    private static final AuditExceptionHandler NOOP_EXCEPTION_HANDLER = (message, ex) -> {
-    };
+    private static final AuditExceptionHandler NOOP_EXCEPTION_HANDLER = (message, ex) -> {};
 
     private AuditExceptionHandler defaultAuditExceptionHandler = DEFAULT_EXCEPTION_HANDLER;
 
@@ -89,8 +87,13 @@ public abstract class AbstractEventLogger {
         logEvent(eventName, null, attributes, exceptionHandler);
     }
 
-    private void logEvent(String eventName, String catalogId, Map<String, String> attributes, AuditExceptionHandler exceptionHandler) {
-        Event event = catalogId == null ? catalogManager.getEvent(eventName) : catalogManager.getEvent(eventName, catalogId);
+    private void logEvent(
+            String eventName,
+            String catalogId,
+            Map<String, String> attributes,
+            AuditExceptionHandler exceptionHandler) {
+        Event event =
+                catalogId == null ? catalogManager.getEvent(eventName) : catalogManager.getEvent(eventName, catalogId);
         if (event == null) {
             throw new AuditException("Unable to locate definition of audit event " + eventName);
         }
@@ -99,8 +102,8 @@ public abstract class AbstractEventLogger {
 
     protected abstract void logEvent(StructuredDataMessage message);
 
-    private void logEvent(String eventName, Map<String, String> attributes, Event event,
-                          AuditExceptionHandler exceptionHandler) {
+    private void logEvent(
+            String eventName, Map<String, String> attributes, Event event, AuditExceptionHandler exceptionHandler) {
         AuditMessage msg = new AuditMessage(eventName, maxLength);
 
         if (attributes == null) {
@@ -113,8 +116,8 @@ public abstract class AbstractEventLogger {
         List<EventAttribute> eventAttributes = event.getAttributes() == null ? emptyList() : event.getAttributes();
         for (EventAttribute eventAttribute : eventAttributes) {
             Attribute attr = catalogManager.getAttribute(eventAttribute.getName(), event.getCatalogId());
-            if ((!attr.isRequestContext() && (attr.isRequired()) ||
-                    (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
+            if ((!attr.isRequestContext() && (attr.isRequired())
+                    || (eventAttribute.isRequired() != null && eventAttribute.isRequired()))) {
                 String name = attr.getName();
                 if (!attributes.containsKey(name)) {
                     if (missingAttributes.length() > 0) {
@@ -134,14 +137,20 @@ public abstract class AbstractEventLogger {
                 if (errors.length() > 0) {
                     errors.append("\n");
                 }
-                errors.append("Attribute ").append(name).append(" is not defined for ").append(eventName);
+                errors.append("Attribute ")
+                        .append(name)
+                        .append(" is not defined for ")
+                        .append(eventName);
             }
         }
         if (missingAttributes.length() > 0) {
             if (errors.length() > 0) {
                 errors.append("\n");
             }
-            errors.append("Event ").append(eventName).append(" is missing required attribute(s) ").append(missingAttributes.toString());
+            errors.append("Event ")
+                    .append(eventName)
+                    .append(" is missing required attribute(s) ")
+                    .append(missingAttributes.toString());
         }
         if (errors.length() > 0) {
             throw new ConstraintValidationException(errors.toString());
@@ -157,7 +166,8 @@ public abstract class AbstractEventLogger {
             }
         }
         if (buf.length() > 0) {
-            throw new ConstraintValidationException("Event " + eventName + " contains invalid attribute(s) " + buf.toString());
+            throw new ConstraintValidationException(
+                    "Event " + eventName + " contains invalid attribute(s) " + buf.toString());
         }
 
         List<String> reqCtxAttrs = catalogManager.getRequiredContextAttributes(eventName, event.getCatalogId());
@@ -172,8 +182,8 @@ public abstract class AbstractEventLogger {
                 }
             }
             if (sb.length() > 0) {
-                throw new ConstraintValidationException("Event " + msg.getId().getName() +
-                        " is missing required RequestContextMapping values for " + sb.toString());
+                throw new ConstraintValidationException("Event " + msg.getId().getName()
+                        + " is missing required RequestContextMapping values for " + sb.toString());
             }
         }
 
@@ -189,8 +199,8 @@ public abstract class AbstractEventLogger {
             }
         }
         if (errors.length() > 0) {
-            throw new ConstraintValidationException("Event " + eventName +
-                                             " is missing required Thread Context values for " + errors.toString());
+            throw new ConstraintValidationException(
+                    "Event " + eventName + " is missing required Thread Context values for " + errors.toString());
         }
 
         for (Map.Entry<String, Attribute> entry : reqCtxAttributes.entrySet()) {
@@ -204,7 +214,8 @@ public abstract class AbstractEventLogger {
             }
         }
         if (errors.length() > 0) {
-            throw new ConstraintValidationException("Event " + eventName + " has incorrect data in the Thread Context: " + errors.toString());
+            throw new ConstraintValidationException(
+                    "Event " + eventName + " has incorrect data in the Thread Context: " + errors.toString());
         }
 
         msg.putAll(attributes);
@@ -219,11 +230,20 @@ public abstract class AbstractEventLogger {
         }
     }
 
-    private static void validateConstraints(boolean isRequestContext, Collection<Constraint> constraints, String name,
-                                            String value, StringBuilder errors) {
+    private static void validateConstraints(
+            boolean isRequestContext,
+            Collection<Constraint> constraints,
+            String name,
+            String value,
+            StringBuilder errors) {
         for (Constraint constraint : constraints) {
-            constraintPlugins.validateConstraint(isRequestContext, constraint.getConstraintType().getName(), name, value,
-                    constraint.getValue(), errors);
+            constraintPlugins.validateConstraint(
+                    isRequestContext,
+                    constraint.getConstraintType().getName(),
+                    name,
+                    value,
+                    constraint.getValue(),
+                    errors);
         }
     }
 }

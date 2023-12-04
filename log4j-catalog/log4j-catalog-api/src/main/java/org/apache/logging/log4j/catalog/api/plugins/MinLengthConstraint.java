@@ -16,11 +16,11 @@
  */
 package org.apache.logging.log4j.catalog.api.plugins;
 
-import org.apache.logging.log4j.catalog.api.ConstraintType;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
-
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
 import static org.apache.logging.log4j.catalog.api.util.StringUtils.isBlank;
+
+import org.apache.logging.log4j.catalog.api.ConstraintType;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
 
 /**
  *
@@ -46,14 +46,19 @@ public class MinLengthConstraint implements ConstraintType {
                     if (isRequestContext) {
                         error.append("ThreadContext key ");
                     }
-                    error.append(name).append(" does not contain ").append(minLength).append(" characters.");
+                    error.append(name)
+                            .append(" does not contain ")
+                            .append(minLength)
+                            .append(" characters.");
                 }
             } catch (Exception ex) {
                 appendNewline(error);
                 if (isRequestContext) {
                     error.append("ThreadContext key ");
                 }
-                error.append(name).append(" encountered an error trying to determine the minimum length value: ").append(ex.getMessage());
+                error.append(name)
+                        .append(" encountered an error trying to determine the minimum length value: ")
+                        .append(ex.getMessage());
             }
         }
     }

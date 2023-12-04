@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.jpa.dao;
 
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
 
 public interface CategoryRepository extends PagingAndSortingRepository<CategoryModel, Long> {

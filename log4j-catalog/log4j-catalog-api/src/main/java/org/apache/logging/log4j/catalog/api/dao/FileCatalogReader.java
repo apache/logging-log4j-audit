@@ -16,6 +16,9 @@
  */
 package org.apache.logging.log4j.catalog.api.dao;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,10 +28,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.CatalogData;
@@ -66,15 +65,15 @@ public class FileCatalogReader extends AbstractCatalogReader {
                     catalogPath.append("/").append(catalogFile);
                 }
             }
-        } else if (catalogFile != null){
+        } else if (catalogFile != null) {
             catalogPath.append(catalogFile);
         } else {
             LOGGER.warn("No catalogFile attribute was provided. Using {}", DEFAULT_CATALOG_FILE);
             catalogPath.append(DEFAULT_CATALOG_FILE);
         }
         Path path = Paths.get(catalogPath.toString());
-        lastUpdated = LocalDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()),
-                ZoneId.systemDefault());
+        lastUpdated =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneId.systemDefault());
         byte[] encoded = Files.readAllBytes(path);
         catalog = new String(encoded, StandardCharsets.UTF_8);
         JsonFactory factory = new JsonFactory();

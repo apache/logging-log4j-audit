@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.audit.rest;
 
 import java.util.Enumeration;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,7 +24,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -84,13 +82,20 @@ public class RequestContextFilter implements Filter {
                     if (mapping != null) {
                         if (mapping.isChained()) {
                             ThreadContext.put(mapping.getChainKey(), request.getHeader(name));
-                            logger.debug("Setting Context Key:{} with value:{}", mapping.getChainKey(), request.getHeader(name));
-                            String value = ((ChainedMapping)mapping).getSupplier().get();
+                            logger.debug(
+                                    "Setting Context Key:{} with value:{}",
+                                    mapping.getChainKey(),
+                                    request.getHeader(name));
+                            String value =
+                                    ((ChainedMapping) mapping).getSupplier().get();
                             ThreadContext.put(mapping.getFieldName(), value);
                             logger.debug("Setting Context Key:{} with value:{}", mapping.getFieldName(), value);
                         } else {
                             ThreadContext.put(mapping.getFieldName(), request.getHeader(name));
-                            logger.debug("Setting Context Key:{} with value:{}", mapping.getFieldName(), request.getHeader(name));
+                            logger.debug(
+                                    "Setting Context Key:{} with value:{}",
+                                    mapping.getFieldName(),
+                                    request.getHeader(name));
                         }
                     }
                 }
@@ -101,7 +106,9 @@ public class RequestContextFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
                 if (logger.isTraceEnabled()) {
                     long elapsed = System.nanoTime() - start;
-                    StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
+                    StringBuilder sb = new StringBuilder("Request ")
+                            .append(request.getRequestURI())
+                            .append(" completed in ");
                     ElapsedUtil.addElapsed(elapsed, sb);
                     logger.trace(sb.toString());
                 }
@@ -114,6 +121,5 @@ public class RequestContextFilter implements Filter {
         }
     }
 
-    public void destroy() {
-    }
+    public void destroy() {}
 }

@@ -20,7 +20,6 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.logging.log4j.audit.generator.InterfacesGenerator;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.dao.JsonCatalogReader;
@@ -46,7 +45,9 @@ public class AuditMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}")
     private MavenProject project;
 
-    @Parameter(property = "catalogReaderClassName", defaultValue = "org.apache.logging.log4j.catalog.api.dao.FileCatalogReader")
+    @Parameter(
+            property = "catalogReaderClassName",
+            defaultValue = "org.apache.logging.log4j.catalog.api.dao.FileCatalogReader")
     private String catalogReaderClassName;
 
     @Parameter(property = "catalogReaderAttributes", required = false)
@@ -87,12 +88,14 @@ public class AuditMojo extends AbstractMojo {
             Constructor<CatalogReader>[] constructors = (Constructor<CatalogReader>[]) clazz.getConstructors();
 
             for (Constructor<CatalogReader> constructor : constructors) {
-                if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0].isAssignableFrom(Map.class)) {
+                if (constructor.getParameterCount() == 1
+                        && constructor.getParameterTypes()[0].isAssignableFrom(Map.class)) {
                     if (catalogReaderAttributes == null) {
                         catalogReaderAttributes = new HashMap<>();
                     }
                     if (!catalogReaderAttributes.containsKey(BASEDIR)) {
-                        catalogReaderAttributes.put(BASEDIR, project.getBasedir().getAbsolutePath());
+                        catalogReaderAttributes.put(
+                                BASEDIR, project.getBasedir().getAbsolutePath());
                     }
                     if (!catalogReaderAttributes.containsKey(BUILDDIR)) {
                         catalogReaderAttributes.put(BUILDDIR, project.getBuild().getDirectory());

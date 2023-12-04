@@ -17,5 +17,7 @@
 package org.apache.logging.log4j.audit.request;
 
 public enum Scope {
-    CLIENT_SERVER, LOCAL_ONLY, CHAIN
+    CLIENT_SERVER,
+    LOCAL_ONLY,
+    CHAIN
 }

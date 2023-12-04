@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
 import org.apache.logging.log4j.catalog.api.DataType;
 
 /**

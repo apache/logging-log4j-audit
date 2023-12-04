@@ -27,16 +27,14 @@ public class VariableDefinition implements Comparable<VariableDefinition> {
     private String initialValue;
     private String annotation = null;
 
-    public VariableDefinition(String visability, String type, String name,
-            String initialValue) {
+    public VariableDefinition(String visability, String type, String name, String initialValue) {
         this.visability = visability;
         this.type = type;
         this.name = name;
         this.initialValue = initialValue;
     }
 
-    public VariableDefinition(String visability, String type, String name,
-            String initialValue, String annotation) {
+    public VariableDefinition(String visability, String type, String name, String initialValue, String annotation) {
         this.visability = visability;
         this.type = type;
         this.name = name;

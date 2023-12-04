@@ -16,20 +16,19 @@
  */
 package org.apache.logging.log4j.audit.generator;
 
+import static org.junit.Assert.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import static org.junit.Assert.*;
 
 public class TestInterfacesGenerator {
     private static final Logger logger = LogManager.getLogger(TestInterfacesGenerator.class);
@@ -49,8 +48,7 @@ public class TestInterfacesGenerator {
 
     @Test
     public void testInterfaceGenerator() throws Exception {
-        InterfacesGenerator interfacesGenerator =
-                (InterfacesGenerator) context.getBean("interfacesGenerator");
+        InterfacesGenerator interfacesGenerator = (InterfacesGenerator) context.getBean("interfacesGenerator");
         assertNotNull("No interfaces generator", interfacesGenerator);
         try {
             interfacesGenerator.generateSource();
@@ -62,8 +60,10 @@ public class TestInterfacesGenerator {
         assertNotNull("Could not locate generated source path", p);
         int maxDepth = 10;
         List<String> fileNames = new ArrayList<>();
-        Files.find(p, maxDepth, (path, basicFileAttributes) -> String.valueOf(path).endsWith(".java"))
-                .map(path -> path.getFileName().toString()).forEach(fileNames::add);
+        Files.find(p, maxDepth, (path, basicFileAttributes) -> String.valueOf(path)
+                        .endsWith(".java"))
+                .map(path -> path.getFileName().toString())
+                .forEach(fileNames::add);
         assertEquals("Incorrect number of files generated. Expected 4 was " + fileNames.size(), 4, fileNames.size());
     }
 }

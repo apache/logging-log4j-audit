@@ -16,13 +16,12 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
+import com.fasterxml.jackson.annotation.JsonFilter;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonFilter;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  * Basic attributes common to all events.
@@ -173,7 +172,11 @@ public class Event implements Serializable {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"name\" : \"").append(name).append("\", \"displayName\" : \"").append(displayName).append("\"");
+        sb.append("{\"name\" : \"")
+                .append(name)
+                .append("\", \"displayName\" : \"")
+                .append(displayName)
+                .append("\"");
         sb.append(", \"description\" : \"").append(description).append("\", \"attributes\" : [");
         if (attributes != null) {
             boolean first = true;
@@ -183,7 +186,11 @@ public class Event implements Serializable {
                 } else {
                     first = false;
                 }
-                sb.append("{\"name\" : \"").append(attribute.getName()).append("\", \"required\" : ").append(attribute.isRequired()).append("}");
+                sb.append("{\"name\" : \"")
+                        .append(attribute.getName())
+                        .append("\", \"required\" : ")
+                        .append(attribute.isRequired())
+                        .append("}");
             }
         }
         sb.append("]}");

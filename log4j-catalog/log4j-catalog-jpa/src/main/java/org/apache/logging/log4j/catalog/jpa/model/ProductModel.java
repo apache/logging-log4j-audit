@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,25 +34,34 @@ import javax.persistence.UniqueConstraint;
  * Definition of a ProductDto.
  */
 @Entity
-@Table(name = "CATALOG_PRODUCT",
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" })})
+@Table(
+        name = "CATALOG_PRODUCT",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME"})})
 public class ProductModel implements Serializable {
     private static final long serialVersionUID = -736368842796386523L;
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
     @Column(name = "NAME")
     private String name;
+
     @Column(name = "DISPLAY_NAME")
     private String displayName;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
     @Column(name = "CATALOG_ID")
     private String catalogId;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "PRODUCT_EVENTS", joinColumns = { @JoinColumn(name = "PRODUCT_ID")},
-            inverseJoinColumns = { @JoinColumn(name = "EVENT_ID")})
+    @JoinTable(
+            name = "PRODUCT_EVENTS",
+            joinColumns = {@JoinColumn(name = "PRODUCT_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "EVENT_ID")})
     private List<EventModel> events;
 
     public ProductModel() {
@@ -146,5 +154,4 @@ public class ProductModel implements Serializable {
     public void setEvents(List<EventModel> events) {
         this.events = events;
     }
-
 }

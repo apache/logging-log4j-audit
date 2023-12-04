@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.dao.CategoryRepository;
 import org.apache.logging.log4j.catalog.jpa.model.CategoryModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +53,8 @@ public class CategoryServiceImpl extends AbstractPagingAndSortingService impleme
     }
 
     @Override
-    public List<CategoryModel> getCategories(String catalogId, int startPage, int itemsPerPage, String sortColumn,
-                                             String direction) {
+    public List<CategoryModel> getCategories(
+            String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<CategoryModel> page = categoryRepository.findByCatalogId(catalogId, pageable);
         return page.getContent();

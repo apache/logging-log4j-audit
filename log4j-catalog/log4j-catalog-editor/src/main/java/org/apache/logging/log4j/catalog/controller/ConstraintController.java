@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
@@ -44,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Constraint controller
  */
-
 @RequestMapping(value = "/api/constraints")
 @RestController
 public class ConstraintController {

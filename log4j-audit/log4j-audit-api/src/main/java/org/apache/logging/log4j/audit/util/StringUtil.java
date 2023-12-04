@@ -27,5 +27,4 @@ public class StringUtil {
         String alphaAndDigits = input.replaceAll("[^a-zA-Z0-9_]+", "");
         System.out.println(alphaAndDigits);
     }
-
 }

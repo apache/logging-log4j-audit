@@ -19,5 +19,4 @@ package org.apache.logging.log4j.audit.service.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ApplicationConfiguration {
-}
+public class ApplicationConfiguration {}

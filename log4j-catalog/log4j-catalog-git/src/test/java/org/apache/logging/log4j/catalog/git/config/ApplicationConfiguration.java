@@ -17,9 +17,7 @@
 package org.apache.logging.log4j.catalog.git.config;
 
 import java.io.File;
-
 import javax.annotation.PreDestroy;
-
 import org.apache.logging.log4j.catalog.git.dao.GitCatalogDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.FileSystemUtils;
 
 @Configuration
-@ComponentScan(basePackages = { "org.apache.logging.log4j.catalog" })
+@ComponentScan(basePackages = {"org.apache.logging.log4j.catalog"})
 public class ApplicationConfiguration {
 
     private String gitLocalRepoPath;
@@ -47,8 +45,8 @@ public class ApplicationConfiguration {
         catalogDao.setLocalRepoPath(gitLocalRepoPath);
         catalogDao.setRemoteRepoUri(gitRemoteRepoUri);
         catalogDao.setCatalogPath("audit-test/catalog.json");
-        //CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider("waymirec", "w4ym1r3c");
-        //catalogDao.setCredentialsProvider(credentialsProvider);
+        // CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider("waymirec", "w4ym1r3c");
+        // catalogDao.setCredentialsProvider(credentialsProvider);
         return catalogDao;
     }
 
@@ -59,6 +57,4 @@ public class ApplicationConfiguration {
         File file = new File(gitLocalRepoPath);
         FileSystemUtils.deleteRecursively(file);
     }
-
-
 }

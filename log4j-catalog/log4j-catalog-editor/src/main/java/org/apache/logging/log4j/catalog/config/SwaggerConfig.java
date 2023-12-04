@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.config;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -40,13 +39,13 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.any())
-            .paths(PathSelectors.any())
-            .build()
-            .directModelSubstitute(LocalDate.class, java.sql.Date.class)
-            .directModelSubstitute(LocalDateTime.class, java.util.Date.class);
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+                .directModelSubstitute(LocalDate.class, java.sql.Date.class)
+                .directModelSubstitute(LocalDateTime.class, java.util.Date.class);
     }
 
     private ApiInfo apiInfo() {

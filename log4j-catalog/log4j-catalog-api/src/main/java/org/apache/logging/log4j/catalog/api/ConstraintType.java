@@ -35,12 +35,12 @@ public interface ConstraintType {
     default String getName() {
         Plugin annotation = this.getClass().getAnnotation(Plugin.class);
         if (annotation == null || annotation.name().length() == 0) {
-            throw new NameNotFoundException("No name could be found for plugin class " + this.getClass().getName());
+            throw new NameNotFoundException(
+                    "No name could be found for plugin class " + this.getClass().getName());
         }
 
         return annotation.name();
     }
 
     void validate(boolean isRequestContext, String name, String value, String constraintValue, StringBuilder error);
-
 }

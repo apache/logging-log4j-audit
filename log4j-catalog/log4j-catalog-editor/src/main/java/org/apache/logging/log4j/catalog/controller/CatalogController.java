@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.Category;
@@ -76,7 +75,6 @@ public class CatalogController {
     @Autowired
     private CatalogDao catalogDao;
 
-
     @PostMapping(value = "catalog")
     public ResponseEntity<?> saveCatalog() {
         CatalogData catalogData = new CatalogData();
@@ -103,7 +101,7 @@ public class CatalogController {
         catalogDao.write(catalogData);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-/*
+    /*
     @RequestMapping(value = "/catalog", method = RequestMethod.GET)
     public ResponseEntity<Object> handleGetCatalog(
             @RequestParam(required = false) boolean attributeDetails,

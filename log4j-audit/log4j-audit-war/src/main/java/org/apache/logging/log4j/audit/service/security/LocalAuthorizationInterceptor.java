@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit.service.security;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -52,6 +51,5 @@ public class LocalAuthorizationInterceptor extends HandlerInterceptorAdapter {
         } finally {
             LOGGER.traceExit();
         }
-
     }
 }

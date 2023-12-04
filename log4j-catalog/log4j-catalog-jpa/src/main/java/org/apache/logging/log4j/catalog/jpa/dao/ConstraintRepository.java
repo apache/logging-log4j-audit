@@ -18,6 +18,4 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 
 import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
 
-public interface ConstraintRepository extends BaseRepository<ConstraintModel, Long> {
-
-}
+public interface ConstraintRepository extends BaseRepository<ConstraintModel, Long> {}

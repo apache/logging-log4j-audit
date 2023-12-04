@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit.service.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-
 import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -42,11 +41,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext mvcContext = new AnnotationConfigWebApplicationContext();
         mvcContext.register(WebMvcAppContext.class);
 
-        ServletRegistration.Dynamic restServlet = servletContext.addServlet("restServlet", new DispatcherServlet(mvcContext));
+        ServletRegistration.Dynamic restServlet =
+                servletContext.addServlet("restServlet", new DispatcherServlet(mvcContext));
         restServlet.setLoadOnStartup(1);
         restServlet.addMapping("/*");
     }
-
-
-
 }

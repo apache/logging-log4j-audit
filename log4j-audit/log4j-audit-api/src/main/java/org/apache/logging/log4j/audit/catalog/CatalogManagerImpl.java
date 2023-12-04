@@ -16,15 +16,17 @@
  */
 package org.apache.logging.log4j.audit.catalog;
 
+import static java.util.Collections.emptyList;
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.exception.AuditException;
@@ -34,10 +36,6 @@ import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
-
-import static java.util.Collections.emptyList;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  *
@@ -125,8 +123,9 @@ public class CatalogManagerImpl implements CatalogManager {
     private CatalogInfo getCatalogInfo(String eventName, String catalogId) {
         Map<String, CatalogInfo> defaultCatalog = infoMap.get(DEFAULT_CATALOG);
         Map<String, CatalogInfo> catalog = catalogId != null ? infoMap.get(catalogId) : null;
-        return catalog != null && catalog.containsKey(eventName) ? catalog.get(eventName) :
-                defaultCatalog.get(eventName);
+        return catalog != null && catalog.containsKey(eventName)
+                ? catalog.get(eventName)
+                : defaultCatalog.get(eventName);
     }
 
     private Map<String, Map<String, CatalogInfo>> initializeData(CatalogReader catalogReader) throws Exception {
@@ -142,7 +141,8 @@ public class CatalogManagerImpl implements CatalogManager {
                 if (attr.isRequestContext()) {
                     requestContextAttributes.put(attr.getName(), attr);
                 }
-                Map<String, Attribute> attrMap = attributeMap.computeIfAbsent(attr.getCatalogId(), k -> new HashMap<>());
+                Map<String, Attribute> attrMap =
+                        attributeMap.computeIfAbsent(attr.getCatalogId(), k -> new HashMap<>());
                 attrMap.put(attr.getName(), attr);
             }
         }
@@ -194,8 +194,7 @@ public class CatalogManagerImpl implements CatalogManager {
         }
         info.requiredContextAttributes = required;
         info.attributeNames = names;
-        Map<String, CatalogInfo> catalogMap = catalogId == null ?
-                map.get(DEFAULT_CATALOG) : map.get(catalogId);
+        Map<String, CatalogInfo> catalogMap = catalogId == null ? map.get(DEFAULT_CATALOG) : map.get(catalogId);
         catalogMap.put(NamingUtils.getFieldName(event.getName()), info);
     }
 

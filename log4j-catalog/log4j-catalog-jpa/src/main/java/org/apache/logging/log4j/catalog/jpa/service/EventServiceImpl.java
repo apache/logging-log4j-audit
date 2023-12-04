@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.dao.EventRepository;
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +55,8 @@ public class EventServiceImpl extends AbstractPagingAndSortingService implements
     }
 
     @Override
-    public List<EventModel> getEvents(String catalogId, int startPage, int itemsPerPage, String sortColumn,
-                                      String direction) {
+    public List<EventModel> getEvents(
+            String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<EventModel> page = eventRepository.findByCatalogId(catalogId, pageable);
         return page.getContent();

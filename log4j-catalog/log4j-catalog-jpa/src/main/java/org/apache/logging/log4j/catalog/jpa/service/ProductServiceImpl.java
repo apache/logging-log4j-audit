@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.dao.ProductRepository;
 import org.apache.logging.log4j.catalog.jpa.model.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +53,8 @@ public class ProductServiceImpl extends AbstractPagingAndSortingService implemen
     }
 
     @Override
-    public List<ProductModel> getProducts(String catalogId, int startPage, int itemsPerPage, String sortColumn,
-                                          String direction) {
+    public List<ProductModel> getProducts(
+            String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<ProductModel> page = productRepository.findByCatalogId(catalogId, pageable);
         return page.getContent();
@@ -65,7 +64,6 @@ public class ProductServiceImpl extends AbstractPagingAndSortingService implemen
     public Optional<ProductModel> getProduct(Long productId) {
         return productRepository.findOne(productId);
     }
-
 
     @Override
     public Optional<ProductModel> getProduct(String catalogId, String name) {

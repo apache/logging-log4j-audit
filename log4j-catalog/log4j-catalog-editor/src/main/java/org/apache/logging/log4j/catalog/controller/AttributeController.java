@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.ListResponse;
@@ -50,7 +48,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Catalog Product controller
  */
-
 @RequestMapping(value = "/api/attributes")
 @RestController
 public class AttributeController {
@@ -73,9 +70,10 @@ public class AttributeController {
     }
 
     @PostMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> attributeList(@RequestParam(value="jtStartIndex", required=false) Integer startIndex,
-                                                             @RequestParam(value="jtPageSize", required=false) Integer pageSize,
-                                                             @RequestParam(value="jtSorting", required=false) String sorting) {
+    public ResponseEntity<Map<String, Object>> attributeList(
+            @RequestParam(value = "jtStartIndex", required = false) Integer startIndex,
+            @RequestParam(value = "jtPageSize", required = false) Integer pageSize,
+            @RequestParam(value = "jtSorting", required = false) String sorting) {
         Type listType = new TypeToken<List<Attribute>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
@@ -96,7 +94,8 @@ public class AttributeController {
                         sortDirection = sortInfo[1];
                     }
                 }
-                attributes = modelMapper.map(attributeService.getAttributes(startPage, pageSize, sortColumn, sortDirection), listType);
+                attributes = modelMapper.map(
+                        attributeService.getAttributes(startPage, pageSize, sortColumn, sortDirection), listType);
             }
             if (attributes == null) {
                 attributes = new ArrayList<>();

@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
 import org.apache.logging.log4j.catalog.api.util.ProfileUtil;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -33,8 +32,8 @@ public class AuditCatalogEditor extends SpringBootServletInitializer {
     private static final String SPRING_PROFILE = "spring.profiles.active";
 
     public static void main(String[] args) {
-        SpringApplicationBuilder builder = new SpringApplicationBuilder().profiles(getActiveProfile())
-            .sources(AuditCatalogEditor.class);
+        SpringApplicationBuilder builder =
+                new SpringApplicationBuilder().profiles(getActiveProfile()).sources(AuditCatalogEditor.class);
         System.setProperty("isEmbedded", "true");
         builder.run(args);
     }
@@ -73,10 +72,9 @@ public class AuditCatalogEditor extends SpringBootServletInitializer {
             try {
                 props.load(is);
             } catch (IOException ioe) {
-                //Ignore the error.
+                // Ignore the error.
             }
         }
         return props;
     }
-
 }

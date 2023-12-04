@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit.service.config;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -40,24 +39,24 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.any())
-            .paths(PathSelectors.any())
-            .build()
-            .directModelSubstitute(LocalDate.class, java.sql.Date.class)
-            .directModelSubstitute(LocalDateTime.class, java.util.Date.class);
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+                .directModelSubstitute(LocalDate.class, java.sql.Date.class)
+                .directModelSubstitute(LocalDateTime.class, java.util.Date.class);
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Audit Service")
-            .description("Audits events")
-            .termsOfServiceUrl("http://logging.apache.org")
-            .contact("Apache Logging")
-            .license("1.0")
-            .licenseUrl("http://www.apache.org/licenses/")
-            .version("1.0")
-            .build();
+                .title("Audit Service")
+                .description("Audits events")
+                .termsOfServiceUrl("http://logging.apache.org")
+                .contact("Apache Logging")
+                .license("1.0")
+                .licenseUrl("http://www.apache.org/licenses/")
+                .version("1.0")
+                .build();
     }
 }

@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.jpa.dao.AttributeRepository;
 import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,8 @@ public class AttributeServiceImpl extends AbstractPagingAndSortingService implem
     }
 
     @Override
-    public List<AttributeModel> getAttributes(String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
+    public List<AttributeModel> getAttributes(
+            String catalogId, int startPage, int itemsPerPage, String sortColumn, String direction) {
         Pageable pageable = createPageRequest(startPage, itemsPerPage, sortColumn, direction);
         Page<AttributeModel> page = attributeRepository.findByCatalogId(catalogId, pageable);
         return page.getContent();

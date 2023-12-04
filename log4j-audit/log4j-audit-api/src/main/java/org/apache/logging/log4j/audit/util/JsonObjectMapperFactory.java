@@ -16,13 +16,6 @@
  */
 package org.apache.logging.log4j.audit.util;
 
-import java.io.IOException;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -35,6 +28,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import java.io.IOException;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
@@ -50,7 +49,8 @@ public final class JsonObjectMapperFactory {
     /**
      * LocalDateTime formatter that converts to and from a format usable in REST requests.
      */
-    public static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT);
+    public static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT);
 
     /**
      * Date/Time format.
@@ -70,10 +70,10 @@ public final class JsonObjectMapperFactory {
     /**
      * LocalDateTime formatter that converts to and from a format usable in REST requests.
      */
-    public static final DateTimeFormatter ZONED_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(ZONED_DATE_TIME_FORMAT);
+    public static final DateTimeFormatter ZONED_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern(ZONED_DATE_TIME_FORMAT);
 
-    private JsonObjectMapperFactory() {
-    }
+    private JsonObjectMapperFactory() {}
 
     /**
      * Create an ObjectMapper using the standard LocalDateTime format.
@@ -87,8 +87,9 @@ public final class JsonObjectMapperFactory {
         SimpleModule module = new SimpleModule();
         module.addSerializer(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
             @Override
-            public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator,
-                                  SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+            public void serialize(
+                    LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+                    throws IOException, JsonProcessingException {
                 jsonGenerator.writeString(dateTimeFormatter.format(localDateTime));
             }
         });
@@ -102,16 +103,20 @@ public final class JsonObjectMapperFactory {
                 try {
                     return LocalDateTime.parse(string, dateTimeFormatter);
                 } catch (DateTimeException e) {
-                    throw JsonMappingException.from(parser,
-                            String.format("Failed to deserialize %s: (%s) %s",
-                                    handledType().getName(), e.getClass().getName(), e.getMessage()), e);
+                    throw JsonMappingException.from(
+                            parser,
+                            String.format(
+                                    "Failed to deserialize %s: (%s) %s",
+                                    handledType().getName(), e.getClass().getName(), e.getMessage()),
+                            e);
                 }
             }
         });
         module.addSerializer(ZonedDateTime.class, new JsonSerializer<ZonedDateTime>() {
             @Override
-            public void serialize(ZonedDateTime zonedDateTime, JsonGenerator jsonGenerator,
-                                  SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+            public void serialize(
+                    ZonedDateTime zonedDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+                    throws IOException, JsonProcessingException {
                 jsonGenerator.writeString(zonedTimeFormatter.format(zonedDateTime));
             }
         });
@@ -125,16 +130,20 @@ public final class JsonObjectMapperFactory {
                 try {
                     return ZonedDateTime.parse(string, zonedTimeFormatter);
                 } catch (DateTimeException e) {
-                    throw JsonMappingException.from(parser,
-                            String.format("Failed to deserialize %s: (%s) %s",
-                                    handledType().getName(), e.getClass().getName(), e.getMessage()), e);
+                    throw JsonMappingException.from(
+                            parser,
+                            String.format(
+                                    "Failed to deserialize %s: (%s) %s",
+                                    handledType().getName(), e.getClass().getName(), e.getMessage()),
+                            e);
                 }
             }
         });
         module.addSerializer(LocalDate.class, new JsonSerializer<LocalDate>() {
             @Override
-            public void serialize(LocalDate localDate, JsonGenerator jsonGenerator,
-                                  SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+            public void serialize(
+                    LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+                    throws IOException, JsonProcessingException {
                 jsonGenerator.writeString(dateFormatter.format(localDate));
             }
         });
@@ -148,9 +157,12 @@ public final class JsonObjectMapperFactory {
                 try {
                     return LocalDate.parse(string, dateFormatter);
                 } catch (DateTimeException e) {
-                    throw JsonMappingException.from(parser,
-                            String.format("Failed to deserialize %s: (%s) %s",
-                                    handledType().getName(), e.getClass().getName(), e.getMessage()), e);
+                    throw JsonMappingException.from(
+                            parser,
+                            String.format(
+                                    "Failed to deserialize %s: (%s) %s",
+                                    handledType().getName(), e.getClass().getName(), e.getMessage()),
+                            e);
                 }
             }
         });
@@ -159,5 +171,4 @@ public final class JsonObjectMapperFactory {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         return mapper;
     }
-
 }

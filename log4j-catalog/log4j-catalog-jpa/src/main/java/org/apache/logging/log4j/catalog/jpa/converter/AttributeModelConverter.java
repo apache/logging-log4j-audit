@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.converter;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Constraint;
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
@@ -33,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AttributeModelConverter extends AbstractConverter<AttributeModel, Attribute> {
 
-    public  Attribute convert(AttributeModel model) {
+    public Attribute convert(AttributeModel model) {
         Attribute attribute = new Attribute();
         attribute.setName(model.getName());
         attribute.setDisplayName(model.getDisplayName());
@@ -52,7 +51,8 @@ public class AttributeModelConverter extends AbstractConverter<AttributeModel, A
             for (ConstraintModel constraintModel : constraintModels) {
                 Constraint constraint = new Constraint();
                 constraint.setId(constraintModel.getId());
-                constraint.setConstraintType(ConstraintPlugins.getInstance().findByName(constraintModel.getConstraintType()));
+                constraint.setConstraintType(
+                        ConstraintPlugins.getInstance().findByName(constraintModel.getConstraintType()));
                 constraint.setValue(constraintModel.getValue());
                 constraints.add(constraint);
             }

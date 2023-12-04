@@ -23,9 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.catalog.CatalogManagerImpl;
@@ -82,7 +80,6 @@ public class AuditCatalogManager extends CatalogManagerImpl implements AuditMana
     ProductConverter productConverter;
 
     private final CatalogReader catalogReader;
-
 
     public AuditCatalogManager(CatalogReader catalogReader) {
         super(catalogReader);

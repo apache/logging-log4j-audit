@@ -16,11 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
-import java.io.Serializable;
-import java.util.List;
-
 import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Definition of a Product.
@@ -145,5 +144,4 @@ public class Product implements Serializable {
         this.events = events;
         return this;
     }
-
 }

@@ -16,9 +16,8 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 /**
  *

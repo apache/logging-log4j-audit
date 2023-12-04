@@ -16,13 +16,12 @@
  */
 package org.apache.logging.log4j.audit;
 
+import static org.junit.Assert.*;
+
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.logging.log4j.audit.event.Logout;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class LogoutTest extends BaseEventTest {
     @Test
@@ -44,9 +43,8 @@ public class LogoutTest extends BaseEventTest {
 
         event.logEvent();
 
-        AuditExceptionHandler exceptionHandler = (message, ex) -> {
+        AuditExceptionHandler exceptionHandler = (message, ex) -> {};
 
-        };
         event.setAuditExceptionHandler(exceptionHandler);
         event.logEvent();
 
@@ -58,7 +56,8 @@ public class LogoutTest extends BaseEventTest {
         assertTrue("No completionStatus", msg.contains("completionStatus=\"Success\""));
 
         msg = msgs.get(2);
-        assertFalse("auditExceptionHandler should not be present in the context", msg.contains("auditExceptionHandler=\""));
+        assertFalse(
+                "auditExceptionHandler should not be present in the context", msg.contains("auditExceptionHandler=\""));
         msgs.forEach(System.out::println);
     }
 

@@ -16,17 +16,17 @@
  */
 package org.apache.logging.log4j.audit.service.controller;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import javax.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.service.catalog.AuditManager;
@@ -65,8 +65,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 @RestController
 @RequestMapping(value = "/catalog")
@@ -126,16 +124,19 @@ public class CatalogController {
         categoryModelMapper.addConverter(categoryModelConverter);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "List catalog Attributes", notes = "List catalog attributes for a catalog id", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "List catalog Attributes",
+            notes = "List catalog attributes for a catalog id",
+            tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/attributes")
-    public ResponseEntity<List<Attribute>> getAttributes(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
-                                                         @RequestParam(value = "startIndex", required = false) Integer startIndex,
-                                                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                         @RequestParam(value = "sortCol", required= false) String sortColumn,
-                                                         @RequestParam(value = "sortDir", required = false) String sortDirection) {
-        Type listType = new TypeToken<List<Attribute>>() {
-        }.getType();
+    public ResponseEntity<List<Attribute>> getAttributes(
+            @ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
+            @RequestParam(value = "startIndex", required = false) Integer startIndex,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortCol", required = false) String sortColumn,
+            @RequestParam(value = "sortDir", required = false) String sortDirection) {
+        Type listType = new TypeToken<List<Attribute>>() {}.getType();
         List<Attribute> attributes;
         if (startIndex == null || pageSize == null) {
             attributes = attributeModelMapper.map(attributeService.getAttributes(catalogId), listType);
@@ -148,8 +149,8 @@ public class CatalogController {
             if (startIndex > 0) {
                 startPage = startIndex / pageSize;
             }
-            attributes = attributeModelMapper.map(attributeService.getAttributes(startPage, pageSize, sortColumn,
-                    sortDirection), listType);
+            attributes = attributeModelMapper.map(
+                    attributeService.getAttributes(startPage, pageSize, sortColumn, sortDirection), listType);
         }
         if (attributes == null) {
             attributes = new ArrayList<>();
@@ -157,11 +158,15 @@ public class CatalogController {
         return new ResponseEntity<>(attributes, HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Attribute", notes = "Returns a catalog attribute", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Create a catalog Attribute",
+            notes = "Returns a catalog attribute",
+            tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/attribute/{name}")
-    public ResponseEntity<Attribute> getAttribute(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
-                                                         @ApiParam(value = "attribute name", required = true) @PathVariable String name) {
+    public ResponseEntity<Attribute> getAttribute(
+            @ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
+            @ApiParam(value = "attribute name", required = true) @PathVariable String name) {
         Optional<AttributeModel> optional = attributeService.getAttribute(catalogId, name);
         if (!optional.isPresent()) {
             LOGGER.warn("Unable to locate attribute {} in catalog {}", name, catalogId);
@@ -171,12 +176,14 @@ public class CatalogController {
         return new ResponseEntity<>(attribute, HttpStatus.OK);
     }
 
-
-
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Attribute", notes = "Creates a catalog attribute", tags = {"Catalog"})
-    @PostMapping(value = "/attribute", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Attribute> createAttribute(@ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Create a catalog Attribute",
+            notes = "Creates a catalog attribute",
+            tags = {"Catalog"})
+    @PostMapping(value = "/attribute", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Attribute> createAttribute(
+            @ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
         if (attribute.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required.");
         }
@@ -184,11 +191,11 @@ public class CatalogController {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
         AttributeModel model;
-        synchronized(this) {
+        synchronized (this) {
             Optional<AttributeModel> opt = attributeService.getAttribute(attribute.getCatalogId(), attribute.getName());
             if (opt != null && opt.isPresent()) {
-                throw new IllegalStateException(
-                    "An attribute named " + attribute.getName() + " in catalog " + attribute.getCatalogId() + " already exists");
+                throw new IllegalStateException("An attribute named " + attribute.getName() + " in catalog "
+                        + attribute.getCatalogId() + " already exists");
             }
             model = attributeService.saveAttribute(attributeConverter.convert(attribute));
             auditManager.saveAttribute(attribute);
@@ -196,10 +203,14 @@ public class CatalogController {
         return new ResponseEntity<>(attributeModelConverter.convert(model), HttpStatus.CREATED);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Update a catalog Attribute", notes = "Updates a catalog attribute", tags = {"Catalog"})
-    @PutMapping(value = "/attribute", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Attribute> updateAttribute(@ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Update a catalog Attribute",
+            notes = "Updates a catalog attribute",
+            tags = {"Catalog"})
+    @PutMapping(value = "/attribute", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Attribute> updateAttribute(
+            @ApiParam(value = "attribute", required = true) @RequestBody Attribute attribute) {
         if (attribute.getId() == null) {
             throw new IllegalArgumentException("An Attribute must have an id to be updated.");
         }
@@ -215,8 +226,11 @@ public class CatalogController {
         return new ResponseEntity<>(attributeModelConverter.convert(model), HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Deletes a catalog Attribute", notes = "Deletes a catalog attribute", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Deletes a catalog Attribute",
+            notes = "Deletes a catalog attribute",
+            tags = {"Catalog"})
     @DeleteMapping(value = "/attribute/{id}")
     public ResponseEntity<?> deleteAttribute(@RequestParam("id") Long attributeId) {
         synchronized (this) {
@@ -228,14 +242,18 @@ public class CatalogController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "List catalog Events", notes = "Lists catalog events for a catalog id", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "List catalog Events",
+            notes = "Lists catalog events for a catalog id",
+            tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/events")
-    public ResponseEntity<List<Event>> getEvents(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
-                                                         @RequestParam(value = "startIndex", required = false) Integer startIndex,
-                                                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                         @RequestParam(value = "sortCol", required= false) String sortColumn,
-                                                         @RequestParam(value = "sortDir", required = false) String sortDirection) {
+    public ResponseEntity<List<Event>> getEvents(
+            @ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
+            @RequestParam(value = "startIndex", required = false) Integer startIndex,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortCol", required = false) String sortColumn,
+            @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Event>>() {}.getType();
         List<Event> events;
         if (startIndex == null || pageSize == null) {
@@ -249,8 +267,8 @@ public class CatalogController {
             if (startIndex > 0) {
                 startPage = startIndex / pageSize;
             }
-            events = eventModelMapper.map(eventService.getEvents(startPage, pageSize, sortColumn,
-                    sortDirection), listType);
+            events = eventModelMapper.map(
+                    eventService.getEvents(startPage, pageSize, sortColumn, sortDirection), listType);
         }
         if (events == null) {
             events = new ArrayList<>();
@@ -258,9 +276,12 @@ public class CatalogController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Event", notes = "Creates a catalog event", tags = {"Catalog"})
-    @PostMapping(value = "/event", consumes=Versions.V1_0, produces=Versions.V1_0)
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Create a catalog Event",
+            notes = "Creates a catalog event",
+            tags = {"Catalog"})
+    @PostMapping(value = "/event", consumes = Versions.V1_0, produces = Versions.V1_0)
     public ResponseEntity<Event> createEvent(@ApiParam(value = "event", required = true) @RequestBody Event event) {
         if (event.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create an event.");
@@ -269,20 +290,23 @@ public class CatalogController {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
         EventModel model;
-        synchronized(this) {
+        synchronized (this) {
             Optional<EventModel> opt = eventService.getEvent(event.getCatalogId(), event.getName());
             if (opt != null && opt.isPresent()) {
-                throw new IllegalStateException(
-                    "An event named " + event.getName() + " in catalog " + event.getCatalogId() + " already exists");
+                throw new IllegalStateException("An event named " + event.getName() + " in catalog "
+                        + event.getCatalogId() + " already exists");
             }
             model = auditManager.saveEvent(event);
         }
         return new ResponseEntity<>(eventModelConverter.convert(model), HttpStatus.CREATED);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Update a catalog Event", notes = "Updates a catalog event", tags = {"Catalog"})
-    @PutMapping(value = "/event", consumes=Versions.V1_0, produces=Versions.V1_0)
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Update a catalog Event",
+            notes = "Updates a catalog event",
+            tags = {"Catalog"})
+    @PutMapping(value = "/event", consumes = Versions.V1_0, produces = Versions.V1_0)
     public ResponseEntity<Event> updateEvent(@ApiParam(value = "event", required = true) @RequestBody Event event) {
         if (event.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to update an event.");
@@ -291,29 +315,36 @@ public class CatalogController {
             throw new IllegalArgumentException("The default catalog cannot be modified at run time.");
         }
         EventModel model;
-        synchronized(this) {
+        synchronized (this) {
             model = eventConverter.convert(event);
             model = eventService.saveEvent(model);
         }
         return new ResponseEntity<>(eventModelConverter.convert(model), HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Deletes a catalog event", notes = "Deletes a catalog event", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Deletes a catalog event",
+            notes = "Deletes a catalog event",
+            tags = {"Catalog"})
     @DeleteMapping(value = "/event/{id}")
     public ResponseEntity<?> deleteEvent(@RequestParam("id") Long eventId) {
         eventService.deleteEvent(eventId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "List catalog Products", notes = "Lists catalog products for a catalog id", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "List catalog Products",
+            notes = "Lists catalog products for a catalog id",
+            tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/products")
-    public ResponseEntity<List<Product>> getProducts(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
-                                                 @RequestParam(value = "startIndex", required = false) Integer startIndex,
-                                                 @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                 @RequestParam(value = "sortCol", required= false) String sortColumn,
-                                                 @RequestParam(value = "sortDir", required = false) String sortDirection) {
+    public ResponseEntity<List<Product>> getProducts(
+            @ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
+            @RequestParam(value = "startIndex", required = false) Integer startIndex,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortCol", required = false) String sortColumn,
+            @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Product>>() {}.getType();
         List<Product> products;
         if (startIndex == null || pageSize == null) {
@@ -327,8 +358,8 @@ public class CatalogController {
             if (startIndex > 0) {
                 startPage = startIndex / pageSize;
             }
-            products = productModelMapper.map(productService.getProducts(startPage, pageSize, sortColumn,
-                    sortDirection), listType);
+            products = productModelMapper.map(
+                    productService.getProducts(startPage, pageSize, sortColumn, sortDirection), listType);
         }
         if (products == null) {
             products = new ArrayList<>();
@@ -336,10 +367,14 @@ public class CatalogController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Product", notes = "Creates a catalog product", tags = {"Catalog"})
-    @PostMapping(value = "/product", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Product> createProduct(@ApiParam(value = "product", required = true) @RequestBody Product product) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Create a catalog Product",
+            notes = "Creates a catalog product",
+            tags = {"Catalog"})
+    @PostMapping(value = "/product", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Product> createProduct(
+            @ApiParam(value = "product", required = true) @RequestBody Product product) {
         if (product.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a product.");
         }
@@ -348,18 +383,22 @@ public class CatalogController {
         }
         Optional<ProductModel> opt = productService.getProduct(product.getCatalogId(), product.getName());
         if (opt != null && opt.isPresent()) {
-            throw new IllegalStateException("A product named "+ product.getName() + " in catalog " +
-                    product.getCatalogId() + " already exists");
+            throw new IllegalStateException("A product named " + product.getName() + " in catalog "
+                    + product.getCatalogId() + " already exists");
         }
         ProductModel model = productConverter.convert(product);
         model = productService.saveProduct(model);
         return new ResponseEntity<>(productModelConverter.convert(model), HttpStatus.CREATED);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Update a catalog Product", notes = "Updates a catalog event", tags = {"Catalog"})
-    @PutMapping(value = "/product", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Product> updateProduct(@ApiParam(value = "product", required = true) @RequestBody Product product) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Update a catalog Product",
+            notes = "Updates a catalog event",
+            tags = {"Catalog"})
+    @PutMapping(value = "/product", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Product> updateProduct(
+            @ApiParam(value = "product", required = true) @RequestBody Product product) {
         if (product.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to update a product.");
         }
@@ -371,22 +410,29 @@ public class CatalogController {
         return new ResponseEntity<>(productModelConverter.convert(model), HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Deletes a catalog product", notes = "Deletes a catalog product", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Deletes a catalog product",
+            notes = "Deletes a catalog product",
+            tags = {"Catalog"})
     @DeleteMapping(value = "/product/{id}")
     public ResponseEntity<?> deleteProduct(@RequestParam("id") Long productId) {
         productService.deleteProduct(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "List catalog Categories", notes = "Lists catalog categories for a catalog id", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "List catalog Categories",
+            notes = "Lists catalog categories for a catalog id",
+            tags = {"Catalog"})
     @GetMapping(value = "{catalogId}/categories")
-    public ResponseEntity<List<Category>> getCategories(@ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
-                                                     @RequestParam(value = "startIndex", required = false) Integer startIndex,
-                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                     @RequestParam(value = "sortCol", required= false) String sortColumn,
-                                                     @RequestParam(value = "sortDir", required = false) String sortDirection) {
+    public ResponseEntity<List<Category>> getCategories(
+            @ApiParam(value = "catalog id", required = true) @PathVariable String catalogId,
+            @RequestParam(value = "startIndex", required = false) Integer startIndex,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+            @RequestParam(value = "sortCol", required = false) String sortColumn,
+            @RequestParam(value = "sortDir", required = false) String sortDirection) {
         Type listType = new TypeToken<List<Category>>() {}.getType();
         List<Category> categories;
         if (startIndex == null || pageSize == null) {
@@ -400,8 +446,8 @@ public class CatalogController {
             if (startIndex > 0) {
                 startPage = startIndex / pageSize;
             }
-            categories = categoryModelMapper.map(categoryService.getCategories(startPage, pageSize, sortColumn,
-                    sortDirection), listType);
+            categories = categoryModelMapper.map(
+                    categoryService.getCategories(startPage, pageSize, sortColumn, sortDirection), listType);
         }
         if (categories == null) {
             categories = new ArrayList<>();
@@ -409,10 +455,14 @@ public class CatalogController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Create a catalog Category", notes = "Creates a catalog category", tags = {"Catalog"})
-    @PostMapping(value = "/category", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Category> createCategory(@ApiParam(value = "category", required = true) @RequestBody Category category) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Create a catalog Category",
+            notes = "Creates a catalog category",
+            tags = {"Catalog"})
+    @PostMapping(value = "/category", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Category> createCategory(
+            @ApiParam(value = "category", required = true) @RequestBody Category category) {
         if (category.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a category.");
         }
@@ -421,18 +471,22 @@ public class CatalogController {
         }
         Optional<CategoryModel> opt = categoryService.getCategory(category.getCatalogId(), category.getName());
         if (opt != null && opt.isPresent()) {
-            throw new IllegalStateException("A category named "+ category.getName() + " in catalog " +
-                    category.getCatalogId() + " already exists");
+            throw new IllegalStateException("A category named " + category.getName() + " in catalog "
+                    + category.getCatalogId() + " already exists");
         }
         CategoryModel model = categoryConverter.convert(category);
         model = categoryService.saveCategory(model);
         return new ResponseEntity<>(categoryModelConverter.convert(model), HttpStatus.CREATED);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Update a catalog Category", notes = "Updates a catalog category", tags = {"Catalog"})
-    @PutMapping(value = "/category", consumes=Versions.V1_0, produces=Versions.V1_0)
-    public ResponseEntity<Category> updateCategory(@ApiParam(value = "category", required = true) @RequestBody Category category) {
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Update a catalog Category",
+            notes = "Updates a catalog category",
+            tags = {"Catalog"})
+    @PutMapping(value = "/category", consumes = Versions.V1_0, produces = Versions.V1_0)
+    public ResponseEntity<Category> updateCategory(
+            @ApiParam(value = "category", required = true) @RequestBody Category category) {
         if (category.getCatalogId() == null) {
             throw new IllegalArgumentException("A catalog id is required to create a category.");
         }
@@ -444,8 +498,11 @@ public class CatalogController {
         return new ResponseEntity<>(categoryModelConverter.convert(model), HttpStatus.OK);
     }
 
-    @ApiImplicitParams( {@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
-    @ApiOperation(value = "Deletes a catalog category", notes = "Deletes a catalog category", tags = {"Catalog"})
+    @ApiImplicitParams({@ApiImplicitParam(dataType = "String", name = "Authorization", paramType = "header")})
+    @ApiOperation(
+            value = "Deletes a catalog category",
+            notes = "Deletes a catalog category",
+            tags = {"Catalog"})
     @DeleteMapping(value = "/category/{id}")
     public ResponseEntity<?> deleteCategory(@RequestParam("id") Long categoryId) {
         categoryService.deleteCategory(categoryId);

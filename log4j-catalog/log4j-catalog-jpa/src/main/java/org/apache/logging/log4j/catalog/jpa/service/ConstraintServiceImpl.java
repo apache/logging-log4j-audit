@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.apache.logging.log4j.catalog.api.plugins.ConstraintPlugins;
 import org.apache.logging.log4j.catalog.jpa.dao.ConstraintRepository;
 import org.apache.logging.log4j.catalog.jpa.model.ConstraintModel;
@@ -60,5 +59,4 @@ public class ConstraintServiceImpl implements ConstraintService {
     public void deleteConstraint(Long constraintId) {
         constraintRepository.deleteById(constraintId);
     }
-
 }

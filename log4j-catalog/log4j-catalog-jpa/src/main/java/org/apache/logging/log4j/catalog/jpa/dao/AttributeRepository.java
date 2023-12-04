@@ -18,5 +18,4 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 
 import org.apache.logging.log4j.catalog.jpa.model.AttributeModel;
 
-public interface AttributeRepository extends PagingAndSortingRepository<AttributeModel, Long> {
-}
+public interface AttributeRepository extends PagingAndSortingRepository<AttributeModel, Long> {}

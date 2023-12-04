@@ -16,12 +16,15 @@
  */
 package org.apache.logging.log4j.audit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.audit.catalog.CatalogManager;
@@ -37,11 +40,6 @@ import org.apache.logging.log4j.core.test.appender.ListAppender;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  *
@@ -140,7 +138,8 @@ public class AuditLoggerTest {
 
     @Test
     public void testAuditLoggerWithBasicCatalog() throws Exception {
-        auditLogger = buildAuditLogger(new ClassPathCatalogReader(Collections.singletonMap("catalogFile", "basicCatalog.json")));
+        auditLogger = buildAuditLogger(
+                new ClassPathCatalogReader(Collections.singletonMap("catalogFile", "basicCatalog.json")));
 
         auditLogger.logEvent("login", null);
     }

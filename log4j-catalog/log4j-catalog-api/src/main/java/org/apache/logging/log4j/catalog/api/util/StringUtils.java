@@ -21,8 +21,7 @@ package org.apache.logging.log4j.catalog.api.util;
  */
 public final class StringUtils {
 
-    private StringUtils() {
-    }
+    private StringUtils() {}
 
     public static final boolean isBlank(String value) {
         return value == null || value.length() == 0;

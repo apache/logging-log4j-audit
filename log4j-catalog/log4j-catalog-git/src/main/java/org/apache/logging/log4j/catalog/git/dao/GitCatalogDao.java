@@ -16,18 +16,17 @@
  */
 package org.apache.logging.log4j.catalog.git.dao;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.CatalogData;
@@ -126,8 +125,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
         if (localRepo == null) {
             updateRepo();
         }
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(catalogFile.lastModified()),
-                ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(catalogFile.lastModified()), ZoneId.systemDefault());
     }
 
     @Override
@@ -156,7 +154,7 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             throw new CatalogModificationException("Catalog is not writable: " + localRepoFile.getAbsolutePath());
         }
 
-        try (FileWriter writer = new FileWriter(catalogFile)){
+        try (FileWriter writer = new FileWriter(catalogFile)) {
             String text = mapper.writeValueAsString(data);
             writer.write(text);
         } catch (IOException ioException) {
@@ -191,7 +189,8 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
         if (!localRepoFile.exists()) {
             LOGGER.debug("local git repo {} does not exist - creating it", localRepoPath);
             localRepoFile.getParentFile().mkdirs();
-            CloneCommand cloneCommand = Git.cloneRepository().setURI(remoteRepoUri).setDirectory(localRepoFile);
+            CloneCommand cloneCommand =
+                    Git.cloneRepository().setURI(remoteRepoUri).setDirectory(localRepoFile);
             if (branch != null) {
                 cloneCommand.setBranch(branch);
             }
@@ -204,12 +203,13 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
             try (Git git = cloneCommand.call()) {
                 catalogFile = new File(localRepoFile, catalogPath);
             } catch (Exception ex) {
-                throw new CatalogNotFoundException("Unable to clone remote catalog at " + remoteRepoUri + " to " + localRepoPath, ex);
+                throw new CatalogNotFoundException(
+                        "Unable to clone remote catalog at " + remoteRepoUri + " to " + localRepoPath, ex);
             }
         } else {
             try {
                 LOGGER.debug("local git repo {} exists - updating", localRepoPath);
-                localRepo = new FileRepository(localRepoPath  + "/.git");
+                localRepo = new FileRepository(localRepoPath + "/.git");
                 catalogFile = new File(localRepoFile, catalogPath);
                 git = new Git(localRepo);
                 PullCommand pullCommand = git.pull();
@@ -225,7 +225,8 @@ public class GitCatalogDao extends AbstractCatalogReader implements CatalogDao {
                     LOGGER.error("Exception", gitApiException);
                 }
             } catch (Exception exception) {
-                throw new CatalogReadException("Unable to pull remote catalog at " + remoteRepoUri + " to " + localRepoPath, exception);
+                throw new CatalogReadException(
+                        "Unable to pull remote catalog at " + remoteRepoUri + " to " + localRepoPath, exception);
             }
         }
     }

@@ -16,13 +16,13 @@
  */
 package org.apache.logging.log4j.audit;
 
+import static org.junit.Assert.*;
+
 import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;
 import org.apache.logging.log4j.audit.request.Scope;
 import org.apache.logging.log4j.core.util.UuidUtil;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class RequestContextTest {
 

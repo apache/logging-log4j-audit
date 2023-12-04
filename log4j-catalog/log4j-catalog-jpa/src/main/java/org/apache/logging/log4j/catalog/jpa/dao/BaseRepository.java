@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,7 +26,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 @NoRepositoryBean
-public interface BaseRepository <T, ID extends Serializable> extends Repository<T, ID>, JpaSpecificationExecutor<T> {
+public interface BaseRepository<T, ID extends Serializable> extends Repository<T, ID>, JpaSpecificationExecutor<T> {
 
     Optional<T> findById(ID id);
 
@@ -36,11 +35,15 @@ public interface BaseRepository <T, ID extends Serializable> extends Repository<
     }
 
     List<T> findAll();
+
     List<T> findAll(Specification<T> spec);
+
     @Modifying
     T save(T persisted);
+
     @Modifying
     void delete(T deleted);
+
     @Modifying
     void deleteById(ID id);
 }

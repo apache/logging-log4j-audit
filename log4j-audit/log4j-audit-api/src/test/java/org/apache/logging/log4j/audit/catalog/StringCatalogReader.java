@@ -16,6 +16,12 @@
  */
 package org.apache.logging.log4j.audit.catalog;
 
+import static org.junit.Assert.assertNotNull;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -26,11 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.CatalogReader;
@@ -43,8 +44,6 @@ import org.apache.logging.log4j.catalog.api.Product;
 import org.apache.logging.log4j.catalog.api.plugins.MinValueConstraint;
 import org.apache.logging.log4j.catalog.api.plugins.PatternConstraint;
 import org.apache.logging.log4j.catalog.api.util.CatalogEventFilter;
-
-import static org.junit.Assert.assertNotNull;
 
 /**
  *
@@ -90,7 +89,6 @@ public class StringCatalogReader implements CatalogReader {
         return attributeMap;
     }
 
-
     @Override
     public Attribute getAttribute(String name) {
         return attributeMap.get(name);
@@ -99,25 +97,32 @@ public class StringCatalogReader implements CatalogReader {
     @Override
     public Category getCategory(String name) {
         if (catalogData.getCategories() != null) {
-            return catalogData.getCategories().stream().filter(a -> a.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getCategories().stream()
+                    .filter(a -> a.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
-
 
     @Override
     public Event getEvent(String name) {
         if (catalogData.getEvents() != null) {
-            return catalogData.getEvents().stream().filter(e -> e.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getEvents().stream()
+                    .filter(e -> e.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
 
-
     @Override
     public Product getProduct(String name) {
         if (catalogData.getProducts() != null) {
-            return catalogData.getProducts().stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+            return catalogData.getProducts().stream()
+                    .filter(p -> p.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
@@ -150,32 +155,64 @@ public class StringCatalogReader implements CatalogReader {
         List<Event> events = new ArrayList<>();
         Attribute attribute = new Attribute();
         attribute.setName("accountNumber").setDisplayName("Account Number").setDescription("Company account number");
-        attribute.setDataType(DataType.INT).setIndexed(true).setSortable(true).setRequired(true).setRequestContext(true);
+        attribute
+                .setDataType(DataType.INT)
+                .setIndexed(true)
+                .setSortable(true)
+                .setRequired(true)
+                .setRequestContext(true);
         attributes.add(attribute);
         attribute = new Attribute();
         attribute.setName("ipAddress").setDisplayName("IP Address").setDescription("IP Address of the caller");
-        attribute.setDataType(DataType.STRING).setIndexed(true).setSortable(true).setRequired(false).setRequestContext(true);
+        attribute
+                .setDataType(DataType.STRING)
+                .setIndexed(true)
+                .setSortable(true)
+                .setRequired(false)
+                .setRequestContext(true);
         Set<Constraint> constraints = new HashSet<>();
         Constraint constraint = new Constraint();
-        constraint.setConstraintType(new PatternConstraint()).setValue("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+        constraint
+                .setConstraintType(new PatternConstraint())
+                .setValue(
+                        "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
         constraints.add(constraint);
         attribute.setConstraints(constraints);
         attributes.add(attribute);
         attribute = new Attribute();
-        attribute.setName("userId").setDisplayName("UserId").setDescription("Id of the User").setDataType(DataType.INT);
+        attribute
+                .setName("userId")
+                .setDisplayName("UserId")
+                .setDescription("Id of the User")
+                .setDataType(DataType.INT);
         attribute.setIndexed(true).setSortable(true).setRequired(true).setRequestContext(true);
         attributes.add(attribute);
         attribute = new Attribute();
         attribute.setName("loginId").setDisplayName("LoginId").setDescription("Id user logs in with");
-        attribute.setDataType(DataType.INT).setIndexed(true).setSortable(true).setRequired(true).setRequestContext(true);
+        attribute
+                .setDataType(DataType.INT)
+                .setIndexed(true)
+                .setSortable(true)
+                .setRequired(true)
+                .setRequestContext(true);
         attributes.add(attribute);
         attribute = new Attribute();
         attribute.setName("hostName").setDisplayName("Host Name").setDescription("Name of the server");
-        attribute.setDataType(DataType.STRING).setIndexed(true).setSortable(true).setRequired(false).setRequestContext(true);
+        attribute
+                .setDataType(DataType.STRING)
+                .setIndexed(true)
+                .setSortable(true)
+                .setRequired(false)
+                .setRequestContext(true);
         attributes.add(attribute);
         Attribute toAccount = new Attribute();
         toAccount.setName("toAccount").setDisplayName("To Account Number").setDescription("Destination account");
-        toAccount.setDataType(DataType.INT).setIndexed(false).setSortable(false).setRequired(true).setRequestContext(false);
+        toAccount
+                .setDataType(DataType.INT)
+                .setIndexed(false)
+                .setSortable(false)
+                .setRequired(true)
+                .setRequestContext(false);
         constraints = new HashSet<>();
         constraint = new Constraint();
         constraint.setConstraintType(new MinValueConstraint()).setValue("1");
@@ -184,19 +221,36 @@ public class StringCatalogReader implements CatalogReader {
         attributes.add(toAccount);
         Attribute fromAccount = new Attribute();
         fromAccount.setName("fromAccount").setDisplayName("From Account Number").setDescription("Source of funds");
-        fromAccount.setDataType(DataType.INT).setIndexed(false).setSortable(false).setRequired(true).setRequestContext(false);
+        fromAccount
+                .setDataType(DataType.INT)
+                .setIndexed(false)
+                .setSortable(false)
+                .setRequired(true)
+                .setRequestContext(false);
         attributes.add(fromAccount);
         Attribute amount = new Attribute();
         amount.setName("amount").setDisplayName("Amount").setDescription("Amount to transfer");
-        amount.setDataType(DataType.BIG_DECIMAL).setIndexed(false).setSortable(false).setRequired(true).setRequestContext(false);
+        amount.setDataType(DataType.BIG_DECIMAL)
+                .setIndexed(false)
+                .setSortable(false)
+                .setRequired(true)
+                .setRequestContext(false);
         attributes.add(amount);
         Attribute account = new Attribute();
         account.setName("account").setDisplayName("Account Number").setDescription("Accopunt number");
-        account.setDataType(DataType.INT).setIndexed(false).setSortable(false).setRequired(true).setRequestContext(false);
+        account.setDataType(DataType.INT)
+                .setIndexed(false)
+                .setSortable(false)
+                .setRequired(true)
+                .setRequestContext(false);
         attributes.add(account);
         Attribute payee = new Attribute();
         payee.setName("payee").setDisplayName("Payee").setDescription("Recipient of payment");
-        payee.setDataType(DataType.STRING).setIndexed(false).setSortable(false).setRequired(true).setRequestContext(false);
+        payee.setDataType(DataType.STRING)
+                .setIndexed(false)
+                .setSortable(false)
+                .setRequired(true)
+                .setRequestContext(false);
         attributes.add(payee);
         Event event = new Event();
         event.setName("login").setDisplayName("Login").setDescription("User Login");

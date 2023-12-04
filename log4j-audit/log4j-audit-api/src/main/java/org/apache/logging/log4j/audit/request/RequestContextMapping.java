@@ -16,7 +16,6 @@
  */
 package org.apache.logging.log4j.audit.request;
 
-
 public class RequestContextMapping {
     private final String fieldName;
     private final Scope scope;

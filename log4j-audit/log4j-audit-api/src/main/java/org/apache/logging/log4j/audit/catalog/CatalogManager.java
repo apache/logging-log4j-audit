@@ -16,13 +16,12 @@
  */
 package org.apache.logging.log4j.audit.catalog;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.Event;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  *

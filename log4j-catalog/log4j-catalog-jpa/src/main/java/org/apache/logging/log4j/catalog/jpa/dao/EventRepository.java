@@ -18,5 +18,4 @@ package org.apache.logging.log4j.catalog.jpa.dao;
 
 import org.apache.logging.log4j.catalog.jpa.model.EventModel;
 
-public interface EventRepository extends PagingAndSortingRepository<EventModel, Long> {
-}
+public interface EventRepository extends PagingAndSortingRepository<EventModel, Long> {}

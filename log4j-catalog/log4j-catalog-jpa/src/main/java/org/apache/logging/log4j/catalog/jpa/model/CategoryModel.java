@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.model;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,26 +34,34 @@ import javax.persistence.UniqueConstraint;
  * A Catalog CategoryDto.
  */
 @Entity
-@Table(name = "CATALOG_CATEGORY",
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" })})
+@Table(
+        name = "CATALOG_CATEGORY",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME"})})
 public class CategoryModel implements Serializable {
     private static final long serialVersionUID = 5776108323599073407L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
     @Column(name = "NAME")
     private String name;
+
     @Column(name = "DISPLAY_NAME")
     private String displayName;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
     @Column(name = "CATALOG_ID")
     private String catalogId;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "category_events", joinColumns = { @JoinColumn(name = "category_id")},
-            inverseJoinColumns = { @JoinColumn(name = "event_id")})
+    @JoinTable(
+            name = "category_events",
+            joinColumns = {@JoinColumn(name = "category_id")},
+            inverseJoinColumns = {@JoinColumn(name = "event_id")})
     private List<EventModel> events;
 
     public CategoryModel() {
@@ -164,5 +171,4 @@ public class CategoryModel implements Serializable {
     public void setEvents(List<EventModel> events) {
         this.events = events;
     }
-
 }

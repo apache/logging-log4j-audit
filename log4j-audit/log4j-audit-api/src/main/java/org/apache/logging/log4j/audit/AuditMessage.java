@@ -18,7 +18,6 @@ package org.apache.logging.log4j.audit;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.logging.log4j.message.StructuredDataId;
 import org.apache.logging.log4j.message.StructuredDataMessage;
 
@@ -32,12 +31,12 @@ public class AuditMessage extends StructuredDataMessage {
     private final Map<String, StructuredDataMessage> extraContent = new HashMap<>();
 
     public AuditMessage(String eventName) {
-         this(eventName, MAX_LENGTH);
+        this(eventName, MAX_LENGTH);
     }
 
     public AuditMessage(String eventName, int maxLength) {
         // Use this with Log4j 2.9
-     //   super(new AuditId(eventName, MAX_LENGTH), null, "Audit", maxLength);
+        //   super(new AuditId(eventName, MAX_LENGTH), null, "Audit", maxLength);
         super(new AuditId(eventName, maxLength), null, "Audit");
     }
 
@@ -52,7 +51,5 @@ public class AuditMessage extends StructuredDataMessage {
             // super(eventName, maxLength);
             super(eventName, null, null);
         }
-
     }
-
 }

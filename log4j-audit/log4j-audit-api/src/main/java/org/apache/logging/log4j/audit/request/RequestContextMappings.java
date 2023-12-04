@@ -22,7 +22,6 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
 import org.apache.logging.log4j.audit.annotation.Chained;
 import org.apache.logging.log4j.audit.annotation.ClientServer;
 import org.apache.logging.log4j.audit.annotation.HeaderPrefix;
@@ -54,7 +53,8 @@ public class RequestContextMappings {
             throw new IllegalArgumentException("A RequestContext class must be provided");
         }
         Annotation annotation = clazz.getAnnotation(HeaderPrefix.class);
-        this.headerPrefix = annotation != null ? ((HeaderPrefix) annotation).value().toLowerCase() : DEFAULT_HEADER_PREFIX;
+        this.headerPrefix =
+                annotation != null ? ((HeaderPrefix) annotation).value().toLowerCase() : DEFAULT_HEADER_PREFIX;
         Field[] fields = clazz.getFields();
         for (Field field : fields) {
             if (!Modifier.isStatic(field.getModifiers())) {
@@ -87,10 +87,12 @@ public class RequestContextMappings {
                     try {
                         @SuppressWarnings("unchecked")
                         Supplier<String> supplier = (Supplier<String>) field.get(null);
-                        mappings.put(chained.fieldName().toLowerCase(),
+                        mappings.put(
+                                chained.fieldName().toLowerCase(),
                                 new ChainedMapping(chained.fieldName(), chained.chainedFieldName(), supplier));
                     } catch (IllegalAccessException ex) {
-                        throw new IllegalArgumentException("Unable to retrieve Supplier for chained field " + chained.fieldName());
+                        throw new IllegalArgumentException(
+                                "Unable to retrieve Supplier for chained field " + chained.fieldName());
                     }
                 }
             }
@@ -115,6 +117,7 @@ public class RequestContextMappings {
     }
 
     private boolean validateChained(RequestContextMapping mapping) {
-        return mapping.getScope() == Scope.CHAIN && !mappings.containsKey(mapping.getChainKey().toLowerCase());
+        return mapping.getScope() == Scope.CHAIN
+                && !mappings.containsKey(mapping.getChainKey().toLowerCase());
     }
 }

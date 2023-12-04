@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.catalog.api.Category;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryConverter;
 import org.apache.logging.log4j.catalog.jpa.converter.CategoryModelConverter;
@@ -43,7 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Catalog Category controller
  */
-
 @RequestMapping(value = "/api/categories")
 @RestController
 public class CategoryController {
@@ -52,7 +49,6 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
 
     @Autowired
     private CategoryModelConverter categoryModelConverter;
@@ -66,9 +62,10 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> categoryList(@RequestParam(value="jtStartIndex", required=false) Integer startIndex,
-                                                            @RequestParam(value="jtPageSize", required=false) Integer pageSize,
-                                                            @RequestParam(value="jtSorting", required=false) String sorting) {
+    public ResponseEntity<Map<String, Object>> categoryList(
+            @RequestParam(value = "jtStartIndex", required = false) Integer startIndex,
+            @RequestParam(value = "jtPageSize", required = false) Integer pageSize,
+            @RequestParam(value = "jtSorting", required = false) String sorting) {
         Type listType = new TypeToken<List<Category>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
@@ -89,7 +86,8 @@ public class CategoryController {
                         sortDirection = sortInfo[1];
                     }
                 }
-                categories = modelMapper.map(categoryService.getCategories(startPage, pageSize, sortColumn, sortDirection), listType);
+                categories = modelMapper.map(
+                        categoryService.getCategories(startPage, pageSize, sortColumn, sortDirection), listType);
             }
             if (categories == null) {
                 categories = new ArrayList<>();

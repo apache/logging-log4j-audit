@@ -16,12 +16,11 @@
  */
 package org.apache.logging.log4j.catalog.api.dao;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Attribute;
@@ -30,12 +29,12 @@ import org.apache.logging.log4j.catalog.api.CatalogReader;
 /**
  * Provides access to the JSON version of the catalog. This version is not modifiable.
  */
-//@Component
+// @Component
 public class JsonCatalogReader extends AbstractCatalogReader {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonCatalogReader.class);
 
-    //@Autowired
+    // @Autowired
     CatalogReader catalogReader;
 
     public CatalogReader getCatalogReader() {
@@ -46,7 +45,7 @@ public class JsonCatalogReader extends AbstractCatalogReader {
         this.catalogReader = catalogReader;
     }
 
-    //@PostConstruct
+    // @PostConstruct
     public void init() {
         catalogData = catalogReader.read();
         for (Attribute attribute : catalogData.getAttributes()) {

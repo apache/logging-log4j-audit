@@ -16,10 +16,10 @@
  */
 package org.apache.logging.log4j.audit.generator;
 
+import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.logging.log4j.audit.generator.Constants.PUBLIC;
 
 public class ConstructorDefinition implements Comparable<ConstructorDefinition> {
     private String visability = PUBLIC;

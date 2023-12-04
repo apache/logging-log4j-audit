@@ -19,5 +19,4 @@ package org.apache.logging.log4j.catalog.git.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ServiceConfig {
-}
+public class ServiceConfig {}

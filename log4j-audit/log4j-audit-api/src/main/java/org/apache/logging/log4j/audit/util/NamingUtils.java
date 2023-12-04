@@ -18,8 +18,7 @@ package org.apache.logging.log4j.audit.util;
 
 public final class NamingUtils {
 
-    private NamingUtils() {
-    }
+    private NamingUtils() {}
 
     public static String getPackageName(String className) {
         return className.substring(0, className.lastIndexOf('.'));

@@ -18,7 +18,6 @@ package org.apache.logging.log4j.catalog.jpa.converter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.catalog.api.Event;
 import org.apache.logging.log4j.catalog.api.EventAttribute;
 import org.apache.logging.log4j.catalog.jpa.model.EventAttributeModel;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventModelConverter extends AbstractConverter<EventModel, Event> {
 
-    public  Event convert(EventModel model) {
+    public Event convert(EventModel model) {
         Event event = new Event();
         event.setName(model.getName());
         event.setDisplayName(model.getDisplayName());

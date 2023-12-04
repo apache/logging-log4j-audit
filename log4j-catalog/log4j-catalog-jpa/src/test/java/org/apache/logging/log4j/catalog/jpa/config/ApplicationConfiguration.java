@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan(basePackages = { "org.apache.logging.log4j.catalog" })
+@ComponentScan(basePackages = {"org.apache.logging.log4j.catalog"})
 @Import(HibernateConfig.class)
 public class ApplicationConfiguration {
     @Bean

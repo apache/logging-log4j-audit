@@ -28,8 +28,7 @@ public class EventAttribute implements Serializable {
 
     private Boolean isRequired;
 
-    public EventAttribute() {
-    }
+    public EventAttribute() {}
 
     public EventAttribute(String name, boolean isRequired) {
         this.name = name;

@@ -19,7 +19,6 @@ package org.apache.logging.log4j.catalog.jpa.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.catalog.api.Attribute;
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.Category;
@@ -54,23 +53,30 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+
     @Autowired
     private EventRepository eventRepository;
+
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private AttributeModelConverter attributeModelConverter;
+
     @Autowired
     private EventModelConverter eventModelConverter;
+
     @Autowired
     private CategoryModelConverter categoryModelConverter;
+
     @Autowired
     private ProductModelConverter productModelConverter;
+
     @Autowired
     private CatalogRepository catalogRepository;
-
 
     public CatalogData getCatalogData() {
         CatalogData data = new CatalogData();

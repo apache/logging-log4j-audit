@@ -17,10 +17,8 @@
 package org.apache.logging.log4j.audit.rest;
 
 import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -54,13 +52,15 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
             if (mapping != null) {
                 if (mapping.isChained()) {
                     ThreadContext.put(mapping.getChainKey(), request.getHeader(name));
-                    logger.debug("Setting Context Key:{} with value:{}", mapping.getChainKey(), request.getHeader(name));
+                    logger.debug(
+                            "Setting Context Key:{} with value:{}", mapping.getChainKey(), request.getHeader(name));
                     String value = ((ChainedMapping) mapping).getSupplier().get();
                     ThreadContext.put(mapping.getFieldName(), value);
                     logger.debug("Setting Context Key:{} with value:{}", mapping.getFieldName(), value);
                 } else {
                     ThreadContext.put(mapping.getFieldName(), request.getHeader(name));
-                    logger.debug("Setting Context Key:{} with value:{}", mapping.getFieldName(), request.getHeader(name));
+                    logger.debug(
+                            "Setting Context Key:{} with value:{}", mapping.getFieldName(), request.getHeader(name));
                 }
             }
         }
@@ -71,10 +71,13 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) {
+    public void postHandle(
+            HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) {
         if (logger.isTraceEnabled()) {
             long elapsed = System.nanoTime() - startTime.get();
-            StringBuilder sb = new StringBuilder("Request ").append(request.getRequestURI()).append(" completed in ");
+            StringBuilder sb = new StringBuilder("Request ")
+                    .append(request.getRequestURI())
+                    .append(" completed in ");
             ElapsedUtil.addElapsed(elapsed, sb);
             logger.trace(sb.toString());
             startTime.remove();
@@ -82,7 +85,8 @@ public class RequestContextHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+    public void afterCompletion(
+            HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
         ThreadContext.clearMap();
     }
 }

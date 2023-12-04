@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.jpa.config;
 
 import javax.sql.DataSource;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

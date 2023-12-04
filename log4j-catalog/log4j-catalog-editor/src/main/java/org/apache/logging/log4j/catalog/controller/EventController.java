@@ -22,9 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.Event;
@@ -46,7 +44,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Catalog Product controller
  */
-
 @RequestMapping(value = "/api/events")
 @RestController
 public class EventController {
@@ -69,9 +66,10 @@ public class EventController {
     }
 
     @PostMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> eventList(@RequestParam(value="jtStartIndex", required=false) Integer startIndex,
-                                                         @RequestParam(value="jtPageSize", required=false) Integer pageSize,
-                                                         @RequestParam(value="jtSorting", required=false) String sorting) {
+    public ResponseEntity<Map<String, Object>> eventList(
+            @RequestParam(value = "jtStartIndex", required = false) Integer startIndex,
+            @RequestParam(value = "jtPageSize", required = false) Integer pageSize,
+            @RequestParam(value = "jtSorting", required = false) String sorting) {
         Type listType = new TypeToken<List<Event>>() {}.getType();
         Map<String, Object> response = new HashMap<>();
         try {
@@ -92,7 +90,8 @@ public class EventController {
                         sortDirection = sortInfo[1];
                     }
                 }
-                events = modelMapper.map(eventService.getEvents(startPage, pageSize, sortColumn, sortDirection), listType);
+                events = modelMapper.map(
+                        eventService.getEvents(startPage, pageSize, sortColumn, sortDirection), listType);
             }
             if (events == null) {
                 events = new ArrayList<>();
@@ -167,7 +166,6 @@ public class EventController {
             } else {
                 response.put("Result", "OK");
                 response.put("Records", new ArrayList<>());
-
             }
         } catch (Exception ex) {
             response.put("Result", "FAILURE");

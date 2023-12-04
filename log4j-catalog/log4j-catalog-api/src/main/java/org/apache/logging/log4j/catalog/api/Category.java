@@ -16,10 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 import java.io.Serializable;
 import java.util.List;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  * A Catalog Category.

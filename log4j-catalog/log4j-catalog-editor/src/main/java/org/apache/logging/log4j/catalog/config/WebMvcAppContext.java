@@ -16,10 +16,7 @@
  */
 package org.apache.logging.log4j.catalog.config;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -27,6 +24,10 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
@@ -59,11 +60,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 @Configuration
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog"})
-//@PropertySource(value = "classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
+// @PropertySource(value = "classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
 public class WebMvcAppContext extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);
@@ -176,8 +175,8 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
                     TransportConfigCallback transportConfigCallback = new TransportConfigCallback() {
                         final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
                             @Override
-                            protected JSch createDefaultJSch( FS fs ) throws JSchException {
-                                JSch defaultJSch = super.createDefaultJSch( fs );
+                            protected JSch createDefaultJSch(FS fs) throws JSchException {
+                                JSch defaultJSch = super.createDefaultJSch(fs);
                                 if (isNotBlank(privateKeyPath)) {
                                     defaultJSch.addIdentity(privateKeyPath);
                                 }
@@ -195,29 +194,36 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter implements Applica
                                         }
 
                                         @Override
-                                        public String getPassword() {return null;}
+                                        public String getPassword() {
+                                            return null;
+                                        }
 
                                         @Override
-                                        public boolean promptPassword(String message) {return false;}
+                                        public boolean promptPassword(String message) {
+                                            return false;
+                                        }
 
                                         @Override
-                                        public boolean promptPassphrase(String message) {return true;}
+                                        public boolean promptPassphrase(String message) {
+                                            return true;
+                                        }
 
                                         @Override
-                                        public boolean promptYesNo(String message) {return false;}
+                                        public boolean promptYesNo(String message) {
+                                            return false;
+                                        }
 
                                         @Override
                                         public void showMessage(String message) {}
                                     });
-
                                 }
                             }
                         };
+
                         @Override
                         public void configure(Transport transport) {
-                            SshTransport sshTransport = ( SshTransport )transport;
-                            sshTransport.setSshSessionFactory( sshSessionFactory );
-
+                            SshTransport sshTransport = (SshTransport) transport;
+                            sshTransport.setSshSessionFactory(sshSessionFactory);
                         }
                     };
                     dataSource.setTransportConfigCallback(transportConfigCallback);

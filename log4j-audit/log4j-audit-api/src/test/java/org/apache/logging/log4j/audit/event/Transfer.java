@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.audit.event;
 
 import java.math.BigDecimal;
-
 import org.apache.logging.log4j.audit.AuditEvent;
 import org.apache.logging.log4j.audit.annotation.Constraint;
 import org.apache.logging.log4j.audit.annotation.MaxLength;
@@ -29,11 +28,18 @@ import org.apache.logging.log4j.audit.annotation.Required;
  * @author generated
  */
 @MaxLength(32)
-@RequestContext(key="hostName")
-@RequestContext(key="loginId", required=true)
-@RequestContext(key="ipAddress", constraints={@Constraint(constraintType="pattern", constraintValue="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")})
-@RequestContext(key="accountNumber", required=true)
-@RequestContext(key="userId", required=true)
+@RequestContext(key = "hostName")
+@RequestContext(key = "loginId", required = true)
+@RequestContext(
+        key = "ipAddress",
+        constraints = {
+            @Constraint(
+                    constraintType = "pattern",
+                    constraintValue =
+                            "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+        })
+@RequestContext(key = "accountNumber", required = true)
+@RequestContext(key = "userId", required = true)
 public interface Transfer extends AuditEvent {
 
     /**
@@ -55,7 +61,6 @@ public interface Transfer extends AuditEvent {
      * @param toAccount Destination account
      */
     @Required
-    @Constraint(constraintType="minValue", constraintValue="1")
+    @Constraint(constraintType = "minValue", constraintValue = "1")
     void setToAccount(int toAccount);
-
 }

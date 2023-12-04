@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.catalog.api.ConstraintType;
@@ -33,7 +32,6 @@ import org.apache.logging.log4j.core.util.ReflectionUtil;
 /**
  *
  */
-
 public class ConstraintPlugins {
 
     private static final Logger LOGGER = LogManager.getLogger(ConstraintPlugins.class);
@@ -46,7 +44,7 @@ public class ConstraintPlugins {
 
     public static ConstraintPlugins getInstance() {
         if (instance == null) {
-            synchronized(LOCK) {
+            synchronized (LOCK) {
                 if (instance == null) {
                     instance = new ConstraintPlugins();
                 }
@@ -59,8 +57,10 @@ public class ConstraintPlugins {
 
         final PluginManager manager = new PluginManager(ConstraintType.CATEGORY);
         if (LOGGER instanceof org.apache.logging.log4j.core.Logger) {
-            List<String> pluginPackages =
-                    ((org.apache.logging.log4j.core.Logger) LOGGER).getContext().getConfiguration().getPluginPackages();
+            List<String> pluginPackages = ((org.apache.logging.log4j.core.Logger) LOGGER)
+                    .getContext()
+                    .getConfiguration()
+                    .getPluginPackages();
             manager.collectPlugins(pluginPackages);
         } else {
             manager.collectPlugins();
@@ -68,7 +68,8 @@ public class ConstraintPlugins {
         final Map<String, PluginType<?>> plugins = manager.getPlugins();
         for (Map.Entry<String, PluginType<?>> entry : plugins.entrySet()) {
             try {
-                final Class<? extends ConstraintType> clazz = entry.getValue().getPluginClass().asSubclass(ConstraintType.class);
+                final Class<? extends ConstraintType> clazz =
+                        entry.getValue().getPluginClass().asSubclass(ConstraintType.class);
                 ConstraintType constraintType = ReflectionUtil.instantiate(clazz);
                 constraintMap.put(entry.getKey(), constraintType);
             } catch (final Throwable t) {
@@ -77,8 +78,13 @@ public class ConstraintPlugins {
         }
     }
 
-    public void validateConstraint(boolean isRequestContext, String constraint, String name,
-                                          String value, String constraintValue, StringBuilder errors) {
+    public void validateConstraint(
+            boolean isRequestContext,
+            String constraint,
+            String name,
+            String value,
+            String constraintValue,
+            StringBuilder errors) {
         ConstraintType constraintType = constraintMap.get(constraint.toLowerCase(Locale.US));
         if (constraintType == null) {
             if (errors.length() > 0) {

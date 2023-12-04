@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.interceptor;
 
 import java.io.IOException;
-
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -33,8 +32,9 @@ import org.springframework.http.client.ClientHttpResponse;
 public class RequestContextHeaderInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] body,
-                                        ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
+    public ClientHttpResponse intercept(
+            HttpRequest httpRequest, byte[] body, ClientHttpRequestExecution clientHttpRequestExecution)
+            throws IOException {
         return clientHttpRequestExecution.execute(httpRequest, body);
     }
 }

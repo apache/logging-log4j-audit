@@ -16,12 +16,11 @@
  */
 package org.apache.logging.log4j.audit.service.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.audit.AuditLogger;
@@ -53,12 +52,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-
 @Configuration
 @EnableWebMvc
 @EnableScheduling
 @ComponentScan(basePackages = {"org.apache.logging.log4j.catalog.jpa", "org.apache.logging.log4j.audit.service"})
-@PropertySource(value= " classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
+@PropertySource(value = " classpath:catalog-${env:}config.properties", ignoreResourceNotFound = true)
 public class WebMvcAppContext extends WebMvcConfigurerAdapter {
 
     private static final Logger LOGGER = LogManager.getLogger(WebMvcAppContext.class);
@@ -81,7 +79,6 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(jsonMessageConverter());
     }
-
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -163,5 +160,4 @@ public class WebMvcAppContext extends WebMvcConfigurerAdapter {
         auditLogger.setCatalogManager(auditManager());
         return auditLogger;
     }
-
 }

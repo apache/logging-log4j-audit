@@ -16,10 +16,10 @@
  */
 package org.apache.logging.log4j.catalog.api;
 
+import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
+
 import java.io.Serializable;
 import java.util.Set;
-
-import static org.apache.logging.log4j.catalog.api.constant.Constants.DEFAULT_CATALOG;
 
 /**
  * A Catalog AttributeDto.
@@ -305,7 +305,9 @@ public class Attribute implements Serializable {
                 } else {
                     first = false;
                 }
-                sb.append("name=\"").append(constraint.getConstraintType().getName()).append("\"");
+                sb.append("name=\"")
+                        .append(constraint.getConstraintType().getName())
+                        .append("\"");
                 sb.append("value=\"").append(constraint.getValue()).append("\"");
             }
             sb.append("]");

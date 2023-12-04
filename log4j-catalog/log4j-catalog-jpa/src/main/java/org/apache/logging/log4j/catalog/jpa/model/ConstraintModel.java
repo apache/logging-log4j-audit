@@ -17,7 +17,6 @@
 package org.apache.logging.log4j.catalog.jpa.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,14 +36,17 @@ public class ConstraintModel implements Serializable {
     private static final long serialVersionUID = 6836453963830996541L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "ATTRIBUTE_ID")
     private AttributeModel attribute;
+
     @Column(name = "CONSTRAINT_TYPE")
     private String constraintType;
+
     @Column(name = "VALUE")
     private String value;
 
@@ -81,6 +83,5 @@ public class ConstraintModel implements Serializable {
         if (attribute.getConstraints() != null) {
             attribute.getConstraints().add(this);
         }
-
     }
 }

@@ -29,7 +29,8 @@ public class PropertyExistsCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment env = context.getEnvironment();
-        MultiValueMap<String, Object> attrs = metadata.getAllAnnotationAttributes(ConditionOnPropertyExists.class.getName());
+        MultiValueMap<String, Object> attrs =
+                metadata.getAllAnnotationAttributes(ConditionOnPropertyExists.class.getName());
         if (attrs != null) {
             Object value = attrs.get("value");
             return value != null && null != env && env.getProperty(value.toString()) != null;

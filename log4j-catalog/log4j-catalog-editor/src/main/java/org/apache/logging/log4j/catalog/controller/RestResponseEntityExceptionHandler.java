@@ -31,14 +31,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     @ResponseBody
     public ResponseEntity<?> handleAnyException(Exception e) {
         return errorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    protected ResponseEntity<ExceptionMessage> errorResponse(Throwable throwable,
-                                                             HttpStatus status) {
+    protected ResponseEntity<ExceptionMessage> errorResponse(Throwable throwable, HttpStatus status) {
         if (null != throwable) {
             LOGGER.error("error caught: " + throwable.getMessage(), throwable);
             return response(new ExceptionMessage(throwable), status);
