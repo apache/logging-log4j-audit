@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="72" link="https://github.com/apache/logging-log4j-audit/pull/72"/>
-  <description format="asciidoc">Update `commons-validator:commons-validator` to version `1.7`</description>
+  <issue id="105" link="https://github.com/apache/logging-log4j-audit/pull/105"/>
+  <description format="asciidoc">Update `commons-validator:commons-validator` to version `1.8.0`</description>
 </entry>
