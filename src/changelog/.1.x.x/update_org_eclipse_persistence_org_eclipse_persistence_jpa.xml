@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
        type="changed">
-  <issue id="67" link="https://github.com/apache/logging-log4j-audit/pull/67"/>
-  <description format="asciidoc">Update `org.eclipse.persistence:org.eclipse.persistence.jpa` to version `2.7.13`</description>
+  <issue id="107" link="https://github.com/apache/logging-log4j-audit/pull/107"/>
+  <description format="asciidoc">Update `org.eclipse.persistence:org.eclipse.persistence.jpa` to version `2.7.14`</description>
 </entry>
