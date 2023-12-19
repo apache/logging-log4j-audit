@@ -198,7 +198,7 @@
          of dependencies (requireUpperBoundDeps rule).
          ===================================================== -->
     <checker-qual.version>3.42.0</checker-qual.version>
-    <guava.version>32.1.3-jre</guava.version>
+    <guava.version>33.0.0-jre</guava.version>
   </properties>
   <dependencyManagement>
     <dependencies>
