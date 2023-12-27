@@ -31,14 +31,10 @@ jobs:
   build:
     if: github.repository == 'apache/logging-log4j-audit' && github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]'
     uses: apache/logging-parent/.github/workflows/build-reusable.yaml@main
-    with:
-      java-version: 11
 
   merge-dependabot:
     needs: build
     uses: apache/logging-parent/.github/workflows/merge-dependabot-reusable.yaml@main
-    with:
-      java-version: 11
     permissions:
       contents: write                                             # to push changelog commits
       pull-requests: write                                        # to close the PR
