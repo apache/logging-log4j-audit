@@ -34,10 +34,24 @@
     </site>
   </distributionManagement>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <log4jParentDir>${basedir}/../..</log4jParentDir>
-    <java.version>1.8</java.version>
+
+    <!--
+      ~ OSGi and JPMS options
+      -->
+    <bnd-extra-package-options>
+      <!-- Packages without code -->
+      !sql.*,
+      !static.*
+    </bnd-extra-package-options>
+    <bnd-extra-module-options>
+      <!-- Filebased module names: MUST be static -->
+      springfox.core;substitute="springfox-core";transitive=false;static=true,
+      springfox.spi;substitute="springfox-spi";transitive=false;static=true,
+      springfox.spring.web;substitute="springfox-spring-web";transitive=false;static=true,
+      springfox.swagger2;substitute="springfox-swagger2";transitive=false;static=true,
+    </bnd-extra-module-options>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

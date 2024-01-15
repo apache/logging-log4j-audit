@@ -32,10 +32,11 @@
       <url>scp://people.apache.org/www/logging.apache.org/log4j-audit/log4j-audit/log4j-audit-maven-plugin</url>
     </site>
   </distributionManagement>
+
   <properties>
-    <bnd.skip>true</bnd.skip>
-    <log4jParentDir>${basedir}/../..</log4jParentDir>
+    <bnd.packagingTypes>maven-plugin</bnd.packagingTypes>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
