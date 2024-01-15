@@ -16,7 +16,10 @@
  */
 package org.apache.logging.log4j.audit.util;
 
-import static org.apache.logging.log4j.audit.util.NamingUtils.*;
+import static org.apache.logging.log4j.audit.util.NamingUtils.getMethodShortName;
+import static org.apache.logging.log4j.audit.util.NamingUtils.getPackageName;
+import static org.apache.logging.log4j.audit.util.NamingUtils.getSimpleName;
+import static org.apache.logging.log4j.audit.util.NamingUtils.lowerFirst;
 
 /**
  *

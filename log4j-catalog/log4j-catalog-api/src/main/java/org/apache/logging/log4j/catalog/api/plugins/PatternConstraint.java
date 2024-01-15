@@ -16,7 +16,8 @@
  */
 package org.apache.logging.log4j.catalog.api.plugins;
 
-import static org.apache.logging.log4j.catalog.api.util.StringUtils.*;
+import static org.apache.logging.log4j.catalog.api.util.StringUtils.appendNewline;
+import static org.apache.logging.log4j.catalog.api.util.StringUtils.isBlank;
 
 import org.apache.logging.log4j.catalog.api.ConstraintType;
 import org.apache.logging.log4j.core.config.plugins.Plugin;

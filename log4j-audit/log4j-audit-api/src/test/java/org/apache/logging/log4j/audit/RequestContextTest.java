@@ -16,7 +16,9 @@
  */
 package org.apache.logging.log4j.audit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.apache.logging.log4j.audit.request.RequestContextMapping;
 import org.apache.logging.log4j.audit.request.RequestContextMappings;

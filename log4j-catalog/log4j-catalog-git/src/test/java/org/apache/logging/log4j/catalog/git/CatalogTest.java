@@ -16,7 +16,8 @@
  */
 package org.apache.logging.log4j.catalog.git;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.logging.log4j.catalog.api.CatalogData;
 import org.apache.logging.log4j.catalog.api.dao.CatalogDao;
