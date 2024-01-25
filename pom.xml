@@ -169,7 +169,7 @@
     <json.version>20231013</json.version>
     <junit.version>4.13.2</junit.version>
     <jxr.plugin.version>2.5</jxr.plugin.version>
-    <log4j2.version>2.21.1</log4j2.version>
+    <log4j2.version>2.22.1</log4j2.version>
     <mockito.version>5.10.0</mockito.version>
     <plexus-utils.version>4.0.0</plexus-utils.version>
     <postgresql.version>42.7.1</postgresql.version>
