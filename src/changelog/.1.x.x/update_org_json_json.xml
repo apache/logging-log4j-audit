@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.3.xsd"
        type="updated">
-  <issue id="119" link="https://github.com/apache/logging-log4j-audit/pull/119"/>
-  <description format="asciidoc">Update `org.json:json` to version `20240205`</description>
+  <issue id="125" link="https://github.com/apache/logging-log4j-audit/pull/125"/>
+  <description format="asciidoc">Update `org.json:json` to version `20240303`</description>
 </entry>
