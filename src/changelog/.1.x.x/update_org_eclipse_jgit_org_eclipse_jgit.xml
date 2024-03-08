@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://logging.apache.org/log4j/changelog"
-       xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.2.xsd"
-       type="changed">
-  <issue id="104" link="https://github.com/apache/logging-log4j-audit/pull/104"/>
-  <description format="asciidoc">Update `org.eclipse.jgit:org.eclipse.jgit` to version `6.8.0.202311291450-r`</description>
+       xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.3.xsd"
+       type="updated">
+  <issue id="126" link="https://github.com/apache/logging-log4j-audit/pull/126"/>
+  <description format="asciidoc">Update `org.eclipse.jgit:org.eclipse.jgit` to version `6.9.0.202403050737-r`</description>
 </entry>
