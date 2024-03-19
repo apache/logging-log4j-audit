@@ -3,6 +3,6 @@
        xmlns="http://logging.apache.org/log4j/changelog"
        xsi:schemaLocation="http://logging.apache.org/log4j/changelog https://logging.apache.org/log4j/changelog-0.1.3.xsd"
        type="updated">
-  <issue id="118" link="https://github.com/apache/logging-log4j-audit/pull/118"/>
-  <description format="asciidoc">Update `io.swagger:swagger-annotations` to version `1.6.13`</description>
+  <issue id="131" link="https://github.com/apache/logging-log4j-audit/pull/131"/>
+  <description format="asciidoc">Update `io.swagger:swagger-annotations` to version `1.6.14`</description>
 </entry>
