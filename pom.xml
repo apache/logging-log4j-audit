@@ -151,7 +151,7 @@
          ===================================================== -->
     <antlr.version>2.7.7</antlr.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
-    <commons.codec.version>1.16.1</commons.codec.version>
+    <commons.codec.version>1.17.0</commons.codec.version>
     <commons.collections.version>3.2.2</commons.collections.version>
     <commons.io.version>2.16.1</commons.io.version>
     <commons.lang.version>3.14.0</commons.lang.version>
